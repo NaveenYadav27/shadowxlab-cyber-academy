@@ -651,7 +651,7 @@ export default function PacketJourneySimulator({
 
   // Generate steps based on current policies
   const simulationSteps = generateSimulationSteps(trafficType, httpsPolicy, sshPolicy);
-  const currentStep = simulationSteps[currentStepIndex] || simulationSteps[0];
+  const currentStep: SimulationStep = simulationSteps[currentStepIndex] ?? simulationSteps[0]!;
 
   // Auto-play timer
   useEffect(() => {
@@ -661,7 +661,10 @@ export default function PacketJourneySimulator({
         if (currentStepIndex < simulationSteps.length - 1) {
           const nextIndex = currentStepIndex + 1;
           setCurrentStepIndex(nextIndex);
-          recordStepTelemetry(simulationSteps[nextIndex]);
+          const nextStep = simulationSteps[nextIndex];
+          if (nextStep) {
+            recordStepTelemetry(nextStep);
+          }
         } else {
           setIsPlaying(false);
           verifyMilestoneCompletion();
@@ -704,7 +707,10 @@ export default function PacketJourneySimulator({
     setCurrentStepIndex(0);
     setSyslogHistory([]);
     setLiveStateTable([]);
-    recordStepTelemetry(simulationSteps[0]);
+    const firstStep = simulationSteps[0];
+    if (firstStep) {
+      recordStepTelemetry(firstStep);
+    }
     setIsPlaying(true);
     toast.info(`Initiated ${trafficType.toUpperCase()} packet journey simulation.`);
   };
@@ -725,7 +731,10 @@ export default function PacketJourneySimulator({
     if (currentStepIndex < simulationSteps.length - 1) {
       const nextIndex = currentStepIndex + 1;
       setCurrentStepIndex(nextIndex);
-      recordStepTelemetry(simulationSteps[nextIndex]);
+      const nextStep = simulationSteps[nextIndex];
+      if (nextStep) {
+        recordStepTelemetry(nextStep);
+      }
       if (nextIndex === simulationSteps.length - 1) {
         verifyMilestoneCompletion();
       }
