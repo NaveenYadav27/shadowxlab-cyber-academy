@@ -1,0 +1,19 @@
+{
+  "name": "shadowxlab-cyber-academy",
+  "compatibility_date": "2026-11-16",
+  "main": ".output/server/index.mjs",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".output/public"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "sxl-net.shadowxlab.com",
+      "custom_domain": true
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "10000000-0000-0000-0000-000000000001",
+    "email": "student01@shadowxlab.com",
+    "name": "Alex Chen",
+    "badge": "STU-01",
+    "role": "student",
+    "seat": "Station 01"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000002",
+    "email": "student02@shadowxlab.com",
+    "name": "Elena Rostova",
+    "badge": "STU-02",
+    "role": "student",
+    "seat": "Station 02"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000003",
+    "email": "student03@shadowxlab.com",
+    "name": "Marcus Vance",
+    "badge": "STU-03",
+    "role": "student",
+    "seat": "Station 03"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000004",
+    "email": "student04@shadowxlab.com",
+    "name": "Priya Sharma",
+    "badge": "STU-04",
+    "role": "student",
+    "seat": "Station 04"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000005",
+    "email": "student05@shadowxlab.com",
+    "name": "Liam Gallagher",
+    "badge": "STU-05",
+    "role": "student",
+    "seat": "Station 05"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000006",
+    "email": "student06@shadowxlab.com",
+    "name": "Aoi Takahashi",
+    "badge": "STU-06",
+    "role": "student",
+    "seat": "Station 06"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000007",
+    "email": "student07@shadowxlab.com",
+    "name": "David Kim",
+    "badge": "STU-07",
+    "role": "student",
+    "seat": "Station 07"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000008",
+    "email": "student08@shadowxlab.com",
+    "name": "Fatima Al-Mansoor",
+    "badge": "STU-08",
+    "role": "student",
+    "seat": "Station 08"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000009",
+    "email": "student09@shadowxlab.com",
+    "name": "Lucas Silva",
+    "badge": "STU-09",
+    "role": "student",
+    "seat": "Station 09"
+  },
+  {
+    "id": "10000000-0000-0000-0000-000000000010",
+    "email": "student10@shadowxlab.com",
+    "name": "Zoe Washington",
+    "badge": "STU-10",
+    "role": "student",
+    "seat": "Station 10"
+  }
+]

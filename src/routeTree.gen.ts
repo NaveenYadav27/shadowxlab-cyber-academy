@@ -10,33 +10,180 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AdministrationRouteImport } from './routes/administration'
+import { Route as AssessmentsRouteImport } from './routes/assessments'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as InstructorRouteImport } from './routes/instructor'
+import { Route as LabRouteImport } from './routes/lab'
+import { Route as ModulesRouteImport } from './routes/modules'
+import { Route as ProgrammesRouteImport } from './routes/programmes'
+import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as ScheduleRouteImport } from './routes/schedule'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdministrationRoute = AdministrationRouteImport.update({
+  id: '/administration',
+  path: '/administration',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentsRoute = AssessmentsRouteImport.update({
+  id: '/assessments',
+  path: '/assessments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstructorRoute = InstructorRouteImport.update({
+  id: '/instructor',
+  path: '/instructor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabRoute = LabRouteImport.update({
+  id: '/lab',
+  path: '/lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModulesRoute = ModulesRouteImport.update({
+  id: '/modules',
+  path: '/modules',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgrammesRoute = ProgrammesRouteImport.update({
+  id: '/programmes',
+  path: '/programmes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScheduleRoute = ScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/administration': typeof AdministrationRoute
+  '/assessments': typeof AssessmentsRoute
+  '/dashboard': typeof DashboardRoute
+  '/instructor': typeof InstructorRoute
+  '/lab': typeof LabRoute
+  '/modules': typeof ModulesRoute
+  '/programmes': typeof ProgrammesRoute
+  '/progress': typeof ProgressRoute
+  '/resources': typeof ResourcesRoute
+  '/schedule': typeof ScheduleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/administration': typeof AdministrationRoute
+  '/assessments': typeof AssessmentsRoute
+  '/dashboard': typeof DashboardRoute
+  '/instructor': typeof InstructorRoute
+  '/lab': typeof LabRoute
+  '/modules': typeof ModulesRoute
+  '/programmes': typeof ProgrammesRoute
+  '/progress': typeof ProgressRoute
+  '/resources': typeof ResourcesRoute
+  '/schedule': typeof ScheduleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/administration': typeof AdministrationRoute
+  '/assessments': typeof AssessmentsRoute
+  '/dashboard': typeof DashboardRoute
+  '/instructor': typeof InstructorRoute
+  '/lab': typeof LabRoute
+  '/modules': typeof ModulesRoute
+  '/programmes': typeof ProgrammesRoute
+  '/progress': typeof ProgressRoute
+  '/resources': typeof ResourcesRoute
+  '/schedule': typeof ScheduleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/administration'
+    | '/assessments'
+    | '/dashboard'
+    | '/instructor'
+    | '/lab'
+    | '/modules'
+    | '/programmes'
+    | '/progress'
+    | '/resources'
+    | '/schedule'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/administration'
+    | '/assessments'
+    | '/dashboard'
+    | '/instructor'
+    | '/lab'
+    | '/modules'
+    | '/programmes'
+    | '/progress'
+    | '/resources'
+    | '/schedule'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/administration'
+    | '/assessments'
+    | '/dashboard'
+    | '/instructor'
+    | '/lab'
+    | '/modules'
+    | '/programmes'
+    | '/progress'
+    | '/resources'
+    | '/schedule'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  AdministrationRoute: typeof AdministrationRoute
+  AssessmentsRoute: typeof AssessmentsRoute
+  DashboardRoute: typeof DashboardRoute
+  InstructorRoute: typeof InstructorRoute
+  LabRoute: typeof LabRoute
+  ModulesRoute: typeof ModulesRoute
+  ProgrammesRoute: typeof ProgrammesRoute
+  ProgressRoute: typeof ProgressRoute
+  ResourcesRoute: typeof ResourcesRoute
+  ScheduleRoute: typeof ScheduleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +195,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/administration': {
+      id: '/administration'
+      path: '/administration'
+      fullPath: '/administration'
+      preLoaderRoute: typeof AdministrationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessments': {
+      id: '/assessments'
+      path: '/assessments'
+      fullPath: '/assessments'
+      preLoaderRoute: typeof AssessmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/instructor': {
+      id: '/instructor'
+      path: '/instructor'
+      fullPath: '/instructor'
+      preLoaderRoute: typeof InstructorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab': {
+      id: '/lab'
+      path: '/lab'
+      fullPath: '/lab'
+      preLoaderRoute: typeof LabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modules': {
+      id: '/modules'
+      path: '/modules'
+      fullPath: '/modules'
+      preLoaderRoute: typeof ModulesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programmes': {
+      id: '/programmes'
+      path: '/programmes'
+      fullPath: '/programmes'
+      preLoaderRoute: typeof ProgrammesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schedule': {
+      id: '/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  AdministrationRoute: AdministrationRoute,
+  AssessmentsRoute: AssessmentsRoute,
+  DashboardRoute: DashboardRoute,
+  InstructorRoute: InstructorRoute,
+  LabRoute: LabRoute,
+  ModulesRoute: ModulesRoute,
+  ProgrammesRoute: ProgrammesRoute,
+  ProgressRoute: ProgressRoute,
+  ResourcesRoute: ResourcesRoute,
+  ScheduleRoute: ScheduleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

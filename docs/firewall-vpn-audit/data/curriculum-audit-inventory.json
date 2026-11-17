@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "auditVersion": "1.0.0",
+  "timestamp": "2026-11-16T22:15:00+05:30",
+  "auditors": [
+    "Principal Network Security Architect",
+    "Senior Firewall/VPN Engineer",
+    "Enterprise Security Trainer",
+    "Curriculum Auditor",
+    "Cyber Range Architect"
+  ],
+  "programme": {
+    "id": "firewall-vpn-security-administration",
+    "title": "Firewall & VPN Security Administration",
+    "scheduledDates": "16 November - 20 November 2026",
+    "duration": "5 Days | 20 Sessions | 30 Contact Hours",
+    "leadInstructor": "Naveen Kumar Yadav Loya",
+    "productionUrl": "https://sxl-net.shadowxlab.com",
+    "repository": "shadowxlab-cyber-academy"
+  },
+  "competencyScorecard": {
+    "overallCoveragePercent": 51.4,
+    "domains": {
+      "networkingFoundations": {
+        "assessed": 12,
+        "coveredAdequately": 7,
+        "coveredSuperficially": 4,
+        "missing": 1,
+        "coveragePercent": 58.3
+      },
+      "firewallArchitecture": {
+        "assessed": 7,
+        "coveredAdequately": 6,
+        "coveredSuperficially": 0,
+        "missing": 1,
+        "coveragePercent": 85.7
+      },
+      "firewallPolicyEngineering": {
+        "assessed": 6,
+        "coveredAdequately": 5,
+        "coveredSuperficially": 1,
+        "missing": 0,
+        "coveragePercent": 83.3
+      },
+      "natAndConnectivity": {
+        "assessed": 5,
+        "coveredAdequately": 2,
+        "coveredSuperficially": 2,
+        "missing": 1,
+        "coveragePercent": 40.0
+      },
+      "advancedFirewallFeatures": {
+        "assessed": 4,
+        "coveredAdequately": 1,
+        "coveredSuperficially": 3,
+        "missing": 0,
+        "coveragePercent": 25.0
+      },
+      "vpnEngineering": {
+        "assessed": 7,
+        "coveredAdequately": 0,
+        "coveredSuperficially": 7,
+        "missing": 0,
+        "coveragePercent": 0.0
+      },
+      "enterpriseOperations": {
+        "assessed": 4,
+        "coveredAdequately": 1,
+        "coveredSuperficially": 3,
+        "missing": 0,
+        "coveragePercent": 25.0
+      }
+    }
+  },
+  "daywiseInventory": [
+    {
+      "day": "Day 1",
+      "title": "Security & Firewall Foundations",
+      "date": "2026-11-16",
+      "conceptsCount": 48,
+      "labsCount": 4,
+      "assessmentQuestionsCount": 360,
+      "readinessStatus": "100% PRODUCTION READY"
+    },
+    {
+      "day": "Day 2",
+      "title": "Firewall Architecture & Administration",
+      "date": "2026-11-17",
+      "conceptsCount": 9,
+      "labsCount": 3,
+      "assessmentQuestionsCount": 0,
+      "readinessStatus": "40% (Needs Instructional & Assessment Depth)"
+    },
+    {
+      "day": "Day 3",
+      "title": "Advanced Firewall & VPN Foundations",
+      "date": "2026-11-18",
+      "conceptsCount": 9,
+      "labsCount": 2,
+      "assessmentQuestionsCount": 0,
+      "readinessStatus": "35% (Needs Applied Engineering & IKE/IPsec Depth)"
+    },
+    {
+      "day": "Day 4",
+      "title": "VPN Deployment & Enterprise Security",
+      "date": "2026-11-19",
+      "conceptsCount": 9,
+      "labsCount": 1,
+      "assessmentQuestionsCount": 0,
+      "readinessStatus": "30% (Critical Lab Gap - Needs OpenVPN & WireGuard Walkthrough)"
+    },
+    {
+      "day": "Day 5",
+      "title": "Monitoring, Troubleshooting & Wireless Security",
+      "date": "2026-11-20",
+      "conceptsCount": 8,
+      "labsCount": 1,
+      "assessmentQuestionsCount": 4,
+      "readinessStatus": "35% (Needs Packet Capture Triage & 50-Question Final Exam)"
+    }
+  ],
+  "labFramework": {
+    "totalLabs": 22,
+    "hardwareModes": [
+      "local-full",
+      "local-light",
+      "shared-range",
+      "simulation"
+    ],
+    "baselineLab": "Standard pfSense Lab (SXL-LAN: 192.168.50.1/24)"
+  }
+}

@@ -83,7 +83,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ShadowXLab | Cybersecurity Training Platform" },
-      { name: "description", content: "ShadowXLab cybersecurity learning and simulation environment." },
+      {
+        name: "description",
+        content: "ShadowXLab cybersecurity learning and simulation environment.",
+      },
       { name: "author", content: "ShadowXLab" },
       { property: "og:title", content: "ShadowXLab | Cybersecurity Training Platform" },
       { property: "og:description", content: "Cybersecurity learning and simulation environment." },
@@ -107,11 +110,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Scripts />
       </body>

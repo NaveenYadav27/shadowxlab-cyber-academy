@@ -1,17 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 import ShadowXLabApp from "@/components/training-platform-app";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    throw redirect({ to: "/dashboard" });
+  },
   head: () => ({
     meta: [
-      { title: "ShadowXLab | Cybersecurity Training Dashboard" },
+      { title: "ShadowXLab | Cybersecurity Training Platform" },
       {
         name: "description",
         content:
           "Manage cybersecurity training programmes, schedules, learning modules, assessments, and simulated labs in ShadowXLab.",
       },
-      { property: "og:title", content: "ShadowXLab | Cybersecurity Training Dashboard" },
+      { property: "og:title", content: "ShadowXLab | Cybersecurity Training Platform" },
       {
         property: "og:description",
         content:
@@ -21,5 +24,5 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: ShadowXLabApp,
+  component: () => <ShadowXLabApp currentView="dashboard" />,
 });
