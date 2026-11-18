@@ -227,6 +227,16 @@ export function Day2ScheduleAccordion({
                   </div>
 
                   <div className="flex items-center gap-2">
+                    {onStartSession && (
+                      <Button
+                        size="sm"
+                        onClick={() => onStartSession(session.id)}
+                        className="h-7 text-xs gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold shadow-[0_0_8px_rgba(0,229,255,0.2)]"
+                      >
+                        <Play className="h-3.5 w-3.5 fill-current" />
+                        <span>Launch Session Engine (8 Stages)</span>
+                      </Button>
+                    )}
                     {onOpenSessionAssessment && (
                       <Button
                         variant="outline"

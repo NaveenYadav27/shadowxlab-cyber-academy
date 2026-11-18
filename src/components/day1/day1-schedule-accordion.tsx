@@ -30,10 +30,11 @@ interface Day1ScheduleAccordionProps {
   sessionScores: Record<string, number>;
   labScores: Record<string, number>;
   onToggleSessionComplete: (sessionId: string) => void;
-  onToggleConceptComplete: (conceptId: string) => void;
+  onToggleConceptComplete?: (conceptId: string) => void;
   onSelectConcept: (conceptId: string) => void;
   onOpenLab: (labId: string) => void;
   onOpenSessionAssessment: (sessionId: string) => void;
+  onStartSession?: (sessionId: string) => void;
 }
 
 export function Day1ScheduleAccordion({
@@ -46,6 +47,7 @@ export function Day1ScheduleAccordion({
   onSelectConcept,
   onOpenLab,
   onOpenSessionAssessment,
+  onStartSession,
 }: Day1ScheduleAccordionProps) {
   // Default first session open
   const [expandedSessions, setExpandedSessions] = useState<Record<string, boolean>>({
@@ -134,6 +136,17 @@ export function Day1ScheduleAccordion({
                   </div>
                 </div>
 
+                {onStartSession && (
+                  <Button
+                    size="sm"
+                    onClick={() => onStartSession(session.id)}
+                    className="h-8 gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold text-xs shadow-[0_0_10px_rgba(0,229,255,0.25)]"
+                  >
+                    <Play className="h-3.5 w-3.5 fill-current" />
+                    <span>Open Lesson</span>
+                  </Button>
+                )}
+
                 <Button
                   variant={isSessionDone ? "secondary" : "outline"}
                   size="sm"
@@ -155,6 +168,16 @@ export function Day1ScheduleAccordion({
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-md bg-surface-2/30 p-3 text-xs">
                   <p className="max-w-2xl text-muted-foreground">{session.description}</p>
                   <div className="flex items-center gap-2">
+                    {onStartSession && (
+                      <Button
+                        size="sm"
+                        onClick={() => onStartSession(session.id)}
+                        className="h-7 gap-1.5 text-xs bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold shadow-[0_0_8px_rgba(0,229,255,0.2)]"
+                      >
+                        <Play className="h-3.5 w-3.5 fill-current" />
+                        <span>Launch Session Engine (8 Stages)</span>
+                      </Button>
+                    )}
                     <Button
                       size="sm"
                       variant="outline"
@@ -250,7 +273,7 @@ export function Day1ScheduleAccordion({
                             <Button
                               variant={isConceptDone ? "secondary" : "ghost"}
                               size="icon"
-                              onClick={() => onToggleConceptComplete(concept.id)}
+                              onClick={() => onToggleConceptComplete?.(concept.id)}
                               className="h-7 w-7 text-xs"
                               title={isConceptDone ? "Mark Incomplete" : "Mark Complete"}
                             >

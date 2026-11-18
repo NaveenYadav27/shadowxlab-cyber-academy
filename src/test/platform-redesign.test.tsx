@@ -359,6 +359,64 @@ describe("ShadowXLab Platform Redesign — Master Acceptance Verification", () =
       expect(screen.getAllByText(/Static Routing & Inter-Zone Reachability/i)[0]).toBeInTheDocument();
       expect(screen.getAllByText(/nftables ACL Policy Management/i)[0]).toBeInTheDocument();
     });
+
+    it("allows student to open a lesson from curriculum cards and renders UniversalSessionEngine", () => {
+      render(
+        <StudentWorkspace
+          state={mockState}
+          programme={INITIAL_PROGRAMME}
+          activeNavId="my-learning"
+          onSelectNav={vi.fn()}
+          onToggleSessionComplete={vi.fn()}
+          onToggleConceptComplete={vi.fn()}
+          onSaveLabScore={vi.fn()}
+          onSaveSessionAssessmentScore={vi.fn()}
+          onSaveFinalScore={vi.fn()}
+          onSelectLabMode={vi.fn()}
+          onOpenReadiness={vi.fn()}
+        />,
+      );
+
+      // Click the CONTINUE LEARNING button in hero
+      const continueBtn = screen.getByText(/CONTINUE LEARNING/i);
+      fireEvent.click(continueBtn);
+
+      // Verify that UniversalSessionEngine opens with Stage 1
+      expect(screen.getByText(/Operational Briefing & Threat Context/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Briefing/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/Schedule/i)[0]).toBeInTheDocument();
+    });
+
+    it("verifies Open Lesson buttons are present in Schedule view for all sessions", () => {
+      render(
+        <StudentWorkspace
+          state={mockState}
+          programme={INITIAL_PROGRAMME}
+          activeNavId="sessions"
+          onSelectNav={vi.fn()}
+          onToggleSessionComplete={vi.fn()}
+          onToggleConceptComplete={vi.fn()}
+          onSaveLabScore={vi.fn()}
+          onSaveSessionAssessmentScore={vi.fn()}
+          onSaveFinalScore={vi.fn()}
+          onSelectLabMode={vi.fn()}
+          onOpenReadiness={vi.fn()}
+        />,
+      );
+
+      // Verify Day 2 open session buttons
+      const openButtons = screen.getAllByText(/Open Session/i);
+      expect(openButtons.length).toBeGreaterThanOrEqual(1);
+
+      // Switch to Day 1 tab
+      fireEvent.click(screen.getByText("Day 1"));
+      const day1OpenButtons = screen.getAllByText(/Open Lesson/i);
+      expect(day1OpenButtons.length).toBeGreaterThanOrEqual(1);
+
+      // Click Open Lesson on Day 1
+      fireEvent.click(day1OpenButtons[0]!);
+      expect(screen.getByText(/Operational Briefing & Threat Context/i)).toBeInTheDocument();
+    });
   });
 });
 

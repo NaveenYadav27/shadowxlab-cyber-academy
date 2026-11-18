@@ -29,6 +29,13 @@ import {
   getConceptChecksForConcept,
   type AssessmentQuestion,
 } from "@/lib/day1-curriculum";
+import {
+  type Day2Concept,
+  getDay2ConceptById,
+  getDay2ConceptsForSession,
+  getDay2ConceptChecksForConcept,
+  checkDay2Prerequisites,
+} from "@/lib/day2-curriculum";
 
 interface ConceptLearningPanelProps {
   conceptId: string;
@@ -47,7 +54,10 @@ export function ConceptLearningPanel({
   onOpenLab,
   onBackToSchedule,
 }: ConceptLearningPanelProps) {
-  const concept = getConceptById(conceptId);
+  const isDay2 = conceptId.startsWith("d2-");
+  const concept: (Day1Concept | Day2Concept) | undefined = isDay2
+    ? getDay2ConceptById(conceptId)
+    : getConceptById(conceptId);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [submittedQuiz, setSubmittedQuiz] = useState<boolean>(false);
 
@@ -67,12 +77,21 @@ export function ConceptLearningPanel({
   }
 
   const isCompleted = completedConceptIds.includes(concept.id);
-  const prereqStatus = checkPrerequisites(concept.id, completedConceptIds);
-  const prevConcept = getPreviousConcept(concept.id);
-  const nextConcept = getNextConcept(concept.id);
-  const questions: AssessmentQuestion[] = getConceptChecksForConcept(concept.id);
-  const sessionConcepts = getConceptsForSession(concept.sessionId);
+  const prereqStatus = isDay2
+    ? checkDay2Prerequisites(concept.id, completedConceptIds)
+    : checkPrerequisites(concept.id, completedConceptIds);
+  const sessionConcepts: (Day1Concept | Day2Concept)[] = isDay2
+    ? getDay2ConceptsForSession(concept.sessionId)
+    : getConceptsForSession(concept.sessionId);
   const conceptIndexInSession = sessionConcepts.findIndex((c) => c.id === concept.id);
+  const prevConcept = conceptIndexInSession > 0 ? sessionConcepts[conceptIndexInSession - 1] : undefined;
+  const nextConcept =
+    conceptIndexInSession >= 0 && conceptIndexInSession < sessionConcepts.length - 1
+      ? sessionConcepts[conceptIndexInSession + 1]
+      : undefined;
+  const questions: AssessmentQuestion[] = isDay2
+    ? getDay2ConceptChecksForConcept(concept.id)
+    : getConceptChecksForConcept(concept.id);
 
   const handleSelectAnswer = (questionId: string, optionIdx: number) => {
     if (submittedQuiz) return;

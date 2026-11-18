@@ -78,7 +78,9 @@ export function StudentWorkspace({
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
 
   // Active Day tab for multi-day views (defaults to Day 2 for Tuesday 17 Nov 2026)
-  const [selectedDayTab, setSelectedDayTab] = useState<"day-1" | "day-2">("day-2");
+  const [selectedDayTab, setSelectedDayTab] = useState<
+    "day-1" | "day-2" | "day-3" | "day-4" | "day-5"
+  >("day-2");
 
   // Active Concept in Concept Explorer
   const [activeConceptId, setActiveConceptId] = useState<string>("concept-01");
@@ -275,12 +277,13 @@ export function StudentWorkspace({
                   return (
                     <div
                       key={session.id}
-                      className={`flex items-center justify-between p-3.5 rounded-lg border transition-all ${
+                      onClick={() => setActiveSessionId(session.id)}
+                      className={`flex items-center justify-between p-3.5 rounded-lg border transition-all cursor-pointer ${
                         isNext
-                          ? "border-cyan-500 bg-cyan-500/10 shadow-[0_0_12px_rgba(0,229,255,0.08)]"
+                          ? "border-cyan-500 bg-cyan-500/10 shadow-[0_0_12px_rgba(0,229,255,0.08)] hover:bg-cyan-500/15"
                           : isDone
-                            ? "border-emerald-500/30 bg-card/40"
-                            : "border-border/60 bg-card/30"
+                            ? "border-emerald-500/30 bg-card/40 hover:border-emerald-500/60"
+                            : "border-border/60 bg-card/30 hover:border-cyan-500/50 hover:bg-card/60"
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
@@ -308,7 +311,10 @@ export function StudentWorkspace({
                       <Button
                         size="sm"
                         variant={isNext ? "default" : "outline"}
-                        onClick={() => setActiveSessionId(session.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveSessionId(session.id);
+                        }}
                         className={`text-xs h-7 px-3 shrink-0 ${
                           isNext ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-semibold" : ""
                         }`}
@@ -434,31 +440,31 @@ export function StudentWorkspace({
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono">
-                <button
-                  type="button"
-                  onClick={() => setSelectedDayTab("day-2")}
-                  className={`px-3 py-1 rounded-md transition-all ${
-                    selectedDayTab === "day-2"
-                      ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Day 2 (Today)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedDayTab("day-1")}
-                  className={`px-3 py-1 rounded-md transition-all ${
-                    selectedDayTab === "day-1"
-                      ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  Day 1
-                </button>
+              <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono overflow-x-auto max-w-full">
+                {(
+                  [
+                    { id: "day-1", label: "Day 1" },
+                    { id: "day-2", label: "Day 2 (Today)" },
+                    { id: "day-3", label: "Day 3" },
+                    { id: "day-4", label: "Day 4" },
+                    { id: "day-5", label: "Day 5" },
+                  ] as const
+                ).map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setSelectedDayTab(tab.id)}
+                    className={`px-3 py-1 rounded-md transition-all whitespace-nowrap ${
+                      selectedDayTab === tab.id
+                        ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
-              <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 font-mono text-xs">
+              <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 font-mono text-xs shrink-0">
                 {progressPercent}% COMPLETE
               </Badge>
             </div>
@@ -480,7 +486,7 @@ export function StudentWorkspace({
               onOpenSessionAssessment={(sId) => setActiveSessionId(sId)}
               onStartSession={(sId) => setActiveSessionId(sId)}
             />
-          ) : (
+          ) : selectedDayTab === "day-1" ? (
             <Day1ScheduleAccordion
               completedSessionIds={state.completedSessionIds}
               completedConceptIds={state.day1CompletedConceptIds ?? []}
@@ -494,7 +500,62 @@ export function StudentWorkspace({
               }}
               onOpenLab={() => onSelectNav("labs")}
               onOpenSessionAssessment={(sId) => setActiveSessionId(sId)}
+              onStartSession={(sId) => setActiveSessionId(sId)}
             />
+          ) : (
+            <div className="space-y-4">
+              {programme.days
+                .find((d) => d.id === selectedDayTab)
+                ?.sessions.map((sess, sIdx) => {
+                  const isDone = state.completedSessionIds.includes(sess.id);
+
+                  return (
+                    <div
+                      key={sess.id}
+                      className="rounded-xl border border-border/70 bg-card/40 p-4 space-y-3 hover:border-cyan-500/50 transition-all"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <span className="font-mono text-xs font-bold text-cyan-400">
+                            {selectedDayTab.toUpperCase()} • S{sIdx + 1}
+                          </span>
+                          <h3 className="text-sm font-semibold text-foreground">
+                            {sess.title}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => setActiveSessionId(sess.id)}
+                            className="gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold text-xs h-8 shadow-[0_0_10px_rgba(0,229,255,0.25)]"
+                          >
+                            <Play className="h-3.5 w-3.5 fill-current" />
+                            <span>Open Lesson</span>
+                          </Button>
+                          <Button
+                            variant={isDone ? "outline" : "secondary"}
+                            size="sm"
+                            onClick={() => onToggleSessionComplete(sess.id)}
+                            className="h-8 text-xs"
+                          >
+                            {isDone ? "Completed" : "Mark Done"}
+                          </Button>
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        {sess.description}
+                      </p>
+                      <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground pt-1 border-t border-border/50">
+                        <span>
+                          {sess.start} – {sess.end}
+                        </span>
+                        <span>•</span>
+                        <span className="capitalize">{sess.kind}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
           )}
         </div>
       )}
@@ -511,7 +572,11 @@ export function StudentWorkspace({
 
           <ConceptLearningPanel
             conceptId={activeConceptId}
-            completedConceptIds={state.day1CompletedConceptIds ?? []}
+            completedConceptIds={
+              activeConceptId.startsWith("d2-")
+                ? (state.day2CompletedConceptIds ?? [])
+                : (state.day1CompletedConceptIds ?? [])
+            }
             onToggleComplete={onToggleConceptComplete}
             onSelectConcept={setActiveConceptId}
             onOpenLab={() => onSelectNav("labs")}
