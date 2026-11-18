@@ -33,7 +33,14 @@ import {
   type Day1Concept,
   type AssessmentQuestion,
 } from "@/lib/day1-curriculum";
+import {
+  getDay2ConceptsForSession,
+  getDay2SessionAssessment,
+  type Day2Concept,
+} from "@/lib/day2-curriculum";
 import PacketJourneySimulator from "@/components/day1/packet-journey-simulator";
+import { Day2TopologyCanvas } from "@/components/day2/day2-topology-canvas";
+import { Day2Labs } from "@/components/day2/day2-labs";
 
 export type SessionStageNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -45,6 +52,8 @@ interface UniversalSessionEngineProps {
   onSessionComplete: (sessionId: string) => void;
   onNavigateToSchedule: () => void;
   onOpenCyberRange?: () => void;
+  onSaveLabScore?: (labId: string, score: number) => void;
+  onSaveSessionAssessmentScore?: (sessionId: string, score: number) => void;
 }
 
 export function UniversalSessionEngine({
@@ -55,14 +64,20 @@ export function UniversalSessionEngine({
   onSessionComplete,
   onNavigateToSchedule,
   onOpenCyberRange,
+  onSaveLabScore,
+  onSaveSessionAssessmentScore,
 }: UniversalSessionEngineProps) {
   const [currentStage, setCurrentStage] = useState<SessionStageNumber>(1);
   const [completedStages, setCompletedStages] = useState<Record<number, boolean>>({});
 
+  const isDay2 = session.id.startsWith("d2-");
+
   // Stage 2 Concept selection
-  const sessionConcepts: Day1Concept[] = getConceptsForSession(session.id);
+  const sessionConcepts: (Day1Concept | Day2Concept)[] = isDay2
+    ? getDay2ConceptsForSession(session.id)
+    : getConceptsForSession(session.id);
   const [selectedConceptIndex, setSelectedConceptIndex] = useState<number>(0);
-  const activeConcept: Day1Concept | undefined = sessionConcepts[selectedConceptIndex];
+  const activeConcept: Day1Concept | Day2Concept | undefined = sessionConcepts[selectedConceptIndex];
 
   // Stage 5 Guided Practical completion checklist
   const [practicalChecklist, setPracticalChecklist] = useState<Record<string, boolean>>({});
@@ -72,11 +87,15 @@ export function UniversalSessionEngine({
   const [missionSubmitted, setMissionSubmitted] = useState<boolean>(false);
 
   // Stage 7 Assessment answers
-  const assessmentQuestions: AssessmentQuestion[] = getSessionAssessment(session.id);
+  const assessmentQuestions: AssessmentQuestion[] = isDay2
+    ? getDay2SessionAssessment(session.id)
+    : getSessionAssessment(session.id);
   const [assessmentAnswers, setAssessmentAnswers] = useState<Record<string, number>>({});
   const [assessmentSubmitted, setAssessmentSubmitted] = useState<boolean>(false);
   const [assessmentScore, setAssessmentScore] = useState<number | null>(
-    state.day1SessionAssessmentScores?.[session.id] ?? null,
+    (isDay2
+      ? state.day2SessionAssessmentScores?.[session.id]
+      : state.day1SessionAssessmentScores?.[session.id]) ?? null,
   );
 
   const stages: { number: SessionStageNumber; name: string; icon: React.ElementType }[] = [
@@ -125,6 +144,9 @@ export function UniversalSessionEngine({
     setAssessmentScore(calculated);
     setAssessmentSubmitted(true);
     markStageDone(7);
+    if (onSaveSessionAssessmentScore) {
+      onSaveSessionAssessmentScore(session.id, calculated);
+    }
   };
 
   const handleFinishSession = () => {
@@ -233,10 +255,14 @@ export function UniversalSessionEngine({
                   ENTERPRISE SCENARIO
                 </span>
                 <p className="mt-1 text-xs text-foreground font-medium">
-                  National Public Land Records Agency (NPLRA) Government Network
+                  {isDay2
+                    ? "Engineering Staff College of India (ESCI) Campus Security"
+                    : "National Public Land Records Agency (NPLRA) Government Network"}
                 </p>
                 <p className="mt-1 text-[11px] text-muted-foreground">
-                  Securing government records, database servers, and multi-zone citizen services.
+                  {isDay2
+                    ? "Multi-zone perimeter: WAN (10.231.10.0/24), LAN (10.231.20.0/24), and DMZ (10.231.30.0/24)."
+                    : "Securing government records, database servers, and multi-zone citizen services."}
                 </p>
               </div>
 
@@ -245,18 +271,37 @@ export function UniversalSessionEngine({
                   LEARNING GOALS
                 </span>
                 <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">
-                  <li className="flex items-center gap-1.5">
-                    <Check className="h-3 w-3 text-cyan-400 shrink-0" />
-                    <span>Understand security perimeter enforcement</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <Check className="h-3 w-3 text-cyan-400 shrink-0" />
-                    <span>Analyze stateful protocol inspections</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <Check className="h-3 w-3 text-cyan-400 shrink-0" />
-                    <span>Validate rule changes without packet loss</span>
-                  </li>
+                  {isDay2 ? (
+                    <>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="h-3 w-3 text-cyan-400 shrink-0" />
+                        <span>Configure multi-homed NICs (eth0, eth1, eth2)</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="h-3 w-3 text-cyan-400 shrink-0" />
+                        <span>Inject static routes & verify kernel forwarding</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="h-3 w-3 text-cyan-400 shrink-0" />
+                        <span>Enforce nftables stateful ACLs & DMZ isolation</span>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="h-3 w-3 text-cyan-400 shrink-0" />
+                        <span>Understand security perimeter enforcement</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="h-3 w-3 text-cyan-400 shrink-0" />
+                        <span>Analyze stateful protocol inspections</span>
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <Check className="h-3 w-3 text-cyan-400 shrink-0" />
+                        <span>Validate rule changes without packet loss</span>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
 
@@ -265,10 +310,12 @@ export function UniversalSessionEngine({
                   EXECUTION MODE
                 </span>
                 <p className="mt-1 text-xs text-foreground font-medium">
-                  Zero Infrastructure Troubleshooting
+                  {isDay2 ? "Deterministic Simulation Engine" : "Zero Infrastructure Troubleshooting"}
                 </p>
                 <p className="mt-1 text-[11px] text-muted-foreground">
-                  Browser-based high-fidelity simulation. No hypervisor configuration required.
+                  {isDay2
+                    ? "High-fidelity browser-based Netfilter/nftables simulation. Real-time packet tracing & telemetry."
+                    : "Browser-based high-fidelity simulation. No hypervisor configuration required."}
                 </p>
               </div>
             </div>
@@ -418,75 +465,92 @@ export function UniversalSessionEngine({
       {/* STAGE 3: VISUAL ARCHITECTURE */}
       {currentStage === 3 && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <Card className="p-6 border-border/80 bg-card/70 space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 pb-4">
-              <div>
-                <span className="font-mono text-xs text-cyan-400 font-bold uppercase">
-                  NETWORK ARCHITECTURE & SECURITY BOUNDARIES
-                </span>
-                <h3 className="text-lg font-bold text-foreground mt-1">
-                  Reference Enterprise Topology: 10.50.0.0/16 Subnet Segmentation
-                </h3>
-              </div>
-              <Badge variant="outline" className="font-mono text-xs text-emerald-400 border-emerald-500/40">
-                ACTIVE LAB TOPOLOGY
-              </Badge>
-            </div>
-
-            {/* Interactive Network Diagram */}
-            <div className="rounded-xl border border-cyan-500/30 bg-slate-950/80 p-6 relative overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-                <div className="rounded-lg border border-border/80 bg-card/60 p-4">
-                  <div className="font-mono text-[10px] text-cyan-400 font-bold">CLIENT WORKSTATION</div>
-                  <div className="text-sm font-bold text-foreground mt-1">10.50.10.25</div>
-                  <div className="text-[10px] text-muted-foreground mt-1">VLAN 10 • Windows 11</div>
-                </div>
-
-                <div className="rounded-lg border border-border/80 bg-card/60 p-4">
-                  <div className="font-mono text-[10px] text-cyan-400 font-bold">DEFAULT GATEWAY</div>
-                  <div className="text-sm font-bold text-foreground mt-1">10.50.10.1</div>
-                  <div className="text-[10px] text-muted-foreground mt-1">L3 Transit Router</div>
-                </div>
-
-                <div className="rounded-lg border border-cyan-500/60 bg-cyan-950/30 p-4 shadow-[0_0_15px_rgba(0,229,255,0.15)]">
-                  <div className="font-mono text-[10px] text-cyan-400 font-bold">pfSense GATEWAY</div>
-                  <div className="text-sm font-bold text-foreground mt-1">10.50.0.2</div>
-                  <div className="text-[10px] text-cyan-300 mt-1">vtnet1 LAN • vtnet2 DMZ</div>
-                </div>
-
-                <div className="rounded-lg border border-purple-500/50 bg-purple-950/20 p-4">
-                  <div className="font-mono text-[10px] text-purple-400 font-bold">UBUNTU APP SERVER</div>
-                  <div className="text-sm font-bold text-foreground mt-1">10.50.40.10</div>
-                  <div className="text-[10px] text-muted-foreground mt-1">DMZ (HTTPS:443 / SSH:22)</div>
-                </div>
-              </div>
-
-              {/* Data Flow Legend */}
-              <div className="mt-6 flex flex-wrap items-center justify-around gap-4 border-t border-border/80 pt-4 text-xs font-mono">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-cyan-400" />
-                  <span className="text-muted-foreground">LAN Interface: 10.50.0.2/30 (vtnet1)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-purple-400" />
-                  <span className="text-muted-foreground">DMZ Interface: 10.50.40.1/24 (vtnet2)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                  <span className="text-muted-foreground">Stateful Filter: pf (FreeBSD 14)</span>
-                </div>
+          {isDay2 ? (
+            <div className="space-y-6">
+              <Day2TopologyCanvas />
+              <div className="flex items-center justify-between border-t border-border/80 pt-4">
+                <Button variant="outline" onClick={handlePrevStage} className="text-xs">
+                  ← Concept Learning
+                </Button>
+                <Button
+                  onClick={handleNextStage}
+                  className="bg-cyan-500 text-slate-950 hover:bg-cyan-400 text-xs font-semibold"
+                >
+                  Instructor Demonstration →
+                </Button>
               </div>
             </div>
+          ) : (
+            <Card className="p-6 border-border/80 bg-card/70 space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 pb-4">
+                <div>
+                  <span className="font-mono text-xs text-cyan-400 font-bold uppercase">
+                    NETWORK ARCHITECTURE & SECURITY BOUNDARIES
+                  </span>
+                  <h3 className="text-lg font-bold text-foreground mt-1">
+                    Reference Enterprise Topology: 10.50.0.0/16 Subnet Segmentation
+                  </h3>
+                </div>
+                <Badge variant="outline" className="font-mono text-xs text-emerald-400 border-emerald-500/40">
+                  ACTIVE LAB TOPOLOGY
+                </Badge>
+              </div>
 
-            <div className="flex items-center justify-between">
-              <Button variant="outline" onClick={handlePrevStage} className="text-xs">
-                ← Concept Learning
-              </Button>
-              <Button onClick={handleNextStage} className="bg-cyan-500 text-slate-950 hover:bg-cyan-400 text-xs font-semibold">
-                Instructor Demonstration →
-              </Button>
-            </div>
-          </Card>
+              {/* Interactive Network Diagram */}
+              <div className="rounded-xl border border-cyan-500/30 bg-slate-950/80 p-6 relative overflow-hidden">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                  <div className="rounded-lg border border-border/80 bg-card/60 p-4">
+                    <div className="font-mono text-[10px] text-cyan-400 font-bold">CLIENT WORKSTATION</div>
+                    <div className="text-sm font-bold text-foreground mt-1">10.50.10.25</div>
+                    <div className="text-[10px] text-muted-foreground mt-1">VLAN 10 • Windows 11</div>
+                  </div>
+
+                  <div className="rounded-lg border border-border/80 bg-card/60 p-4">
+                    <div className="font-mono text-[10px] text-cyan-400 font-bold">DEFAULT GATEWAY</div>
+                    <div className="text-sm font-bold text-foreground mt-1">10.50.10.1</div>
+                    <div className="text-[10px] text-muted-foreground mt-1">L3 Transit Router</div>
+                  </div>
+
+                  <div className="rounded-lg border border-cyan-500/60 bg-cyan-950/30 p-4 shadow-[0_0_15px_rgba(0,229,255,0.15)]">
+                    <div className="font-mono text-[10px] text-cyan-400 font-bold">pfSense GATEWAY</div>
+                    <div className="text-sm font-bold text-foreground mt-1">10.50.0.2</div>
+                    <div className="text-[10px] text-cyan-300 mt-1">vtnet1 LAN • vtnet2 DMZ</div>
+                  </div>
+
+                  <div className="rounded-lg border border-purple-500/50 bg-purple-950/20 p-4">
+                    <div className="font-mono text-[10px] text-purple-400 font-bold">UBUNTU APP SERVER</div>
+                    <div className="text-sm font-bold text-foreground mt-1">10.50.40.10</div>
+                    <div className="text-[10px] text-muted-foreground mt-1">DMZ (HTTPS:443 / SSH:22)</div>
+                  </div>
+                </div>
+
+                {/* Data Flow Legend */}
+                <div className="mt-6 flex flex-wrap items-center justify-around gap-4 border-t border-border/80 pt-4 text-xs font-mono">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-cyan-400" />
+                    <span className="text-muted-foreground">LAN Interface: 10.50.0.2/30 (vtnet1)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-purple-400" />
+                    <span className="text-muted-foreground">DMZ Interface: 10.50.40.1/24 (vtnet2)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                    <span className="text-muted-foreground">Stateful Filter: pf (FreeBSD 14)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Button variant="outline" onClick={handlePrevStage} className="text-xs">
+                  ← Concept Learning
+                </Button>
+                <Button onClick={handleNextStage} className="bg-cyan-500 text-slate-950 hover:bg-cyan-400 text-xs font-semibold">
+                  Instructor Demonstration →
+                </Button>
+              </div>
+            </Card>
+          )}
         </div>
       )}
 
@@ -509,26 +573,71 @@ export function UniversalSessionEngine({
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-lg border border-border/60 bg-slate-950 p-4 font-mono text-xs space-y-2">
-                <div className="text-muted-foreground"># Instructor Demonstration Commands:</div>
-                <div className="text-emerald-400">$ ping -c 3 10.50.40.10</div>
-                <div className="text-muted-foreground text-[11px]">
-                  64 bytes from 10.50.40.10: icmp_seq=1 ttl=63 time=0.84 ms (Firewall Rule 103 PASS)
+              {isDay2 ? (
+                <div className="rounded-lg border border-border/60 bg-slate-950 p-4 font-mono text-xs space-y-2.5">
+                  <div className="text-cyan-400 font-bold"># 1. Interface IP & Link State Verification:</div>
+                  <div className="text-muted-foreground">$ ip -br addr show</div>
+                  <div className="text-emerald-400 text-[11px]">
+                    eth0 UP 10.231.30.254/24 (DMZ) | eth1 UP 10.231.20.254/24 (LAN) | eth2 UP 10.231.10.254/24 (WAN)
+                  </div>
+
+                  <div className="text-cyan-400 font-bold mt-2"># 2. Kernel Routing Table Check:</div>
+                  <div className="text-muted-foreground">$ ip route show</div>
+                  <div className="text-emerald-400 text-[11px]">
+                    default via 10.231.10.1 dev eth2<br />
+                    10.231.10.0/24 dev eth2 proto kernel scope link src 10.231.10.254<br />
+                    10.231.20.0/24 dev eth1 proto kernel scope link src 10.231.20.254<br />
+                    10.231.30.0/24 dev eth0 proto kernel scope link src 10.231.30.254
+                  </div>
+
+                  <div className="text-cyan-400 font-bold mt-2"># 3. Active nftables Ruleset with Hit Counters:</div>
+                  <div className="text-muted-foreground">$ nft list ruleset</div>
+                  <div className="text-cyan-300 text-[11px] whitespace-pre-wrap bg-slate-900/80 p-2.5 rounded border border-border/50">
+{`table inet filter {
+  chain forward {
+    type filter hook forward priority 0; policy drop;
+    ct state established,related counter packets 542 bytes 62140 accept
+    iif eth1 oif eth0 ip daddr 10.231.30.10 tcp dport { 80, 443 } counter packets 118 bytes 15200 accept
+    iif eth2 oif eth0 ip daddr 10.231.30.10 tcp dport { 80, 443 } counter packets 84 bytes 10920 accept
+    iif eth0 oif eth1 counter packets 31 bytes 1860 drop
+  }
+}`}
+                  </div>
+
+                  <div className="text-cyan-400 font-bold mt-2"># 4. End-to-End Inter-Zone Connectivity Test:</div>
+                  <div className="text-emerald-400 text-[11px]">
+                    $ curl -Iv http://10.231.30.10/ (from sxl-lan01)<br />
+                    Connected to 10.231.30.10 port 80 • HTTP/1.1 200 OK (Nginx DMZ Web Server) ✓
+                  </div>
+                  <div className="text-rose-400 text-[11px]">
+                    $ ssh -o ConnectTimeout=2 10.231.20.10 (from sxl-dmz01)<br />
+                    ssh: connect to host 10.231.20.10 port 22: Connection timed out (Rule: iif eth0 oif eth1 drop) ✗
+                  </div>
                 </div>
-                <div className="text-emerald-400 mt-2">$ curl -Iv https://10.50.40.10/</div>
-                <div className="text-muted-foreground text-[11px]">
-                  Connected to 10.50.40.10 port 443 (#0) • TLSv1.3 Handshake OK • HTTP/1.1 200 OK
+              ) : (
+                <div className="rounded-lg border border-border/60 bg-slate-950 p-4 font-mono text-xs space-y-2">
+                  <div className="text-muted-foreground"># Instructor Demonstration Commands:</div>
+                  <div className="text-emerald-400">$ ping -c 3 10.50.40.10</div>
+                  <div className="text-muted-foreground text-[11px]">
+                    64 bytes from 10.50.40.10: icmp_seq=1 ttl=63 time=0.84 ms (Firewall Rule 103 PASS)
+                  </div>
+                  <div className="text-emerald-400 mt-2">$ curl -Iv https://10.50.40.10/</div>
+                  <div className="text-muted-foreground text-[11px]">
+                    Connected to 10.50.40.10 port 443 (#0) • TLSv1.3 Handshake OK • HTTP/1.1 200 OK
+                  </div>
+                  <div className="text-rose-400 mt-2">$ ssh -o ConnectTimeout=3 admin@10.50.40.10</div>
+                  <div className="text-rose-300 text-[11px]">
+                    ssh: connect to host 10.50.40.10 port 22: Connection timed out (Rule 102 BLOCK / pfSense drop)
+                  </div>
                 </div>
-                <div className="text-rose-400 mt-2">$ ssh -o ConnectTimeout=3 admin@10.50.40.10</div>
-                <div className="text-rose-300 text-[11px]">
-                  ssh: connect to host 10.50.40.10 port 22: Connection timed out (Rule 102 BLOCK / pfSense drop)
-                </div>
-              </div>
+              )}
 
               <div className="rounded-lg border border-cyan-500/30 bg-cyan-950/20 p-4 text-xs space-y-2">
                 <span className="font-mono font-bold uppercase text-cyan-400">KEY OBSERVATIONS:</span>
                 <p className="text-muted-foreground leading-relaxed">
-                  Notice that the pfSense firewall inspects the SYN packet at Layer 4. Because Rule 101 permits TCP port 443, a state table entry is established dynamically. The return SYN-ACK packet matches this dynamic state and bypasses inbound evaluation. In contrast, SSH traffic to port 22 is explicitly blocked and dropped.
+                  {isDay2
+                    ? "Notice how the Linux Netfilter forward hook evaluates traffic strictly based on the 5-tuple and interface bindings. The DMZ-to-LAN isolation rule halts any unsolicited packet initiated from eth0 to eth1, preventing lateral movement even if the DMZ web server is compromised. However, stateful return packets for connections initiated by LAN users are accepted by the connection tracking rule at the top of the chain."
+                    : "Notice that the pfSense firewall inspects the SYN packet at Layer 4. Because Rule 101 permits TCP port 443, a state table entry is established dynamically. The return SYN-ACK packet matches this dynamic state and bypasses inbound evaluation. In contrast, SSH traffic to port 22 is explicitly blocked and dropped."}
                 </p>
               </div>
             </div>
@@ -548,65 +657,95 @@ export function UniversalSessionEngine({
       {/* STAGE 5: GUIDED PRACTICAL */}
       {currentStage === 5 && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <Card className="p-6 border-border/80 bg-card/70 space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 pb-4">
-              <div>
-                <span className="font-mono text-xs text-cyan-400 font-bold uppercase">
-                  HANDS-ON GUIDED PRACTICAL
+          {isDay2 ? (
+            <div className="space-y-6">
+              <Day2Labs
+                activeLabId={
+                  session.id === "d2-s1" || session.id === "d2-s2"
+                    ? "day2-lab-01"
+                    : session.id === "d2-s3"
+                      ? "day2-lab-02"
+                      : "day2-lab-03"
+                }
+                labScores={state.day2LabScores ?? {}}
+                onSaveLabScore={(labId, score) => {
+                  markStageDone(5);
+                  onSaveLabScore?.(labId, score);
+                }}
+              />
+              <div className="flex items-center justify-between border-t border-border/80 pt-4">
+                <Button variant="outline" onClick={handlePrevStage} className="text-xs">
+                  ← Demonstration
+                </Button>
+                <Button
+                  onClick={handleNextStage}
+                  className="bg-cyan-500 text-slate-950 hover:bg-cyan-400 text-xs font-semibold"
+                >
+                  Proceed to Independent Mission →
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Card className="p-6 border-border/80 bg-card/70 space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 pb-4">
+                <div>
+                  <span className="font-mono text-xs text-cyan-400 font-bold uppercase">
+                    HANDS-ON GUIDED PRACTICAL
+                  </span>
+                  <h3 className="text-lg font-bold text-foreground mt-1">
+                    Stateful Packet Journey & Rule Execution
+                  </h3>
+                </div>
+                <Badge variant="outline" className="font-mono text-xs text-emerald-400 border-emerald-500/40">
+                  INTERACTIVE SIMULATOR
+                </Badge>
+              </div>
+
+              {/* Embedded Simulator */}
+              <div className="rounded-xl border border-border/70 overflow-hidden">
+                <PacketJourneySimulator onLabScoreSave={() => markStageDone(5)} />
+              </div>
+
+              {/* Guided Verification Tasks */}
+              <div className="rounded-lg border border-border/60 bg-card/40 p-4 space-y-3">
+                <span className="font-mono text-xs font-bold uppercase text-cyan-400">
+                  PRACTICAL VERIFICATION TASKS:
                 </span>
-                <h3 className="text-lg font-bold text-foreground mt-1">
-                  Stateful Packet Journey & Rule Execution
-                </h3>
+                <div className="space-y-2">
+                  {[
+                    { key: "task1", label: "Transmit HTTPS traffic and confirm dynamic state table entry created" },
+                    { key: "task2", label: "Toggle Rule 101 to BLOCK and observe Stage 4 packet drop at pfSense" },
+                    { key: "task3", label: "Toggle Rule 102 to PASS and verify SSH handshake succeeds to 10.50.40.10:22" },
+                  ].map((task) => (
+                    <label
+                      key={task.key}
+                      onClick={() => handleTogglePracticalCheck(task.key)}
+                      className="flex items-center gap-3 p-2 rounded-md hover:bg-card/60 cursor-pointer text-xs"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={!!practicalChecklist[task.key]}
+                        readOnly
+                        className="rounded border-border text-cyan-400 focus:ring-cyan-400"
+                      />
+                      <span className={practicalChecklist[task.key] ? "line-through text-muted-foreground" : "text-foreground"}>
+                        {task.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
               </div>
-              <Badge variant="outline" className="font-mono text-xs text-emerald-400 border-emerald-500/40">
-                INTERACTIVE SIMULATOR
-              </Badge>
-            </div>
 
-            {/* Embedded Simulator */}
-            <div className="rounded-xl border border-border/70 overflow-hidden">
-              <PacketJourneySimulator onLabScoreSave={() => markStageDone(5)} />
-            </div>
-
-            {/* Guided Verification Tasks */}
-            <div className="rounded-lg border border-border/60 bg-card/40 p-4 space-y-3">
-              <span className="font-mono text-xs font-bold uppercase text-cyan-400">
-                PRACTICAL VERIFICATION TASKS:
-              </span>
-              <div className="space-y-2">
-                {[
-                  { key: "task1", label: "Transmit HTTPS traffic and confirm dynamic state table entry created" },
-                  { key: "task2", label: "Toggle Rule 101 to BLOCK and observe Stage 4 packet drop at pfSense" },
-                  { key: "task3", label: "Toggle Rule 102 to PASS and verify SSH handshake succeeds to 10.50.40.10:22" },
-                ].map((task) => (
-                  <label
-                    key={task.key}
-                    onClick={() => handleTogglePracticalCheck(task.key)}
-                    className="flex items-center gap-3 p-2 rounded-md hover:bg-card/60 cursor-pointer text-xs"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={!!practicalChecklist[task.key]}
-                      readOnly
-                      className="rounded border-border text-cyan-400 focus:ring-cyan-400"
-                    />
-                    <span className={practicalChecklist[task.key] ? "line-through text-muted-foreground" : "text-foreground"}>
-                      {task.label}
-                    </span>
-                  </label>
-                ))}
+              <div className="flex items-center justify-between">
+                <Button variant="outline" onClick={handlePrevStage} className="text-xs">
+                  ← Demonstration
+                </Button>
+                <Button onClick={handleNextStage} className="bg-cyan-500 text-slate-950 hover:bg-cyan-400 text-xs font-semibold">
+                  Proceed to Independent Mission →
+                </Button>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <Button variant="outline" onClick={handlePrevStage} className="text-xs">
-                ← Demonstration
-              </Button>
-              <Button onClick={handleNextStage} className="bg-cyan-500 text-slate-950 hover:bg-cyan-400 text-xs font-semibold">
-                Proceed to Independent Mission →
-              </Button>
-            </div>
-          </Card>
+            </Card>
+          )}
         </div>
       )}
 
@@ -620,7 +759,15 @@ export function UniversalSessionEngine({
                   INDEPENDENT MISSION CHALLENGE
                 </span>
                 <h3 className="text-lg font-bold text-foreground mt-1">
-                  Scenario: Restrict Administrative Access to DMZ
+                  {isDay2
+                    ? session.id === "d2-s1"
+                      ? "Scenario: Justify Layer 3 Routed Mode vs Layer 2 Transparent Mode"
+                      : session.id === "d2-s2"
+                        ? "Scenario: Firewall Interface Binding & Management Hardening"
+                        : session.id === "d2-s3"
+                          ? "Scenario: Formulate Diagnostic Sequence for Inter-Zone Reachability"
+                          : "Scenario: Prevent Lateral Movement via DMZ Isolation Policy"
+                    : "Scenario: Restrict Administrative Access to DMZ"}
                 </h3>
               </div>
               <Badge variant="outline" className="font-mono text-xs text-amber-400 border-amber-500/40">
@@ -630,7 +777,15 @@ export function UniversalSessionEngine({
 
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Security auditors flagged that SSH access to the application server (<code className="text-cyan-300 font-mono">10.50.40.10:22</code>) was previously open from all client subnets. Your objective is to explain how a stateful firewall handles rule ordering, and record your technical justification for why stateful return traffic should be allowed while unsolicited inbound connections from the DMZ to the LAN are blocked.
+                {isDay2
+                  ? session.id === "d2-s1"
+                    ? "Security architects require you to justify deploying sxl-fw01 in Routed Mode (Layer 3) across subnets 10.231.10.0/24 (WAN), 10.231.20.0/24 (LAN), and 10.231.30.0/24 (DMZ) rather than Transparent Mode (Layer 2 bridge). Record your technical justification detailing routing boundaries, TTL decrement, and broadcast domain isolation."
+                    : session.id === "d2-s2"
+                      ? "Security policy mandates that all firewall management access must be restricted to in-band LAN interface eth1 (10.231.20.254:22). Explain why allowing management access on WAN eth2 or DMZ eth0 introduces severe risk, and document the configuration controls that enforce this isolation."
+                      : session.id === "d2-s3"
+                        ? "An administrator reports that while IP addresses are assigned to eth0, eth1, and eth2, workstations in LAN cannot reach the DMZ web server. Formulate your systematic Layer 3 diagnostic sequence (link state, IP CIDR, default gateway, and net.ipv4.ip_forward)."
+                        : "Security auditors identified a requirement to strictly prevent compromised DMZ web servers from probing internal LAN databases. Document your nftables rule formulation for 'iif eth0 oif eth1 counter drop' and explain why legitimate return traffic from DMZ to LAN is still permitted."
+                  : "Security auditors flagged that SSH access to the application server (10.50.40.10:22) was previously open from all client subnets. Your objective is to explain how a stateful firewall handles rule ordering, and record your technical justification for why stateful return traffic should be allowed while unsolicited inbound connections from the DMZ to the LAN are blocked."}
               </p>
 
               <div className="space-y-2">

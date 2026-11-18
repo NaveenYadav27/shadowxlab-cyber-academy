@@ -1,0 +1,751 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": "1.0.0",
+  "institution": "Engineering Staff College of India (ESCI)",
+  "programme": {
+    "id": "firewall-vpn-security-administration",
+    "title": "Firewall & VPN Security Administration",
+    "instructor": "Mr. Naveen Kumar",
+    "dates": {
+      "start": "2026-11-16",
+      "end": "2026-11-20",
+      "activeDayDate": "2026-11-17"
+    },
+    "location": "Engineering Staff College of India (ESCI) / ShadowXLab",
+    "durationLabel": "5 Days"
+  },
+  "day": {
+    "id": "day-2",
+    "index": 2,
+    "title": "Firewall Architecture & Administration",
+    "date": "Tuesday, 17 November 2026",
+    "faculty": "Mr. Naveen Kumar",
+    "objectives": [
+      "Master firewall architectures, inspection engines, deployment modes (Layer 2 vs Layer 3 vs NAT), and security zones.",
+      "Design enterprise network topologies mapping WAN (10.231.10.0/24), LAN (10.231.20.0/24), and DMZ (10.231.30.0/24) zones.",
+      "Configure multi-homed firewall interfaces (eth0, eth1, eth2), static routing, and management access policies.",
+      "Construct stateful nftables Access Control Lists (ACLs), manage rule ordering, and enforce default-deny perimeter policies."
+    ],
+    "addressingScheme": {
+      "wan": {
+        "subnet": "10.231.10.0/24",
+        "gateway": "10.231.10.254",
+        "interface": "eth2",
+        "endpoint": "10.231.10.10",
+        "endpointHostname": "sxl-wan01",
+        "description": "Untrusted external network / ISP simulation"
+      },
+      "lan": {
+        "subnet": "10.231.20.0/24",
+        "gateway": "10.231.20.254",
+        "interface": "eth1",
+        "endpoint": "10.231.20.10",
+        "endpointHostname": "sxl-lan01",
+        "description": "Trusted internal corporate network / workstations"
+      },
+      "dmz": {
+        "subnet": "10.231.30.0/24",
+        "gateway": "10.231.30.254",
+        "interface": "eth0",
+        "endpoint": "10.231.30.10",
+        "endpointHostname": "sxl-dmz01",
+        "services": [
+          "Nginx Web Server (HTTP:80, HTTPS:443)"
+        ],
+        "description": "Semi-trusted perimeter zone for public services"
+      },
+      "firewall": {
+        "hostname": "sxl-fw01",
+        "engine": "nftables v1.0.6 (Linux 6.x Netfilter)",
+        "managementIp": "10.231.20.254 (LAN eth1)",
+        "interfaces": {
+          "eth0": "10.231.30.254/24 (DMZ)",
+          "eth1": "10.231.20.254/24 (LAN)",
+          "eth2": "10.231.10.254/24 (WAN)"
+        }
+      }
+    },
+    "sessions": [
+      {
+        "id": "d2-s1",
+        "index": 1,
+        "title": "Firewall Architecture, Deployment Modes and Security Zones; Firewall Placement: LAN, WAN, DMZ and Perimeter Security",
+        "start": "10:00",
+        "end": "11:30",
+        "kind": "lesson",
+        "durationMinutes": 90,
+        "description": "In-depth exploration of firewall architecture, packet filtering vs stateful vs proxy engines, deployment modes (Routed L3 vs Transparent L2), security zones (Inside, Outside, DMZ), trust boundaries, and perimeter defense-in-depth placement.",
+        "conceptRange": [
+          1,
+          4
+        ],
+        "labReferences": [
+          "day2-lab-01"
+        ]
+      },
+      {
+        "id": "d2-s2",
+        "index": 2,
+        "title": "Hands-on Lab: Network Topology Design and Basic Firewall Installation / Initial Setup, Firewall Interface Configuration, Management Access and Initial Setup",
+        "start": "11:45",
+        "end": "13:00",
+        "kind": "lab",
+        "durationMinutes": 75,
+        "description": "Practical laboratory hands-on: Design multi-zone enterprise topology, assign physical/virtual NICs (eth0 DMZ, eth1 LAN, eth2 WAN), perform initial bootstrap setup, and configure out-of-band vs in-band administrative management access.",
+        "conceptRange": [
+          5,
+          8
+        ],
+        "labReferences": [
+          "day2-lab-01",
+          "day2-lab-02"
+        ]
+      },
+      {
+        "id": "d2-s3",
+        "index": 3,
+        "title": "Configuration of LAN, WAN, DMZ Interfaces and Static Routing",
+        "start": "14:00",
+        "end": "15:30",
+        "kind": "lesson",
+        "durationMinutes": 90,
+        "description": "Technical configuration of multi-homed interfaces across subnets 10.231.10.0/24, 10.231.20.0/24, and 10.231.30.0/24; static routing table construction; default gateway injection (0.0.0.0/0); and inter-zone reachability verification.",
+        "conceptRange": [
+          9,
+          12
+        ],
+        "labReferences": [
+          "day2-lab-02"
+        ]
+      },
+      {
+        "id": "d2-s4",
+        "index": 4,
+        "title": "Firewall Access Control Lists (ACLs), Rules and Policy Management",
+        "start": "15:45",
+        "end": "17:00",
+        "kind": "lesson",
+        "durationMinutes": 75,
+        "description": "Architecture of firewall Access Control Lists (ACLs), 5-tuple filtering rules, evaluation order (first-match semantics), default-deny posture, nftables framework implementation, and directional inter-zone security policies.",
+        "conceptRange": [
+          13,
+          16
+        ],
+        "labReferences": [
+          "day2-lab-03"
+        ]
+      }
+    ],
+    "conceptsPerSession": 4,
+    "conceptCount": 16,
+    "concepts": [
+      {
+        "id": "day2-concept-01",
+        "number": 1,
+        "title": "Firewall Inspection Engines: Stateless, Stateful & Application Proxies",
+        "sessionId": "d2-s1",
+        "durationMinutes": 22,
+        "learningObjectives": [
+          "Differentiate stateless packet filters, stateful inspection engines, and application-layer proxies.",
+          "Analyze connection tracking tables (conntrack) and TCP state transitions (SYN, ESTABLISHED, FIN/RST).",
+          "Understand processing overhead and security trade-offs for each inspection model."
+        ],
+        "technicalExplanation": "Stateless packet filters evaluate individual datagrams in isolation based on Layer 3/4 headers (src/dst IP, proto, src/dst port) without retaining memory of previous packets. Stateful firewalls maintain an internal state table (connection tracking table) recording bidirectional session attributes, allowing return packets for established sessions to pass automatically. Application proxies terminate client connections entirely, inspect Layer 7 payload headers and semantics, and establish an independent connection to destination servers.",
+        "architectureOrWorkflow": "Packet arrives at NIC -> Kernel Netfilter pre-routing hook -> Connection tracking (conntrack) lookup -> If established state matches, fast-path accept -> If new SYN packet, evaluate Access Control List top-down -> If permitted, allocate new state table entry -> Route lookup -> Post-routing egress.",
+        "enterpriseExample": "At the ESCI campus perimeter, internal research staff initiating HTTPS sessions to external academic libraries generate outbound TCP SYN packets matching state table entries. Inbound responses bypass policy evaluation because their 5-tuple reversed matches state ESTABLISHED, reducing latency and preventing port exhaustion attacks.",
+        "securityEngineeringRelevance": "Without stateful inspection, administrators would have to open high-range ephemeral ports (1024-65535) bidirectionally, creating gaping attack surfaces for port scanning and reverse shells.",
+        "instructorExplanation": "Highlight to students that stateful inspection operates by maintaining dynamic state tables. Emphasize why state table exhaustion is a primary DoS target (SYN flood) and how SYN cookies mitigate it.",
+        "commonMistakes": [
+          "Confusing stateless rule symmetry with stateful bidirectional session tracking.",
+          "Assuming stateful firewalls inspect application payloads for SQL injection or XSS.",
+          "Omitting state timeout parameters, leading to zombie connection table exhaustion."
+        ],
+        "knowledgeCheckObjectives": [
+          "Explain why returning TCP SYN-ACK packets are permitted by stateful firewalls without an explicit inbound rule.",
+          "Identify the inspection layer where protocol anomalies and payload attacks are detected."
+        ],
+        "diagramSpecification": "Diagram comparing stateless packet evaluation vs state table memory allocation during a 3-way handshake.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "d1-s4"
+        ]
+      },
+      {
+        "id": "day2-concept-02",
+        "number": 2,
+        "title": "Firewall Deployment Modes: Routed (Layer 3) vs. Transparent (Layer 2) vs. NAT",
+        "sessionId": "d2-s1",
+        "durationMinutes": 22,
+        "learningObjectives": [
+          "Compare Routed (L3 hop), Transparent (L2 bridge/stealth), and NAT deployment topologies.",
+          "Select appropriate deployment mode based on IP renumbering constraints and perimeter visibility.",
+          "Analyze MAC-layer bridging vs IP routing forwarding logic."
+        ],
+        "technicalExplanation": "In Routed Mode (Layer 3), the firewall acts as the default gateway for internal networks, decrementing TTL, performing ARP resolution, and routing between distinct IP subnets. In Transparent Mode (Layer 2 bridge), the firewall operates without an IP address on filtering interfaces, functioning as an invisible bump-in-the-wire filtering frames based on IP/TCP headers without modifying network addressing or routing. In NAT Mode, private subnets (RFC 1918) are multiplexed onto one or more public routable IP addresses using Port Address Translation (PAT).",
+        "architectureOrWorkflow": "Routed Mode: Host sends frame to FW MAC -> FW checks IP destination -> Decrements TTL -> Evaluates L3/L4 rules -> ARP lookup for next hop -> Rewrites dst MAC -> Transmits. Transparent Mode: Host sends frame to Router MAC -> FW intercepts frame in bridge hook -> Inspects L3/L4 policy -> If allowed, passes frame unchanged.",
+        "enterpriseExample": "ESCI deploys the sxl-fw01 gateway in Routed Mode between WAN (10.231.10.0/24), LAN (10.231.20.0/24), and DMZ (10.231.30.0/24). This provides strict Layer 3 boundary isolation and routing policy enforcement across educational blocks.",
+        "securityEngineeringRelevance": "Transparent mode allows inline firewall insertion into legacy industrial or healthcare networks where renumbering IP addresses or changing default gateways is operationally impossible.",
+        "instructorExplanation": "Draw the difference between MAC rewriting in Routed Mode versus zero-MAC rewriting in Transparent Bridge Mode. Show why stealth firewalls are harder for adversaries to locate via traceroute.",
+        "commonMistakes": [
+          "Configuring overlapping subnets on multiple interfaces in Routed Mode.",
+          "Attempting to configure static routes inside a pure Layer 2 transparent bridge.",
+          "Forgetting that transparent firewalls still require an out-of-band management IP address."
+        ],
+        "knowledgeCheckObjectives": [
+          "Determine the correct deployment mode when IP subnets must remain completely unchanged.",
+          "Identify why TTL is decremented in Routed Mode but preserved in Transparent Mode."
+        ],
+        "diagramSpecification": "Flowchart contrasting Routed L3 gateway forwarding vs Layer 2 transparent bridge frame inspection.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "day2-concept-01"
+        ]
+      },
+      {
+        "id": "day2-concept-03",
+        "number": 3,
+        "title": "Security Zones & Trust Boundaries: Inside, Outside & DMZ Demarcation",
+        "sessionId": "d2-s1",
+        "durationMinutes": 23,
+        "learningObjectives": [
+          "Define security zones and establish hierarchical trust boundaries.",
+          "Classify Inside (LAN), Outside (WAN), and DMZ trust levels (e.g., Trust 100, Trust 50, Trust 0).",
+          "Enforce strict inter-zone traffic flow rules preventing lateral movement."
+        ],
+        "technicalExplanation": "A security zone is a logical grouping of one or more physical/virtual interfaces sharing identical security requirements. Trust boundaries dictate directional policies: traffic flowing from higher trust (LAN) to lower trust (WAN/DMZ) is typically permitted with stateful tracking, while traffic from lower trust to higher trust is denied by default unless explicitly allowed by pinhole rules.",
+        "architectureOrWorkflow": "LAN Zone (Trust 100) -> Permitted to DMZ Zone (Trust 50) for management and WAN Zone (Trust 0) for internet. WAN Zone (Trust 0) -> Permitted to DMZ Zone (Trust 50) ONLY for HTTP:80/HTTPS:443. DMZ Zone (Trust 50) -> STRICTLY FORBIDDEN from initiating connections into LAN Zone (Trust 100).",
+        "enterpriseExample": "In the ESCI pilot network, sxl-dmz01 hosts the Nginx portal on 10.231.30.10. If an attacker compromises the web application, the DMZ-to-LAN isolation rule prevents them from scanning or attacking internal LAN student workstations (10.231.20.10).",
+        "securityEngineeringRelevance": "Zones replace unwieldy interface-specific ACLs with scalable, intent-based policies that remain resilient as subnets expand.",
+        "instructorExplanation": "Stress the Cardinal Rule of DMZ Architecture: A DMZ host must NEVER be able to initiate a connection to the internal LAN. It may only respond to sessions initiated from the LAN.",
+        "commonMistakes": [
+          "Allowing DMZ servers to initiate database connections directly into the internal LAN.",
+          "Placing internal management tools (LDAP, Active Directory) inside the DMZ.",
+          "Treating DMZ and LAN as peer subnets with symmetric routing."
+        ],
+        "knowledgeCheckObjectives": [
+          "Identify the fundamental directional policy between DMZ and LAN.",
+          "Calculate risk exposure if a DMZ web server is compromised in an improperly zoned network."
+        ],
+        "diagramSpecification": "Security Zone trust pyramid illustrating Inside (100), DMZ (50), and Outside (0) boundaries.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "day2-concept-02"
+        ]
+      },
+      {
+        "id": "day2-concept-04",
+        "number": 4,
+        "title": "Perimeter Security Architecture & Defense-in-Depth Placement",
+        "sessionId": "d2-s1",
+        "durationMinutes": 23,
+        "learningObjectives": [
+          "Construct multi-tier perimeter architectures (Screened Host, Screened Subnet, Dual-Homed Firewall).",
+          "Evaluate placement of bastion hosts, reverse proxies, and perimeter screening routers.",
+          "Apply defense-in-depth principles across edge, zone, and endpoint tiers."
+        ],
+        "technicalExplanation": "Perimeter defense-in-depth layers specialized security mechanisms at each boundary. An external screening router drops spoofed bogons and basic ICMP floods; the primary edge firewall enforces zone ACLs and stateful inspection; an application reverse proxy terminates TLS and filters web threats; and internal host firewalls provide endpoint-level microsegmentation.",
+        "architectureOrWorkflow": "Internet -> Screening Router (drops RFC 1918 on WAN) -> Edge Firewall (sxl-fw01 eth2) -> Demilitarized Zone (sxl-fw01 eth0) -> Reverse Proxy -> Internal Firewall -> LAN Switch (sxl-fw01 eth1) -> Host firewall (iptables/Windows Defender).",
+        "enterpriseExample": "ESCI enterprise perimeter employs a Screened Subnet architecture: external internet traffic arrives via 10.231.10.0/24 (WAN), web requests are filtered and passed to 10.231.30.0/24 (DMZ), while administrative control is segregated to 10.231.20.0/24 (LAN).",
+        "securityEngineeringRelevance": "A single firewall failure or zero-day bypass does not result in complete enterprise compromise when defense-in-depth is rigorously enforced.",
+        "instructorExplanation": "Explain the difference between a Dual-Homed Host (single machine with two NICs acting as router) and a Screened Subnet (DMZ isolated between two distinct packet filtering boundaries).",
+        "commonMistakes": [
+          "Relying solely on perimeter edge firewalls while disabling host-based firewalls.",
+          "Allowing dual-homed bastion hosts to bridge networks without filtering inspection.",
+          "Failing to filter outbound egress traffic from internal servers."
+        ],
+        "knowledgeCheckObjectives": [
+          "Contrast single-homed screened host topology with multi-zone screened subnet topology.",
+          "Identify the primary defensive role of an external perimeter screening router."
+        ],
+        "diagramSpecification": "Architectural blueprint of Screened Subnet with edge screening router, DMZ bastion, and internal LAN.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "day2-concept-03"
+        ]
+      },
+      {
+        "id": "day2-concept-05",
+        "number": 5,
+        "title": "Network Topology Design & Virtual/Physical NIC Mapping",
+        "sessionId": "d2-s2",
+        "durationMinutes": 18,
+        "learningObjectives": [
+          "Map virtual network interfaces (eth0, eth1, eth2) to designated security zones.",
+          "Configure deterministic interface bindings and verify MAC address associations.",
+          "Prevent interface cross-wiring and VLAN leakage."
+        ],
+        "technicalExplanation": "Enterprise firewall hardware or virtual appliances utilize dedicated physical or virtual Network Interface Cards (NICs). In the ShadowXLab ESCI pilot, eth0 is mapped to the DMZ (10.231.30.0/24), eth1 is mapped to the LAN (10.231.20.0/24), and eth2 is mapped to the WAN (10.231.10.0/24). Interface mapping must be deterministic and verifiable via systemd network link configurations.",
+        "architectureOrWorkflow": "Hardware Bus / Hypervisor vSwitch -> PCI Device Enumeration -> OS Interface Name (eth0/eth1/eth2) -> IP Configuration -> Zone Assignment in Firewall Policy Engine.",
+        "enterpriseExample": "On the sxl-fw01 firewall, typing ip link show confirms: eth0 connected to dmz_bridge, eth1 connected to lan_bridge, and eth2 connected to wan_bridge.",
+        "securityEngineeringRelevance": "Cross-wiring an interface (e.g. connecting eth2 WAN cable to internal LAN switch) completely destroys network security by bypassing all firewall controls.",
+        "instructorExplanation": "Demonstrate how Linux kernel interface names relate to physical switch ports or virtual bridges. Emphasize physical labeling and link state verification before assigning IP addresses.",
+        "commonMistakes": [
+          "Assigning IP addresses to interfaces before verifying physical/virtual cable termination.",
+          "Swapping WAN and LAN NIC cables during rack mounting or hypervisor vSwitch creation.",
+          "Ignoring interface link negotiation (half-duplex mismatch causing packet loss)."
+        ],
+        "knowledgeCheckObjectives": [
+          "Verify interface mapping between eth0, eth1, eth2 and their corresponding pilot zones.",
+          "Identify symptoms of interface misconfiguration and link duplex mismatch."
+        ],
+        "diagramSpecification": "Cabling diagram connecting sxl-fw01 NICs to WAN, LAN, and DMZ network bridges.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "day2-concept-04"
+        ]
+      },
+      {
+        "id": "day2-concept-06",
+        "number": 6,
+        "title": "Firewall Initial Bootstrap & Operating System Setup",
+        "sessionId": "d2-s2",
+        "durationMinutes": 19,
+        "learningObjectives": [
+          "Execute firewall bootstrap procedures: system hostname, DNS resolvers, NTP synchronization, and administrative accounts.",
+          "Enforce baseline security hardening immediately upon first boot.",
+          "Validate cryptographic signature and firmware integrity."
+        ],
+        "technicalExplanation": "The initial bootstrap sequence establishes the firewall identity and operating baseline. Hostname configuration prevents operator confusion across environments; precise NTP time synchronization is mandatory for valid TLS handshakes and correlated syslog investigation; DNS resolvers allow threat feed downloads; and default factory credentials must be replaced with salted, hashed passwords and SSH public keys.",
+        "architectureOrWorkflow": "Power On / Container Boot -> Console Serial Access -> Change default password -> Set Hostname (sxl-fw01) -> Configure Timezone and NTP (pool.ntp.org) -> Set DNS -> Commit initial bootstrap baseline.",
+        "enterpriseExample": "When provisioning sxl-fw01 at ESCI, the engineer connects via console, sets hostname to sxl-fw01.esci.shadowxlab.com, points NTP to local time servers, and disables factory default admin credentials before attaching any network cables.",
+        "securityEngineeringRelevance": "If a firewall is connected to the WAN with default credentials or unhardened services, automated internet bots compromise it within minutes.",
+        "instructorExplanation": "Walk through why clock synchronization (NTP) is a prerequisite for security: timestamps in firewall drop logs must correlate to the second with IDS/IPS and web server access logs.",
+        "commonMistakes": [
+          "Leaving default vendor passwords active.",
+          "Failing to configure NTP, causing state expiration and TLS certificate validation failures.",
+          "Enabling remote management on all interfaces during initial setup."
+        ],
+        "knowledgeCheckObjectives": [
+          "Identify why accurate NTP time synchronization is essential for security auditing.",
+          "List mandatory hardening steps before connecting a new firewall to an untrusted WAN."
+        ],
+        "diagramSpecification": "Bootstrap sequence flowchart from initial console login to hardened baseline state.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "day2-concept-05"
+        ]
+      },
+      {
+        "id": "day2-concept-07",
+        "number": 7,
+        "title": "In-Band vs. Out-of-Band (OOB) Firewall Management Architecture",
+        "sessionId": "d2-s2",
+        "durationMinutes": 19,
+        "learningObjectives": [
+          "Differentiate in-band management over production LAN from dedicated Out-of-Band (OOB) networks.",
+          "Evaluate security risks of in-band administrative protocols (SSH, HTTPS).",
+          "Configure management interface scoping and isolated management VLANs."
+        ],
+        "technicalExplanation": "In-band management transmits administrative commands (SSH, WebGUI) over the same physical links and subnets used for user or production traffic. Out-of-Band (OOB) management utilizes an entirely isolated physical network, separate serial terminal servers, or dedicated management interfaces (IPMI/iLO/iDRAC) inaccessible from user subnets or the internet. In-band access must be restricted to dedicated bastion IPs.",
+        "architectureOrWorkflow": "Administrative Workstation (10.231.20.10) -> In-Band SSH over eth1 (10.231.20.254:22) -> Firewall listens ONLY on eth1 -> Drop all management attempts arriving on eth2 (WAN) or eth0 (DMZ).",
+        "enterpriseExample": "At ESCI, faculty and administrators access sxl-fw01 via SSH only from the authorized workstation sxl-lan01 (10.231.20.10). Any SSH or HTTPS connection attempt originating from sxl-wan01 or sxl-dmz01 is dropped instantly.",
+        "securityEngineeringRelevance": "Restricting management access exclusively to internal trusted interfaces prevents external attackers and compromised DMZ servers from hijacking firewall control.",
+        "instructorExplanation": "Show what happens when management access is exposed to WAN: show actual honeypot statistics of brute-force SSH attacks attempting admin logins every 3 seconds.",
+        "commonMistakes": [
+          "Allowing WebGUI or SSH management access from the WAN or public internet.",
+          "Using unencrypted HTTP or Telnet for firewall administration.",
+          "Omitting source IP restrictions on administrative login rules."
+        ],
+        "knowledgeCheckObjectives": [
+          "Identify which interface on sxl-fw01 is authorized to accept administrative SSH connections.",
+          "Explain the operational resilience advantage of Out-of-Band (OOB) serial console management."
+        ],
+        "diagramSpecification": "Architectural comparison between In-Band LAN management vs Out-of-Band serial console infrastructure.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "day2-concept-06"
+        ]
+      },
+      {
+        "id": "day2-concept-08",
+        "number": 8,
+        "title": "Default Security Posture: Default-Deny vs. Default-Allow & Control Plane Protection",
+        "sessionId": "d2-s2",
+        "durationMinutes": 19,
+        "learningObjectives": [
+          "Formulate the mathematical and operational differences between Default-Deny and Default-Allow.",
+          "Protect the firewall control plane (INPUT chain) separately from data forwarding plane (FORWARD chain).",
+          "Implement rate-limiting and lockout controls against administrative brute-force."
+        ],
+        "technicalExplanation": "Default-Deny (Whitelisting) states that all network traffic is prohibited unless explicitly matched by an authorization rule. Default-Allow (Blacklisting) allows all traffic unless explicitly forbidden. Security engineering mandates Default-Deny. Furthermore, the firewall architecture separates traffic directed TO the firewall itself (Control Plane / INPUT chain) from traffic passing THROUGH the firewall (Data Plane / FORWARD chain).",
+        "architectureOrWorkflow": "Packet arrives -> Destination is Firewall IP (INPUT chain) -> Default Drop unless SSH from 10.231.20.10 -> Destination is other subnet (FORWARD chain) -> Default Drop unless matching Zone ACL policy.",
+        "enterpriseExample": "On sxl-fw01, nftables sets default policy drop on both input and forward chains: chain input policy drop and chain forward policy drop.",
+        "securityEngineeringRelevance": "Default-Allow is fundamentally insecure because administrators cannot anticipate and enumerate all unknown malicious ports, protocols, or zero-day attack vectors.",
+        "instructorExplanation": "Have students state the two rules of firewall hygiene: 1. Default-Deny everywhere. 2. Explicit rules must be as specific as possible in 5-tuple parameters.",
+        "commonMistakes": [
+          "Leaving default policy set to ACCEPT while attempting to block bad ports one-by-one.",
+          "Failing to apply default-deny to the firewall local INPUT chain.",
+          "Allowing unlimited password attempts on administrative services without rate limiting."
+        ],
+        "knowledgeCheckObjectives": [
+          "Explain why Default-Deny is mathematically provable as a superior security posture.",
+          "Distinguish between traffic processed by the INPUT chain versus the FORWARD chain."
+        ],
+        "diagramSpecification": "Decision matrix contrasting Default-Deny whitelist enforcement vs Default-Allow blacklist failure modes.",
+        "recommendedLab": [
+          "day2-lab-01"
+        ],
+        "prerequisites": [
+          "day2-concept-07"
+        ]
+      },
+      {
+        "id": "day2-concept-09",
+        "number": 9,
+        "title": "Multi-Homed Interface IP Assignment & CIDR Addressing (Pilot 10.231.x.x)",
+        "sessionId": "d2-s3",
+        "durationMinutes": 22,
+        "learningObjectives": [
+          "Assign static IPv4 addresses and CIDR subnets across multi-homed interfaces.",
+          "Calculate network boundaries, broadcast addresses, and usable host ranges for /24 subnets.",
+          "Configure interface MTU, link flags, and IP alias settings."
+        ],
+        "technicalExplanation": "A multi-homed firewall terminates multiple physical or virtual subnets on separate interfaces. In the ESCI pilot, each zone is allocated a /24 subnet: WAN (10.231.10.0/24, gateway 10.231.10.254 on eth2), LAN (10.231.20.0/24, gateway 10.231.20.254 on eth1), and DMZ (10.231.30.0/24, gateway 10.231.30.254 on eth0). Interface IP assignment must be bound with the appropriate netmask (/24 = 255.255.255.0) and interface up state.",
+        "architectureOrWorkflow": "ip addr add 10.231.10.254/24 dev eth2 -> ip addr add 10.231.20.254/24 dev eth1 -> ip addr add 10.231.30.254/24 dev eth0 -> ip link set dev eth0/1/2 up -> Verify with ip -br addr show.",
+        "enterpriseExample": "The sxl-fw01 appliance serves as the default gateway (.254) for all three subnets, allowing endpoints sxl-wan01 (10.231.10.10), sxl-lan01 (10.231.20.10), and sxl-dmz01 (10.231.30.10) to route inter-zone packets to their respective gateway IP.",
+        "securityEngineeringRelevance": "Structured CIDR subnetting establishes clear organizational boundaries and prevents routing loops or ambiguous broadcast domains.",
+        "instructorExplanation": "Demonstrate the Linux iproute2 toolchain. Show why ifconfig is deprecated and why modern engineers use ip addr and ip link.",
+        "commonMistakes": [
+          "Configuring host endpoints with the wrong default gateway address.",
+          "Assigning the network address (.0) or broadcast address (.255) as a host IP.",
+          "Omitting the CIDR prefix length, resulting in a default /32 single-host binding."
+        ],
+        "knowledgeCheckObjectives": [
+          "Identify the gateway IP address assigned to sxl-fw01 on interface eth0 (DMZ).",
+          "Calculate the usable host IP range for the LAN subnet 10.231.20.0/24."
+        ],
+        "diagramSpecification": "Interface IP configuration map showing eth0 (DMZ), eth1 (LAN), and eth2 (WAN) with CIDR allocations.",
+        "recommendedLab": [
+          "day2-lab-02"
+        ],
+        "prerequisites": [
+          "day2-concept-08"
+        ]
+      },
+      {
+        "id": "day2-concept-10",
+        "number": 10,
+        "title": "Static Routing Fundamentals & Default Gateway (0.0.0.0/0) Injection",
+        "sessionId": "d2-s3",
+        "durationMinutes": 23,
+        "learningObjectives": [
+          "Construct static routing table entries and understand Longest Prefix Match (LPM).",
+          "Configure default route (0.0.0.0/0) pointing to upstream WAN internet provider.",
+          "Analyze route lookup precedence: directly connected vs static vs default route."
+        ],
+        "technicalExplanation": "The routing table instructs the OS kernel where to forward packets based on destination IP address. Directly connected subnets (10.231.10.0/24 on eth2, 10.231.20.0/24 on eth1, 10.231.30.0/24 on eth0) are automatically populated into the routing table. For non-local destinations (the internet), a Default Route 0.0.0.0/0 is injected pointing to the upstream ISP gateway next-hop via the WAN interface.",
+        "architectureOrWorkflow": "Packet arrives for 8.8.8.8 -> Kernel inspects routing table -> Does 8.8.8.8 match 10.231.20.0/24? No. -> Match 10.231.30.0/24? No. -> Match 10.231.10.0/24? No. -> Longest Prefix Match fallback: 0.0.0.0/0 -> Forward out eth2 via upstream next hop 10.231.10.1.",
+        "enterpriseExample": "On sxl-fw01, the static default route is established via ip route add default via 10.231.10.1 dev eth2. All external internet-bound traffic from LAN workstations follows this route after passing policy inspection.",
+        "securityEngineeringRelevance": "Routing errors create black holes where traffic drops silently, or worse, routing loops that saturate interfaces and deny service.",
+        "instructorExplanation": "Walk through the Longest Prefix Match (LPM) algorithm. Show that a /32 host route wins over a /24 subnet route, which wins over the /0 default route.",
+        "commonMistakes": [
+          "Setting the next-hop IP of a static route to an address not on a directly connected subnet.",
+          "Configuring multiple default routes on different interfaces without metric weighting.",
+          "Forgetting that routing must exist bidirectionally for communication to succeed."
+        ],
+        "knowledgeCheckObjectives": [
+          "Explain how the Longest Prefix Match (LPM) rule resolves routing destination conflicts.",
+          "Identify the exact command to configure the default gateway on sxl-fw01 via eth2."
+        ],
+        "diagramSpecification": "Routing decision tree showing directly connected subnet checks falling through to default route 0.0.0.0/0.",
+        "recommendedLab": [
+          "day2-lab-02"
+        ],
+        "prerequisites": [
+          "day2-concept-09"
+        ]
+      },
+      {
+        "id": "day2-concept-11",
+        "number": 11,
+        "title": "Inter-Zone Packet Forwarding Mechanics & Linux Kernel IP Forwarding",
+        "sessionId": "d2-s3",
+        "durationMinutes": 23,
+        "learningObjectives": [
+          "Explain the Linux kernel IP forwarding flag (net.ipv4.ip_forward = 1).",
+          "Trace the lifecycle of a routed packet through the kernel networking stack.",
+          "Analyze the strict boundary between routing decisions and firewall policy filtering."
+        ],
+        "technicalExplanation": "By default, multi-homed Linux hosts act as endpoints, rejecting packets whose destination IP does not match one of their own interface addresses. To act as a firewall router, the kernel parameter net.ipv4.ip_forward must be set to 1. Once enabled, incoming packets with foreign destinations are passed from the ingress interface to the routing subsystem, then to the Netfilter FORWARD hook, and if permitted, out the egress interface.",
+        "architectureOrWorkflow": "Frame arrives on eth1 -> Ingress MAC matches FW -> IP header inspected -> Destination IP is 10.231.30.10 -> Not local FW IP -> Is ip_forward == 1? -> Yes -> Route lookup finds eth0 -> Netfilter FORWARD hook evaluated -> Packet transmitted on eth0.",
+        "enterpriseExample": "When sxl-lan01 (10.231.20.10) sends an HTTP request to sxl-dmz01 (10.231.30.10), sxl-fw01 receives the frame on eth1. Because ip_forward is enabled, sxl-fw01 forwards the packet across the kernel bus to eth0 after verifying ACL rules.",
+        "securityEngineeringRelevance": "If IP forwarding is enabled without a Default-Deny firewall policy in place, the multi-homed machine acts as an open, unrestricted router, completely compromising zone isolation.",
+        "instructorExplanation": "Remind students: Routing decides WHERE a packet goes. The Firewall decides IF it is allowed to go there. Both must agree for traffic to flow.",
+        "commonMistakes": [
+          "Disabling net.ipv4.ip_forward or forgetting to persist it in /etc/sysctl.conf.",
+          "Confusing local packet delivery (INPUT) with transit packet forwarding (FORWARD).",
+          "Assuming routing automatically implies firewall filtering."
+        ],
+        "knowledgeCheckObjectives": [
+          "Describe the exact role of the kernel parameter net.ipv4.ip_forward.",
+          "Identify whether route lookup occurs before or after Netfilter FORWARD chain evaluation."
+        ],
+        "diagramSpecification": "Packet traversal flowchart through kernel ingress, IP forward check, Netfilter FORWARD hook, and egress.",
+        "recommendedLab": [
+          "day2-lab-02"
+        ],
+        "prerequisites": [
+          "day2-concept-10"
+        ]
+      },
+      {
+        "id": "day2-concept-12",
+        "number": 12,
+        "title": "Route Verification, Traceroute Diagnostics & Connectivity Troubleshooting",
+        "sessionId": "d2-s3",
+        "durationMinutes": 22,
+        "learningObjectives": [
+          "Execute connectivity diagnostics using ip route, ping, and traceroute.",
+          "Interpret ICMP Time Exceeded and Destination Unreachable messages.",
+          "Isolate routing failures from firewall packet filtering drops."
+        ],
+        "technicalExplanation": "Troubleshooting inter-zone connectivity requires separating routing layer defects from firewall policy drops. Tools include ip route get to test route resolution, ping to verify Layer 3 echo reachability, and traceroute to identify the exact hop where packets cease forwarding. If ping returns Destination Host Unreachable, routing or ARP is broken; if ping times out silently, a firewall rule is typically dropping the packet.",
+        "architectureOrWorkflow": "Step 1: Check link status (ip -br link) -> Step 2: Test gateway ping (ping 10.231.20.254) -> Step 3: Check kernel route resolution (ip route get 10.231.30.10) -> Step 4: Check firewall drop counters (nft list ruleset).",
+        "enterpriseExample": "During ESCI lab verification, an administrator on sxl-lan01 experiences an HTTP timeout to sxl-dmz01. Running ip route get 10.231.30.10 shows valid gateway 10.231.20.254 via eth1. Checking sxl-fw01 confirms the route is correct, isolating the problem to an nftables ACL rule.",
+        "securityEngineeringRelevance": "Systematic Layer 3 diagnostic methodology prevents engineers from haphazardly modifying firewall policies when the root cause is a missing route or link outage.",
+        "instructorExplanation": "Demonstrate the difference between Destination Network Unreachable (routing error) vs silent packet drop (firewall filter). Train students to never change security rules until routing is verified.",
+        "commonMistakes": [
+          "Assuming a failed ping is always caused by a firewall rule when the route does not exist.",
+          "Relying on DNS names during connectivity tests instead of raw IP addresses.",
+          "Forgetting that ICMP echo-request requires an allowed ICMP echo-reply return path."
+        ],
+        "knowledgeCheckObjectives": [
+          "Differentiate the diagnostic meaning of Host Unreachable versus Connection Timed Out.",
+          "List the systematic 4-step diagnostic verification sequence."
+        ],
+        "diagramSpecification": "Troubleshooting flowchart isolating Physical Link -> IP Addressing -> Route Table -> Firewall Policy.",
+        "recommendedLab": [
+          "day2-lab-02"
+        ],
+        "prerequisites": [
+          "day2-concept-11"
+        ]
+      },
+      {
+        "id": "day2-concept-13",
+        "number": 13,
+        "title": "Firewall Access Control List (ACL) Anatomy & 5-Tuple Matching Mechanics",
+        "sessionId": "d2-s4",
+        "durationMinutes": 18,
+        "learningObjectives": [
+          "Deconstruct firewall rule anatomy into the 5-tuple: Source IP, Destination IP, Protocol, Source Port, Destination Port.",
+          "Distinguish service ports (well-known destination ports) from client ephemeral ports (source ports).",
+          "Evaluate directional packet attributes (ingress interface iif, egress interface oif)."
+        ],
+        "technicalExplanation": "An Access Control List (ACL) consists of an ordered sequence of rules matching packet header attributes. The fundamental matching tuple is the 5-tuple: Source IP (or CIDR range), Destination IP (or CIDR range), Transport Protocol (TCP/UDP/ICMP), Source Port (typically dynamic ephemeral 1024-65535), and Destination Port (well-known service port, e.g. 80, 443, 22). In advanced firewalls, input interface (iif) and output interface (oif) bind the 5-tuple to physical security zones.",
+        "architectureOrWorkflow": "Packet arrives -> Extract: src_ip=10.231.20.10, dst_ip=10.231.30.10, proto=TCP, sport=54210, dport=80, iif=eth1, oif=eth0 -> Compare against ACL rule 1 -> Compare rule 2 -> Match found -> Execute action (ACCEPT / DROP / REJECT).",
+        "enterpriseExample": "Rule permitting LAN users to access the DMZ Web server: iif eth1 oif eth0 ip saddr 10.231.20.0/24 ip daddr 10.231.30.10 tcp dport { 80, 443 } accept. Notice destination port is specified, while source port is left unconstrained.",
+        "securityEngineeringRelevance": "A classic beginner vulnerability is restricting source port to 80 instead of destination port, which fails to match normal client traffic and opens dangerous bypass vectors.",
+        "instructorExplanation": "Drill into students: Servers listen on Destination Ports; Clients connect from random ephemeral Source Ports. Never write a rule filtering client traffic by source port 80/443.",
+        "commonMistakes": [
+          "Confusing source port with destination port when writing outbound rules.",
+          "Using host IP addresses without subnet masks or using incorrect wildcard masks.",
+          "Omitting the transport protocol specification when specifying port numbers."
+        ],
+        "knowledgeCheckObjectives": [
+          "Identify all components of the standard firewall 5-tuple.",
+          "Explain why client source ports are dynamic ephemeral numbers (1024-65535)."
+        ],
+        "diagramSpecification": "Header breakdown highlighting the 5-tuple fields in IPv4 and TCP packet headers.",
+        "recommendedLab": [
+          "day2-lab-03"
+        ],
+        "prerequisites": [
+          "day2-concept-12"
+        ]
+      },
+      {
+        "id": "day2-concept-14",
+        "number": 14,
+        "title": "Rule Ordering, First-Match Evaluation Semantics & Rule Shadowing",
+        "sessionId": "d2-s4",
+        "durationMinutes": 19,
+        "learningObjectives": [
+          "Analyze top-down, first-match rule processing mechanics.",
+          "Identify and remediate Rule Shadowing where broader rules obscure specific rules.",
+          "Structure rulesets hierarchically: Established/Related -> Specific Drops -> Specific Allows -> Default Deny."
+        ],
+        "technicalExplanation": "Firewalls evaluate ACL rules strictly sequentially from top to bottom (first-match wins). As soon as a packet matches a rule conditions, the configured action (ACCEPT/DROP) is executed immediately, and evaluation terminates. If a broad rule (e.g. allow any any) is placed above a specific restriction (e.g. drop IP X), the restriction is shadowed and will never execute.",
+        "architectureOrWorkflow": "1. Accept established/related connection tracking -> 2. Drop high-risk rogue subnets -> 3. Allow specific authenticated administration -> 4. Allow specific business services -> 5. Implicit/explicit Default Drop with counter.",
+        "enterpriseExample": "If an administrator writes allow all LAN to DMZ on Line 1, and then adds drop LAN to DMZ SSH (port 22) on Line 4, SSH is allowed! The packet matched Line 1 and evaluation ceased. Placing Line 4 above Line 1 fixes the vulnerability.",
+        "securityEngineeringRelevance": "Rule shadowing is one of the most common causes of enterprise security breaches, giving administrators a false sense of security while policies fail to enforce.",
+        "instructorExplanation": "Walk through an intentionally broken ruleset on the whiteboard. Have students trace packet evaluation step-by-step to spot the shadowed rule.",
+        "commonMistakes": [
+          "Placing an allow-any rule at the top of the ruleset for testing and forgetting to remove it.",
+          "Inserting new rules at the bottom of the table beneath a default-deny rule.",
+          "Assuming firewalls evaluate all rules and choose the most specific match (firewalls use First-Match, unlike IP routing which uses Longest Prefix Match)."
+        ],
+        "knowledgeCheckObjectives": [
+          "Contrast First-Match evaluation in firewalls with Longest Prefix Match in routing.",
+          "Identify the security consequence of placing a broad allow rule above a specific deny rule."
+        ],
+        "diagramSpecification": "Flowchart tracing packet evaluation through an ordered ruleset illustrating early termination and rule shadowing.",
+        "recommendedLab": [
+          "day2-lab-03"
+        ],
+        "prerequisites": [
+          "day2-concept-13"
+        ]
+      },
+      {
+        "id": "day2-concept-15",
+        "number": 15,
+        "title": "The Linux nftables Framework: Tables, Chains, Rulesets & Telemetry Counters",
+        "sessionId": "d2-s4",
+        "durationMinutes": 19,
+        "learningObjectives": [
+          "Master modern Linux nftables architecture: address families (inet), tables, and base chains.",
+          "Configure base chains with netfilter hooks (input, forward, output) and priorities.",
+          "Inspect real-time telemetry counters (counter packets bytes) to verify policy enforcement."
+        ],
+        "technicalExplanation": "nftables is the modern Linux kernel packet classification framework replacing legacy iptables. In nftables, there are no predefined tables; administrators create tables with address families (inet handles both IPv4 and IPv6). Chains are attached to Netfilter kernel hooks (forward, input, output) with defined priorities and policies. Every rule can include the counter keyword, tracking exact packet and byte counts for compliance auditing.",
+        "architectureOrWorkflow": "nft add table inet filter -> nft add chain inet filter forward { type filter hook forward priority 0 ; policy drop ; } -> nft add rule inet filter forward ct state established,related counter accept -> nft list ruleset.",
+        "enterpriseExample": "The sxl-fw01 appliance runs native nftables v1.0.6. Running nft list ruleset displays the live active ruleset and allows students to watch packet counters incrementing live as traffic flows through the range.",
+        "securityEngineeringRelevance": "nftables provides atomic ruleset updates, avoiding the race conditions and high CPU spikes caused by legacy iptables table reloading.",
+        "instructorExplanation": "Highlight the clarity of nftables syntax compared to iptables. Show how a single nftables rule with set notation (tcp dport { 80, 443 }) replaces multiple cumbersome iptables lines.",
+        "commonMistakes": [
+          "Forgetting to attach the base chain to a Netfilter hook, resulting in an uncalled chain that filters nothing.",
+          "Omitting the backslash escape before semicolons when typing chain definitions in bash.",
+          "Neglecting rule counters, making it difficult to debug whether rules are being hit."
+        ],
+        "knowledgeCheckObjectives": [
+          "Explain the role of the inet family in nftables.",
+          "Identify how to inspect rule match counters using nft list ruleset."
+        ],
+        "diagramSpecification": "nftables hierarchy diagram showing Family (inet) -> Table (filter) -> Chains (forward/input) -> Rules with Counters.",
+        "recommendedLab": [
+          "day2-lab-03"
+        ],
+        "prerequisites": [
+          "day2-concept-14"
+        ]
+      },
+      {
+        "id": "day2-concept-16",
+        "number": 16,
+        "title": "Directional Policy Management: LAN-to-WAN, LAN-to-DMZ, WAN-to-DMZ & DMZ Isolation",
+        "sessionId": "d2-s4",
+        "durationMinutes": 19,
+        "learningObjectives": [
+          "Construct comprehensive directional security policies across all pilot zone combinations.",
+          "Permit LAN-to-DMZ management and user traffic while strictly forbidding DMZ-to-LAN initiation.",
+          "Publish DMZ web services to WAN (HTTP/HTTPS) while blocking WAN access to LAN workstations.",
+          "Verify stateful bidirectional return traffic without violating zone isolation."
+        ],
+        "technicalExplanation": "Enterprise policy management requires defining explicit directional policies for every valid zone pair: 1. LAN to WAN: Allow internal users outbound internet access with conntrack. 2. LAN to DMZ: Allow internal users to browse/manage DMZ services. 3. WAN to DMZ: Allow external public access ONLY to authorized DMZ web ports (80/443). 4. WAN to LAN: DROP all unsolicited external packets. 5. DMZ to LAN: DROP all unsolicited connection initiation to prevent lateral movement.",
+        "architectureOrWorkflow": "Rule 1: ct state established,related accept -> Rule 2: iif eth1 oif eth2 accept (LAN->WAN) -> Rule 3: iif eth1 oif eth0 ip daddr 10.231.30.10 tcp dport { 80, 443 } accept (LAN->DMZ) -> Rule 4: iif eth2 oif eth0 ip daddr 10.231.30.10 tcp dport { 80, 443 } accept (WAN->DMZ) -> Rule 5: iif eth0 oif eth1 counter drop (DMZ->LAN Drop) -> Default Policy Drop.",
+        "enterpriseExample": "In the ESCI cyber lab, when sxl-dmz01 is probed by an attacker, an attempt to connect to sxl-lan01 (10.231.20.10) hits Rule 5 (iif eth0 oif eth1 counter drop), incrementing the drop counter and preserving internal campus security.",
+        "securityEngineeringRelevance": "Directional isolation is the bedrock of zero-trust network segmentation. Compromising an external service must never grant access to internal network assets.",
+        "instructorExplanation": "Conduct a live roleplay with students: Student A is WAN, Student B is DMZ Web Server, Student C is LAN Workstation, Student D is Firewall. Demonstrate each flow and show which rule triggers.",
+        "commonMistakes": [
+          "Accidentally allowing DMZ servers to initiate connections to internal LAN databases.",
+          "Writing rules that permit all traffic between LAN and DMZ bidirectionally.",
+          "Failing to log or count dropped packets for security information and event management (SIEM)."
+        ],
+        "knowledgeCheckObjectives": [
+          "State the exact nftables rule required to isolate DMZ (eth0) from initiating connections to LAN (eth1).",
+          "Explain why stateful return traffic from DMZ to LAN is permitted even when DMZ-to-LAN initiation is blocked."
+        ],
+        "diagramSpecification": "Complete inter-zone policy matrix displaying allowed flows, blocked lateral vectors, and stateful return paths.",
+        "recommendedLab": [
+          "day2-lab-03"
+        ],
+        "prerequisites": [
+          "day2-concept-15"
+        ]
+      }
+    ],
+    "labs": [
+      {
+        "id": "day2-lab-01",
+        "number": 1,
+        "title": "Network Topology Design & Firewall Interface Setup",
+        "dayId": "day-2",
+        "linkedSessionIds": [
+          "d2-s1",
+          "d2-s2"
+        ],
+        "conceptIds": [
+          "day2-concept-01",
+          "day2-concept-02",
+          "day2-concept-03",
+          "day2-concept-04",
+          "day2-concept-05",
+          "day2-concept-06",
+          "day2-concept-07",
+          "day2-concept-08"
+        ],
+        "estimatedMinutes": 45,
+        "kind": "guided-practical",
+        "description": "Configure physical/virtual interface assignments for sxl-fw01 (eth0 DMZ, eth1 LAN, eth2 WAN), perform initial bootstrap hardening, and verify management access restrictions.",
+        "objectives": [
+          "Verify interface MAC address bindings and link statuses.",
+          "Assign IP 10.231.30.254/24 to eth0, 10.231.20.254/24 to eth1, and 10.231.10.254/24 to eth2.",
+          "Restrict administrative SSH management exclusively to the LAN interface."
+        ]
+      },
+      {
+        "id": "day2-lab-02",
+        "number": 2,
+        "title": "Static Routing & Inter-Zone Reachability Verification",
+        "dayId": "day-2",
+        "linkedSessionIds": [
+          "d2-s2",
+          "d2-s3"
+        ],
+        "conceptIds": [
+          "day2-concept-09",
+          "day2-concept-10",
+          "day2-concept-11",
+          "day2-concept-12"
+        ],
+        "estimatedMinutes": 45,
+        "kind": "guided-practical",
+        "description": "Construct kernel static routing tables, inject upstream default gateway 0.0.0.0/0 via eth2, enable net.ipv4.ip_forward, and execute end-to-end diagnostic ping tests across all three subnets.",
+        "objectives": [
+          "Inspect the initial kernel routing table using ip route show.",
+          "Inject default route 0.0.0.0/0 via 10.231.10.1 dev eth2.",
+          "Enable kernel IP forwarding and verify reachability to sxl-wan01, sxl-lan01, and sxl-dmz01."
+        ]
+      },
+      {
+        "id": "day2-lab-03",
+        "number": 3,
+        "title": "nftables ACL Policy Management & Packet Filtering",
+        "dayId": "day-2",
+        "linkedSessionIds": [
+          "d2-s3",
+          "d2-s4"
+        ],
+        "conceptIds": [
+          "day2-concept-13",
+          "day2-concept-14",
+          "day2-concept-15",
+          "day2-concept-16"
+        ],
+        "estimatedMinutes": 45,
+        "kind": "guided-practical",
+        "description": "Build a production-grade nftables policy ruleset implementing default-deny, connection tracking, LAN-to-DMZ access, WAN-to-DMZ web publishing, and strict DMZ-to-LAN isolation with live counter telemetry.",
+        "objectives": [
+          "Create inet filter table and base chains with default policy drop.",
+          "Configure stateful connection tracking for established/related return traffic.",
+          "Enforce directional inter-zone ACL rules and test packet acceptance and drop telemetry."
+        ]
+      }
+    ]
+  }
+}

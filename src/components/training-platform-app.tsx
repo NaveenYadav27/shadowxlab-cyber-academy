@@ -17,6 +17,9 @@ import { WorkspaceSidebar } from "@/components/navigation/workspace-sidebar";
 import { StudentWorkspace } from "@/components/workspaces/student-workspace";
 import { InstructorWorkspace } from "@/components/workspaces/instructor-workspace";
 import { AdminWorkspace } from "@/components/workspaces/admin-workspace";
+import { AuthService } from "@/lib/auth-service";
+import { Button } from "@/components/ui/button";
+import { LockKeyhole, Shield } from "lucide-react";
 
 export type ViewKey =
   | "dashboard"
@@ -89,9 +92,25 @@ function readState(): TrainingState {
   }
 }
 
+function useSafeLocation() {
+  try {
+    return useLocation();
+  } catch {
+    return { pathname: "/" };
+  }
+}
+
+function useSafeNavigate() {
+  try {
+    return useNavigate();
+  } catch {
+    return () => {};
+  }
+}
+
 function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useSafeLocation();
+  const navigate = useSafeNavigate();
   const { user, role, isRecoveryMode } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -117,8 +136,17 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
     persistenceService.saveState(state, user?.id);
   }, [state, user?.id]);
 
+  // Sub-navigation state within workspaces
+  const [activeSubNav, setActiveSubNav] = useState<string | null>(null);
+
+  // Reset sub-navigation when the top-level routeView changes
+  useEffect(() => {
+    setActiveSubNav(null);
+  }, [routeView]);
+
   // Synchronize navigation ID between routes and workspaces
   const activeNavId = useMemo(() => {
+    if (activeSubNav) return activeSubNav;
     if (routeView === "dashboard") return "my-learning";
     if (routeView === "programmes") return "programmes";
     if (routeView === "schedule") return "sessions";
@@ -130,10 +158,12 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
     if (routeView === "instructor") return "instructor-overview";
     if (routeView === "administration") return "admin-overview";
     return "my-learning";
-  }, [routeView]);
+  }, [routeView, activeSubNav]);
 
   // Handle sidebar navigation clicks
   const handleSelectNav = (navId: string) => {
+    setActiveSubNav(navId);
+
     // Student Workspace mappings
     if (navId === "my-learning") navigate({ to: "/dashboard" });
     else if (navId === "programmes") navigate({ to: "/programmes" });
@@ -161,7 +191,9 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
         "reports",
       ].includes(navId)
     ) {
-      navigate({ to: "/instructor" });
+      if (routeView !== "instructor") {
+        navigate({ to: "/instructor" });
+      }
     }
 
     // Administrator Workspace mappings
@@ -182,7 +214,9 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
         "system-config",
       ].includes(navId)
     ) {
-      navigate({ to: "/admin" });
+      if (routeView !== "administration") {
+        navigate({ to: "/admin" });
+      }
     }
   };
 
@@ -210,6 +244,15 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
 
   const handleToggleConceptComplete = (conceptId: string) => {
     setState((prev) => {
+      if (conceptId.startsWith("day2-")) {
+        const list = prev.day2CompletedConceptIds ?? [];
+        const isDone = list.includes(conceptId);
+        const updated = isDone ? list.filter((id) => id !== conceptId) : [...list, conceptId];
+        return {
+          ...prev,
+          day2CompletedConceptIds: updated,
+        };
+      }
       const list = prev.day1CompletedConceptIds ?? [];
       const isDone = list.includes(conceptId);
       const updated = isDone ? list.filter((id) => id !== conceptId) : [...list, conceptId];
@@ -221,24 +264,46 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
   };
 
   const handleSaveLabScore = (labId: string, score: number) => {
-    setState((prev) => ({
-      ...prev,
-      day1LabScores: {
-        ...(prev.day1LabScores ?? {}),
-        [labId]: score,
-      },
-    }));
+    setState((prev) => {
+      if (labId.startsWith("day2-")) {
+        return {
+          ...prev,
+          day2LabScores: {
+            ...(prev.day2LabScores ?? {}),
+            [labId]: score,
+          },
+        };
+      }
+      return {
+        ...prev,
+        day1LabScores: {
+          ...(prev.day1LabScores ?? {}),
+          [labId]: score,
+        },
+      };
+    });
     toast.success(`Lab ${labId.toUpperCase()} score recorded: ${score}%`);
   };
 
   const handleSaveSessionAssessmentScore = (sessionId: string, score: number) => {
-    setState((prev) => ({
-      ...prev,
-      day1SessionAssessmentScores: {
-        ...(prev.day1SessionAssessmentScores ?? {}),
-        [sessionId]: score,
-      },
-    }));
+    setState((prev) => {
+      if (sessionId.startsWith("d2-")) {
+        return {
+          ...prev,
+          day2SessionAssessmentScores: {
+            ...(prev.day2SessionAssessmentScores ?? {}),
+            [sessionId]: score,
+          },
+        };
+      }
+      return {
+        ...prev,
+        day1SessionAssessmentScores: {
+          ...(prev.day1SessionAssessmentScores ?? {}),
+          [sessionId]: score,
+        },
+      };
+    });
     toast.success(`Session ${sessionId.toUpperCase()} assessment saved: ${score}%`);
   };
 
@@ -246,8 +311,9 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
     setState((prev) => ({
       ...prev,
       day1FinalAssessmentScore: score,
+      day2FinalAssessmentScore: score,
     }));
-    toast.success(`Day 1 Comprehensive Exam recorded: ${score}%`);
+    toast.success(`Comprehensive Exam score recorded: ${score}%`);
   };
 
   const handleSelectLabMode = (mode: LabMode) => {
@@ -301,8 +367,34 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
 
   // Determine which workspace to render based on user role and current route
   const renderActiveWorkspace = () => {
-    // If explicitly on /admin route or role is administrator
-    if (routeView === "administration" || role === "administrator") {
+    // If explicitly on /admin route
+    if (routeView === "administration") {
+      if (!AuthService.canAccessAdmin(role)) {
+        return (
+          <div className="flex min-h-[60vh] items-center justify-center p-4">
+            <div className="max-w-md rounded-xl border border-border/80 bg-card p-6 text-center shadow-xl">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-950/50 text-purple-400 border border-purple-500/30">
+                <LockKeyhole className="h-6 w-6" />
+              </div>
+              <h2 className="text-lg font-bold text-foreground">Administrator Console Restricted</h2>
+              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                {role === "student"
+                  ? "Your account currently has the Student role. Only designated platform administrators can access governance and configuration settings."
+                  : "This workspace requires an authenticated Administrator session."}
+              </p>
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <Button size="sm" onClick={() => setAuthModalOpen(true)} className="bg-purple-600 hover:bg-purple-500 text-white text-xs">
+                  <Shield className="h-3.5 w-3.5 mr-1.5" />
+                  <span>Sign In / Switch Role</span>
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => navigate({ to: "/dashboard" })} className="text-xs">
+                  Return to My Learning
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+      }
       return (
         <AdminWorkspace
           state={state}
@@ -314,8 +406,34 @@ function ShadowXLabAppContent({ currentView }: ShadowXLabAppProps = {}) {
       );
     }
 
-    // If explicitly on /instructor route or role is instructor
-    if (routeView === "instructor" || role === "instructor") {
+    // If explicitly on /instructor route
+    if (routeView === "instructor") {
+      if (!AuthService.canAccessInstructor(role)) {
+        return (
+          <div className="flex min-h-[60vh] items-center justify-center p-4">
+            <div className="max-w-md rounded-xl border border-border/80 bg-card p-6 text-center shadow-xl">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-950/50 text-emerald-400 border border-emerald-500/30">
+                <LockKeyhole className="h-6 w-6" />
+              </div>
+              <h2 className="text-lg font-bold text-foreground">Instructor Console Restricted</h2>
+              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                {role === "student"
+                  ? "Your account currently has the Student role. Only designated course instructors or administrators can access classroom monitoring and delivery controls."
+                  : "This workspace requires an authenticated Instructor or Administrator session."}
+              </p>
+              <div className="mt-6 flex flex-wrap justify-center gap-3">
+                <Button size="sm" onClick={() => setAuthModalOpen(true)} className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs">
+                  <Shield className="h-3.5 w-3.5 mr-1.5" />
+                  <span>Sign In / Switch Role</span>
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => navigate({ to: "/dashboard" })} className="text-xs">
+                  Return to My Learning
+                </Button>
+              </div>
+            </div>
+          </div>
+        );
+      }
       return (
         <InstructorWorkspace
           state={state}

@@ -32,10 +32,18 @@ export class TrainingPersistenceService {
       if (!raw) return createInitialState();
       const saved = JSON.parse(raw) as Partial<TrainingState>;
       const fallback = createInitialState();
-      const programmes =
-        Array.isArray(saved.programmes) && saved.programmes.length > 0
-          ? saved.programmes
-          : fallback.programmes;
+      const programmes = fallback.programmes.map((fallbackProg) => {
+        const savedProg = Array.isArray(saved.programmes)
+          ? saved.programmes.find((p) => p.id === fallbackProg.id)
+          : undefined;
+        if (!savedProg) return fallbackProg;
+        return {
+          ...savedProg,
+          instructor: fallbackProg.instructor,
+          location: fallbackProg.location,
+          days: fallbackProg.days,
+        };
+      });
       const firstProgramme = programmes[0] ?? fallback.programmes[0];
       const activeId =
         firstProgramme && programmes.some((p) => p.id === saved.activeProgrammeId)

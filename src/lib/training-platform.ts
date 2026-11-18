@@ -73,6 +73,10 @@ export type TrainingState = {
   day1LabScores?: Record<string, number>;
   day1SessionAssessmentScores?: Record<string, number>;
   day1FinalAssessmentScore?: number | null;
+  day2CompletedConceptIds?: string[];
+  day2LabScores?: Record<string, number>;
+  day2SessionAssessmentScores?: Record<string, number>;
+  day2FinalAssessmentScore?: number | null;
   activeConceptId?: string | null;
   selectedLabMode?: LabMode;
   standardLabVerification?: StandardLabVerificationState;
@@ -92,8 +96,8 @@ const seedProgramme: ProgrammeConfig = {
   id: "firewall-vpn-security-administration",
   title: "Firewall & VPN Security Administration",
   description: "A five-day learning and simulation programme for firewall and VPN administration.",
-  instructor: "Naveen Kumar Yadav Loya",
-  location: "ShadowXLab Cyber Range",
+  instructor: "Mr. Naveen Kumar",
+  location: "Engineering Staff College of India (ESCI) / ShadowXLab",
   startDate: "2026-11-16",
   endDate: "2026-11-20",
   durationLabel: "5 Days",
@@ -169,7 +173,7 @@ const seedProgramme: ProgrammeConfig = {
           "d2-s1",
           "10:00",
           "11:30",
-          "Firewall Architecture, Deployment Modes and Security Zones",
+          "Firewall Architecture, Deployment Modes and Security Zones; Firewall Placement: LAN, WAN, DMZ and Perimeter Security",
           "lesson",
           "Architecture, deployment modes, security zones, LAN/WAN/DMZ and perimeter security.",
         ),
@@ -177,7 +181,7 @@ const seedProgramme: ProgrammeConfig = {
           "d2-s2",
           "11:45",
           "13:00",
-          "Lab: Network Topology Design and Basic Firewall Installation / Initial Setup",
+          "Hands-on Lab: Network Topology Design and Basic Firewall Installation / Initial Setup, Firewall Interface Configuration, Management Access and Initial Setup",
           "lab",
           "Design the network topology and walk through basic firewall installation and initial setup.",
         ),
@@ -489,6 +493,10 @@ export function createInitialState(): TrainingState {
     day1LabScores: {},
     day1SessionAssessmentScores: {},
     day1FinalAssessmentScore: null,
+    day2CompletedConceptIds: [],
+    day2LabScores: {},
+    day2SessionAssessmentScores: {},
+    day2FinalAssessmentScore: null,
     activeConceptId: null,
     selectedLabMode: "local-full",
     standardLabVerification: {

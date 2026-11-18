@@ -37,6 +37,11 @@ import { ConceptLearningPanel } from "@/components/day1/concept-learning-panel";
 import { Day1Labs } from "@/components/day1/day1-labs";
 import { Day1Assessments } from "@/components/day1/day1-assessments";
 import { DAY1_CONCEPTS, type Day1Concept } from "@/lib/day1-curriculum";
+import { Day2ScheduleAccordion } from "@/components/day2/day2-schedule-accordion";
+import { Day2Labs } from "@/components/day2/day2-labs";
+import { Day2Assessments } from "@/components/day2/day2-assessments";
+import { Day2TopologyCanvas } from "@/components/day2/day2-topology-canvas";
+import { DAY2_CONCEPTS, type Day2Concept } from "@/lib/day2-curriculum";
 import type { LabMode, StandardLabVerificationState } from "@/lib/lab-readiness-types";
 import heroBannerImg from "@/assets/shadowxlab-cyber-range.jpg";
 
@@ -71,6 +76,9 @@ export function StudentWorkspace({
 }: StudentWorkspaceProps) {
   // Active session in Universal Engine (if open)
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+
+  // Active Day tab for multi-day views (defaults to Day 2 for Tuesday 17 Nov 2026)
+  const [selectedDayTab, setSelectedDayTab] = useState<"day-1" | "day-2">("day-2");
 
   // Active Concept in Concept Explorer
   const [activeConceptId, setActiveConceptId] = useState<string>("concept-01");
@@ -116,6 +124,8 @@ export function StudentWorkspace({
           setActiveSessionId(null);
           onSelectNav("cyber-range");
         }}
+        onSaveLabScore={onSaveLabScore}
+        onSaveSessionAssessmentScore={onSaveSessionAssessmentScore}
       />
     );
   }
@@ -130,8 +140,11 @@ export function StudentWorkspace({
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
               <div className="lg:col-span-2 space-y-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline" className="border-cyan-500/50 bg-cyan-950/40 text-cyan-300 font-mono text-xs">
-                    ENROLLED PROGRAMME
+                  <Badge variant="outline" className="border-cyan-500/50 bg-cyan-950/40 text-cyan-300 font-mono text-xs font-bold">
+                    ENGINEERING STAFF COLLEGE OF INDIA (ESCI)
+                  </Badge>
+                  <Badge variant="outline" className="border-emerald-500/50 bg-emerald-950/40 text-emerald-300 font-mono text-xs">
+                    Tuesday, 17 November 2026 • Day 2
                   </Badge>
                   <span className="text-xs text-muted-foreground font-mono">
                     5 Days • 30 Contact Hours • {programme.location}
@@ -142,8 +155,16 @@ export function StudentWorkspace({
                   {programme.title}
                 </h1>
                 <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-                  {programme.description} Instructor: <strong className="text-cyan-300">{programme.instructor}</strong>
+                  {programme.description} Faculty: <strong className="text-cyan-300">Mr. Naveen Kumar</strong>
                 </p>
+                <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-muted-foreground">
+                  <span className="text-cyan-400 font-semibold">Pilot Subnets:</span>
+                  <span>WAN: 10.231.10.0/24</span>
+                  <span>•</span>
+                  <span>LAN: 10.231.20.0/24</span>
+                  <span>•</span>
+                  <span>DMZ: 10.231.30.0/24</span>
+                </div>
 
                 {/* Progress Bar & KPI Chips */}
                 <div className="pt-2 space-y-2 max-w-xl">
@@ -409,28 +430,72 @@ export function StudentWorkspace({
             <div>
               <h1 className="text-2xl font-bold text-foreground">Learning Sessions Schedule</h1>
               <p className="text-xs text-muted-foreground mt-1">
-                Preserved 5-Day / 20-Session Table of Contents (30 Contact Hours)
+                Preserved 5-Day / 20-Session Table of Contents (30 Contact Hours) • ESCI Hyderabad
               </p>
             </div>
-            <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 font-mono text-xs">
-              {progressPercent}% PROGRAMME COMPLETE
-            </Badge>
+            <div className="flex items-center gap-2">
+              <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono">
+                <button
+                  type="button"
+                  onClick={() => setSelectedDayTab("day-2")}
+                  className={`px-3 py-1 rounded-md transition-all ${
+                    selectedDayTab === "day-2"
+                      ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Day 2 (Today)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedDayTab("day-1")}
+                  className={`px-3 py-1 rounded-md transition-all ${
+                    selectedDayTab === "day-1"
+                      ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Day 1
+                </button>
+              </div>
+              <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 font-mono text-xs">
+                {progressPercent}% COMPLETE
+              </Badge>
+            </div>
           </div>
 
-          <Day1ScheduleAccordion
-            completedSessionIds={state.completedSessionIds}
-            completedConceptIds={state.day1CompletedConceptIds ?? []}
-            sessionScores={state.day1SessionAssessmentScores ?? {}}
-            labScores={state.day1LabScores ?? {}}
-            onToggleSessionComplete={onToggleSessionComplete}
-            onToggleConceptComplete={onToggleConceptComplete}
-            onSelectConcept={(cId) => {
-              setActiveConceptId(cId);
-              onSelectNav("concepts");
-            }}
-            onOpenLab={() => onSelectNav("labs")}
-            onOpenSessionAssessment={(sId) => setActiveSessionId(sId)}
-          />
+          {selectedDayTab === "day-2" ? (
+            <Day2ScheduleAccordion
+              completedSessionIds={state.completedSessionIds}
+              completedConceptIds={state.day2CompletedConceptIds ?? []}
+              sessionScores={state.day2SessionAssessmentScores ?? {}}
+              labScores={state.day2LabScores ?? {}}
+              onToggleSessionComplete={onToggleSessionComplete}
+              onToggleConceptComplete={onToggleConceptComplete}
+              onSelectConcept={(cId) => {
+                setActiveConceptId(cId);
+                onSelectNav("concepts");
+              }}
+              onOpenLab={() => onSelectNav("labs")}
+              onOpenSessionAssessment={(sId) => setActiveSessionId(sId)}
+              onStartSession={(sId) => setActiveSessionId(sId)}
+            />
+          ) : (
+            <Day1ScheduleAccordion
+              completedSessionIds={state.completedSessionIds}
+              completedConceptIds={state.day1CompletedConceptIds ?? []}
+              sessionScores={state.day1SessionAssessmentScores ?? {}}
+              labScores={state.day1LabScores ?? {}}
+              onToggleSessionComplete={onToggleSessionComplete}
+              onToggleConceptComplete={onToggleConceptComplete}
+              onSelectConcept={(cId) => {
+                setActiveConceptId(cId);
+                onSelectNav("concepts");
+              }}
+              onOpenLab={() => onSelectNav("labs")}
+              onOpenSessionAssessment={(sId) => setActiveSessionId(sId)}
+            />
+          )}
         </div>
       )}
 
@@ -458,50 +523,149 @@ export function StudentWorkspace({
       {/* VIEW: PRACTICAL LABS */}
       {activeNavId === "labs" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="border-b border-border/80 pb-4">
-            <h1 className="text-2xl font-bold text-foreground">Practical Labs Engine</h1>
-            <p className="text-xs text-muted-foreground mt-1">
-              Guided network experiments, packet filters, and configuration testing.
-            </p>
+          <div className="border-b border-border/80 pb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Practical Labs Engine</h1>
+              <p className="text-xs text-muted-foreground mt-1">
+                Guided network experiments, packet filters, and configuration testing.
+              </p>
+            </div>
+            <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => setSelectedDayTab("day-2")}
+                className={`px-3 py-1 rounded-md transition-all ${
+                  selectedDayTab === "day-2"
+                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Day 2 Labs (Active)
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedDayTab("day-1")}
+                className={`px-3 py-1 rounded-md transition-all ${
+                  selectedDayTab === "day-1"
+                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Day 1 Labs
+              </button>
+            </div>
           </div>
 
-          <Day1Labs
-            labScores={state.day1LabScores ?? {}}
-            onSaveLabScore={onSaveLabScore}
-            onNavigateToSchedule={() => onSelectNav("sessions")}
-          />
+          {selectedDayTab === "day-2" ? (
+            <Day2Labs
+              labScores={state.day2LabScores ?? {}}
+              onSaveLabScore={onSaveLabScore}
+              onNavigateToSchedule={() => onSelectNav("sessions")}
+            />
+          ) : (
+            <Day1Labs
+              labScores={state.day1LabScores ?? {}}
+              onSaveLabScore={onSaveLabScore}
+              onNavigateToSchedule={() => onSelectNav("sessions")}
+            />
+          )}
         </div>
       )}
 
       {/* VIEW: CYBER RANGE */}
       {activeNavId === "cyber-range" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <UnifiedCyberRange
-            selectedLabMode={state.selectedLabMode ?? "simulation"}
-            onSelectLabMode={onSelectLabMode}
-            standardLabVerification={state.standardLabVerification}
-            onUpdateVerification={onUpdateVerification}
-          />
+          <div className="flex rounded-lg border border-border/70 bg-card/60 p-1 text-xs font-mono max-w-md">
+            <button
+              type="button"
+              onClick={() => setSelectedDayTab("day-2")}
+              className={`flex-1 py-1.5 px-3 rounded-md transition-all text-center ${
+                selectedDayTab === "day-2"
+                  ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(0,229,255,0.25)]"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Day 2 Pilot Topology (10.231.x.x)
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDayTab("day-1")}
+              className={`flex-1 py-1.5 px-3 rounded-md transition-all text-center ${
+                selectedDayTab === "day-1"
+                  ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(0,229,255,0.25)]"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Full Multi-Node Cyber Range
+            </button>
+          </div>
+
+          {selectedDayTab === "day-2" ? (
+            <Day2TopologyCanvas />
+          ) : (
+            <UnifiedCyberRange
+              selectedLabMode={state.selectedLabMode ?? "simulation"}
+              onSelectLabMode={onSelectLabMode}
+              standardLabVerification={state.standardLabVerification}
+              onUpdateVerification={onUpdateVerification}
+            />
+          )}
         </div>
       )}
 
       {/* VIEW: ASSESSMENTS */}
       {activeNavId === "assessments" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="border-b border-border/80 pb-4">
-            <h1 className="text-2xl font-bold text-foreground">Competency Assessments</h1>
-            <p className="text-xs text-muted-foreground mt-1">
-              Transparent knowledge checks, log interpretations, and final examinations.
-            </p>
+          <div className="border-b border-border/80 pb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Competency Assessments</h1>
+              <p className="text-xs text-muted-foreground mt-1">
+                Transparent knowledge checks, log interpretations, and final examinations.
+              </p>
+            </div>
+            <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => setSelectedDayTab("day-2")}
+                className={`px-3 py-1 rounded-md transition-all ${
+                  selectedDayTab === "day-2"
+                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Day 2 Assessments (Active)
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedDayTab("day-1")}
+                className={`px-3 py-1 rounded-md transition-all ${
+                  selectedDayTab === "day-1"
+                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Day 1 Assessments
+              </button>
+            </div>
           </div>
 
-          <Day1Assessments
-            sessionScores={state.day1SessionAssessmentScores ?? {}}
-            finalScore={state.day1FinalAssessmentScore ?? null}
-            onSaveSessionScore={onSaveSessionAssessmentScore}
-            onSaveFinalScore={onSaveFinalScore}
-            onNavigateToSchedule={() => onSelectNav("sessions")}
-          />
+          {selectedDayTab === "day-2" ? (
+            <Day2Assessments
+              sessionScores={state.day2SessionAssessmentScores ?? {}}
+              finalScore={state.day2FinalAssessmentScore ?? null}
+              onSaveSessionScore={onSaveSessionAssessmentScore}
+              onSaveFinalScore={onSaveFinalScore}
+              onNavigateToSchedule={() => onSelectNav("sessions")}
+            />
+          ) : (
+            <Day1Assessments
+              sessionScores={state.day1SessionAssessmentScores ?? {}}
+              finalScore={state.day1FinalAssessmentScore ?? null}
+              onSaveSessionScore={onSaveSessionAssessmentScore}
+              onSaveFinalScore={onSaveFinalScore}
+              onNavigateToSchedule={() => onSelectNav("sessions")}
+            />
+          )}
         </div>
       )}
 
@@ -561,22 +725,106 @@ export function StudentWorkspace({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { title: "NPLRA Network Architecture Specification", kind: "PDF / Topology Document", size: "2.4 MB" },
-              { title: "pfSense 2.7.2 Administration Cheat Sheet", kind: "Quick Reference", size: "840 KB" },
-              { title: "Stateful TCP Connection Inspection Guide", kind: "Technical Whitepaper", size: "1.1 MB" },
-              { title: "Zero-Troubleshooting Range Diagnostics Runbook", kind: "Operations Manual", size: "650 KB" },
-            ].map((res, idx) => (
-              <Card key={idx} className="p-4 border-border/80 bg-card/60 flex items-center justify-between">
-                <div>
-                  <h3 className="text-xs font-semibold text-foreground">{res.title}</h3>
-                  <p className="text-[10px] text-muted-foreground font-mono mt-0.5">{res.kind} • {res.size}</p>
+              {
+                id: "res-1",
+                title: "NPLRA Network Architecture Specification",
+                kind: "Topology & Zone Architecture Reference",
+                size: "2.4 MB Reference",
+                url: "https://sxl-net.shadowxlab.com",
+                badge: "LOCAL REF",
+              },
+              {
+                id: "res-2",
+                title: "pfSense 2.7.2 Administration Cheat Sheet",
+                kind: "Firewall & NAT Quick Reference",
+                size: "840 KB Guide",
+                url: "https://docs.netgate.com/pfsense/en/latest/",
+                badge: "MANUAL",
+              },
+              {
+                id: "res-3",
+                title: "Stateful TCP Connection Inspection Guide",
+                kind: "Technical Whitepaper & RFC 9293 Mechanics",
+                size: "1.1 MB Whitepaper",
+                url: "https://datatracker.ietf.org/doc/html/rfc9293",
+                badge: "WHITEPAPER",
+              },
+              {
+                id: "res-4",
+                title: "Zero-Troubleshooting Range Diagnostics Runbook",
+                kind: "Hardware Diagnostics & Recovery Manual",
+                size: "650 KB Operations",
+                url: "https://sxl-net.shadowxlab.com",
+                badge: "RUNBOOK",
+              },
+              {
+                id: "res-5",
+                title: "NIST SP 800-41 Rev. 1: Guidelines on Firewalls",
+                kind: "Firewall Policy & Defense-in-Depth Standard",
+                size: "NIST Federal Standard",
+                url: "https://csrc.nist.gov/pubs/sp/800/41/r1/final",
+                badge: "NIST STANDARD",
+              },
+              {
+                id: "res-6",
+                title: "NIST SP 800-77 Rev. 1: Guide to IPsec VPNs",
+                kind: "Cryptographic Tunnel Architecture Standard",
+                size: "NIST Federal Standard",
+                url: "https://csrc.nist.gov/pubs/sp/800/77/r1/final",
+                badge: "NIST STANDARD",
+              },
+              {
+                id: "res-7",
+                title: "NIST SP 800-207: Zero Trust Architecture",
+                kind: "Perimeter Isolation & Microsegmentation Model",
+                size: "NIST Federal Standard",
+                url: "https://csrc.nist.gov/pubs/sp/800/207/final",
+                badge: "NIST STANDARD",
+              },
+              {
+                id: "res-8",
+                title: "RFC 7296: Internet Key Exchange Protocol (IKEv2)",
+                kind: "IETF Core Protocol Specification",
+                size: "IETF Protocol RFC",
+                url: "https://datatracker.ietf.org/doc/html/rfc7296",
+                badge: "IETF RFC",
+              },
+              {
+                id: "res-9",
+                title: "RFC 4301 / RFC 8446: IPsec Architecture & TLS 1.3",
+                kind: "IP Security & Transport Layer Security Standards",
+                size: "IETF Protocol RFCs",
+                url: "https://datatracker.ietf.org/doc/html/rfc4301",
+                badge: "IETF RFC",
+              },
+            ].map((res) => (
+              <Card key={res.id} className="p-4 border-border/80 bg-card/60 flex flex-col justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[9px] font-bold text-cyan-400 uppercase tracking-wider">
+                      {res.badge}
+                    </span>
+                    <span className="font-mono text-[10px] text-muted-foreground">{res.size}</span>
+                  </div>
+                  <h3 className="text-xs font-semibold text-foreground line-clamp-2">{res.title}</h3>
+                  <p className="text-[11px] text-muted-foreground leading-relaxed">{res.kind}</p>
                 </div>
-                <Button size="sm" variant="outline" className="text-xs h-7 gap-1">
-                  <span>Download</span>
-                  <ExternalLink className="h-3 w-3" />
-                </Button>
+                <div className="pt-2 border-t border-border/60 flex items-center justify-between">
+                  <span className="font-mono text-[10px] text-muted-foreground/80 truncate max-w-[150px]">
+                    {res.url.replace("https://", "")}
+                  </span>
+                  <a
+                    href={res.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 font-medium"
+                  >
+                    <span>Open Standard</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
               </Card>
             ))}
           </div>

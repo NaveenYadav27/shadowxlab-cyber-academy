@@ -88,7 +88,7 @@ describe("ShadowXLab Platform Redesign — Master Acceptance Verification", () =
 
       expect(screen.getByText("Firewall & VPN Security Administration")).toBeInTheDocument();
       expect(screen.getByRole("button", { name: /CONTINUE LEARNING/i })).toBeInTheDocument();
-      expect(screen.getByText(/Naveen Kumar Yadav Loya/i)).toBeInTheDocument();
+      expect(screen.getByText(/Naveen Kumar/i)).toBeInTheDocument();
       expect(screen.getByText(/30 Contact Hours/i)).toBeInTheDocument();
     });
 
@@ -186,4 +186,179 @@ describe("ShadowXLab Platform Redesign — Master Acceptance Verification", () =
       expect(screen.getByText(/30 hours total/i)).toBeInTheDocument();
     });
   });
+
+  describe("5. Basic Delivery Access Control Route Guards", () => {
+    it("renders Administrator Console Restricted card when unauthorized role visits /admin", async () => {
+      // Import ShadowXLabApp to test complete route guard orchestration
+      const { default: ShadowXLabApp } = await import("@/components/training-platform-app");
+      render(<ShadowXLabApp currentView="administration" />);
+
+      expect(screen.getByText(/Administrator Console Restricted/i)).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /Return to My Learning/i })).toBeInTheDocument();
+      expect(
+        screen.queryByText(/PLATFORM GOVERNANCE & ARCHITECTURE/i),
+      ).not.toBeInTheDocument();
+    });
+
+    it("renders Instructor Console Restricted card when unauthorized role visits /instructor", async () => {
+      const { default: ShadowXLabApp } = await import("@/components/training-platform-app");
+      render(<ShadowXLabApp currentView="instructor" />);
+
+      expect(screen.getByText(/Instructor Console Restricted/i)).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /Return to My Learning/i })).toBeInTheDocument();
+      expect(screen.queryByText(/INSTRUCTOR COMMAND CONSOLE/i)).not.toBeInTheDocument();
+    });
+  });
+
+  describe("6. 20-Session Universal Engine Coverage (Days 1–5)", () => {
+    it("successfully mounts and renders each of the 20 approved sessions across all 5 days", () => {
+      const allSessions = INITIAL_PROGRAMME.days.flatMap((day, dayIdx) =>
+        day.sessions.map((sess) => ({ sess, dayIdx })),
+      );
+
+      expect(allSessions).toHaveLength(20);
+
+      allSessions.forEach(({ sess, dayIdx }) => {
+        const { unmount } = render(
+          <UniversalSessionEngine
+            session={sess}
+            dayIndex={dayIdx}
+            programme={INITIAL_PROGRAMME}
+            state={mockState}
+            onSessionComplete={vi.fn()}
+            onNavigateToSchedule={vi.fn()}
+          />,
+        );
+
+        expect(screen.getAllByText(sess.title).length).toBeGreaterThanOrEqual(1);
+        expect(screen.getByText(new RegExp(`SESSION ${sess.id}`, "i"))).toBeInTheDocument();
+        unmount();
+      });
+    });
+  });
+
+  describe("7. Nine Learning Resources Accessibility", () => {
+    it("renders all 9 approved resources with active standard links", () => {
+      render(
+        <StudentWorkspace
+          state={mockState}
+          programme={INITIAL_PROGRAMME}
+          activeNavId="resources"
+          onSelectNav={vi.fn()}
+          onToggleSessionComplete={vi.fn()}
+          onToggleConceptComplete={vi.fn()}
+          onSaveLabScore={vi.fn()}
+          onSaveSessionAssessmentScore={vi.fn()}
+          onSaveFinalScore={vi.fn()}
+          onSelectLabMode={vi.fn()}
+          onOpenReadiness={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByText(/NPLRA Network Architecture Specification/i)).toBeInTheDocument();
+      expect(screen.getByText(/pfSense 2.7.2 Administration Cheat Sheet/i)).toBeInTheDocument();
+      expect(screen.getByText(/Stateful TCP Connection Inspection Guide/i)).toBeInTheDocument();
+      expect(screen.getByText(/Zero-Troubleshooting Range Diagnostics Runbook/i)).toBeInTheDocument();
+      expect(screen.getByText(/NIST SP 800-41 Rev. 1/i)).toBeInTheDocument();
+      expect(screen.getByText(/NIST SP 800-77 Rev. 1/i)).toBeInTheDocument();
+      expect(screen.getByText(/NIST SP 800-207/i)).toBeInTheDocument();
+      expect(screen.getByText(/RFC 7296/i)).toBeInTheDocument();
+      expect(screen.getByText(/RFC 4301 \/ RFC 8446/i)).toBeInTheDocument();
+    });
+  });
+
+  describe("8. Instructor Session Delivery Across Days 1–5", () => {
+    it("provides access to all 20 sessions in session-delivery view", () => {
+      render(
+        <InstructorWorkspace
+          state={mockState}
+          programme={INITIAL_PROGRAMME}
+          activeNavId="session-delivery"
+          onSelectNav={vi.fn()}
+          onUpdateAttendance={vi.fn()}
+        />,
+      );
+
+      // Verify sessions from both Day 1 and later days appear in delivery list
+      expect(screen.getByText("D1-S1")).toBeInTheDocument();
+      expect(screen.getByText("D4-S4")).toBeInTheDocument();
+      expect(screen.getByText("D5-S4")).toBeInTheDocument();
+    });
+  });
+
+  describe("9. ESCI Day 2 Curriculum & Practical Engine", () => {
+    it("verifies ESCI institution branding, active training date and pilot subnets", () => {
+      render(
+        <StudentWorkspace
+          state={mockState}
+          programme={INITIAL_PROGRAMME}
+          activeNavId="my-learning"
+          onSelectNav={vi.fn()}
+          onToggleSessionComplete={vi.fn()}
+          onToggleConceptComplete={vi.fn()}
+          onSaveLabScore={vi.fn()}
+          onSaveSessionAssessmentScore={vi.fn()}
+          onSaveFinalScore={vi.fn()}
+          onSelectLabMode={vi.fn()}
+          onOpenReadiness={vi.fn()}
+        />,
+      );
+
+      expect(screen.getAllByText(/ENGINEERING STAFF COLLEGE OF INDIA/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/Tuesday, 17 November 2026/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/10.231.10.0\/24/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/10.231.20.0\/24/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/10.231.30.0\/24/i)[0]).toBeInTheDocument();
+    });
+
+    it("verifies Day 2 schedule accordion renders the 4 official sessions without break displays", () => {
+      render(
+        <StudentWorkspace
+          state={mockState}
+          programme={INITIAL_PROGRAMME}
+          activeNavId="sessions"
+          onSelectNav={vi.fn()}
+          onToggleSessionComplete={vi.fn()}
+          onToggleConceptComplete={vi.fn()}
+          onSaveLabScore={vi.fn()}
+          onSaveSessionAssessmentScore={vi.fn()}
+          onSaveFinalScore={vi.fn()}
+          onSelectLabMode={vi.fn()}
+          onOpenReadiness={vi.fn()}
+        />,
+      );
+
+      // Verify Day 2 schedule sessions
+      expect(screen.getAllByText(/Firewall Architecture, Deployment Modes and Security Zones/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/Configuration of LAN, WAN, DMZ Interfaces and Static Routing/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/Firewall Access Control Lists \(ACLs\), Rules and Policy Management/i)[0]).toBeInTheDocument();
+
+      // Verify NO break or lunch texts are present
+      expect(screen.queryByText(/tea break/i)).toBeNull();
+      expect(screen.queryByText(/lunch break/i)).toBeNull();
+    });
+
+    it("renders Day 2 Practical Labs engine with interface, routing, and nftables modules", () => {
+      render(
+        <StudentWorkspace
+          state={mockState}
+          programme={INITIAL_PROGRAMME}
+          activeNavId="labs"
+          onSelectNav={vi.fn()}
+          onToggleSessionComplete={vi.fn()}
+          onToggleConceptComplete={vi.fn()}
+          onSaveLabScore={vi.fn()}
+          onSaveSessionAssessmentScore={vi.fn()}
+          onSaveFinalScore={vi.fn()}
+          onSelectLabMode={vi.fn()}
+          onOpenReadiness={vi.fn()}
+        />,
+      );
+
+      expect(screen.getAllByText(/Network Topology Design & Firewall Interface Setup/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/Static Routing & Inter-Zone Reachability/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/nftables ACL Policy Management/i)[0]).toBeInTheDocument();
+    });
+  });
 });
+

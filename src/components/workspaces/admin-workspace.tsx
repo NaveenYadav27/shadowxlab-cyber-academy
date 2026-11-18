@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import type { ProgrammeConfig, TrainingState } from "@/lib/training-platform";
 import { DEMO_STUDENTS } from "@/lib/auth-service";
+import { isSupabaseConfigured } from "@/lib/supabase-client";
 
 interface AdminWorkspaceProps {
   state: TrainingState;
@@ -44,7 +45,8 @@ export function AdminWorkspace({
   onSelectNav,
   onResetToSeed,
 }: AdminWorkspaceProps) {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>(" ");
+  const isRemoteDbConnected = isSupabaseConfigured();
 
   const auditEvents = [
     { timestamp: "10:14:02", user: "student-01@shadowxlab.com", action: "Completed Session D1-S1 (Briefing → Summary)", level: "INFO" },
@@ -107,11 +109,25 @@ export function AdminWorkspace({
 
             <Card className="p-4 border-border/80 bg-card/60">
               <span className="font-mono text-[10px] text-muted-foreground uppercase font-bold">DATABASE HEALTH</span>
-              <div className="text-2xl font-bold text-emerald-400 font-mono mt-1 flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981]" />
-                <span>ONLINE</span>
+              <div
+                className={`text-2xl font-bold font-mono mt-1 flex items-center gap-1.5 ${
+                  isRemoteDbConnected ? "text-emerald-400" : "text-cyan-400"
+                }`}
+              >
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    isRemoteDbConnected
+                      ? "bg-emerald-400 shadow-[0_0_8px_#10b981]"
+                      : "bg-cyan-400 shadow-[0_0_8px_#00e5ff]"
+                  }`}
+                />
+                <span>{isRemoteDbConnected ? "ONLINE" : "LOCAL-FIRST"}</span>
               </div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Supabase PostgREST & RLS Active</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                {isRemoteDbConnected
+                  ? "Supabase PostgREST & RLS Active"
+                  : "Offline Browser Storage (Remote Unconfigured)"}
+              </p>
             </Card>
 
             <Card className="p-4 border-border/80 bg-card/60">
@@ -129,7 +145,7 @@ export function AdminWorkspace({
                 <span>Supabase Persistence Tier</span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                PostgreSQL schema version 20261115000004 with 11 tables. Client connects via anon key; service roles are strictly withheld.
+                PostgreSQL schema version 20261115000004 with 11 tables. Supabase PostgREST & RLS Active when authenticated; client falls back to local storage offline.
               </p>
               <div className="flex items-center justify-between text-[11px] font-mono border-t border-border/60 pt-2 text-muted-foreground">
                 <span>RLS ENFORCEMENT:</span>

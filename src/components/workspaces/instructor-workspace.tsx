@@ -225,21 +225,23 @@ export function InstructorWorkspace({
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-1 space-y-2">
               <span className="font-mono text-xs font-bold uppercase text-emerald-400">Select Session to Deliver:</span>
-              <div className="space-y-1">
-                {programme.days[0]?.sessions.map((sess) => (
-                  <button
-                    key={sess.id}
-                    onClick={() => setDeliverySessionId(sess.id)}
-                    className={`w-full text-left p-3 rounded-lg border text-xs transition-all ${
-                      deliverySessionId === sess.id
-                        ? "border-emerald-500 bg-emerald-500/10 text-emerald-300 font-semibold"
-                        : "border-border/60 bg-card/40 text-muted-foreground hover:bg-card/70"
-                    }`}
-                  >
-                    <div className="font-mono text-[10px] text-emerald-400">{sess.id.toUpperCase()}</div>
-                    <div className="font-bold truncate mt-0.5">{sess.title}</div>
-                  </button>
-                ))}
+              <div className="space-y-1 max-h-[500px] overflow-y-auto pr-1">
+                {programme.days
+                  .flatMap((day) => day.sessions)
+                  .map((sess) => (
+                    <button
+                      key={sess.id}
+                      onClick={() => setDeliverySessionId(sess.id)}
+                      className={`w-full text-left p-2.5 rounded-lg border text-xs transition-all ${
+                        deliverySessionId === sess.id
+                          ? "border-emerald-500 bg-emerald-500/10 text-emerald-300 font-semibold shadow-[0_0_8px_rgba(16,185,129,0.15)]"
+                          : "border-border/60 bg-card/40 text-muted-foreground hover:bg-card/70 hover:text-foreground"
+                      }`}
+                    >
+                      <div className="font-mono text-[10px] text-emerald-400">{sess.id.toUpperCase()}</div>
+                      <div className="font-medium line-clamp-2 mt-0.5">{sess.title}</div>
+                    </button>
+                  ))}
               </div>
             </div>
 
