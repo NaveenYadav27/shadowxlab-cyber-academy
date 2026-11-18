@@ -309,7 +309,7 @@ export function ConceptLearningPanel({
             Common Operational Mistakes
           </h4>
           <ul className="space-y-2 text-xs text-foreground/80">
-            {concept.commonMistakes.map((mistake, idx) => (
+            {(concept.commonMistakes ?? []).map((mistake, idx) => (
               <li key={idx} className="flex items-start gap-2">
                 <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-red-400" />
                 <span>{mistake}</span>

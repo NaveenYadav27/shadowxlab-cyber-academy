@@ -138,29 +138,29 @@ export function StudentWorkspace({
       {activeNavId === "my-learning" && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Hero Banner: Enrolled Programme & Prominent Continue Learning Action */}
-          <div className="relative overflow-hidden rounded-2xl border border-cyan-500/40 bg-gradient-to-r from-card via-card to-cyan-950/40 p-6 md:p-8 shadow-2xl">
+          <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
               <div className="lg:col-span-2 space-y-3">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="outline" className="border-cyan-500/50 bg-cyan-950/40 text-cyan-300 font-mono text-xs font-bold">
+                  <Badge variant="outline" className="border-red-200 bg-red-50 text-red-700 font-mono text-xs font-bold">
                     ENGINEERING STAFF COLLEGE OF INDIA (ESCI)
                   </Badge>
-                  <Badge variant="outline" className="border-emerald-500/50 bg-emerald-950/40 text-emerald-300 font-mono text-xs">
+                  <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-800 font-mono text-xs">
                     Tuesday, 17 November 2026 • Day 2
                   </Badge>
-                  <span className="text-xs text-muted-foreground font-mono">
+                  <span className="text-xs text-gray-500 font-mono">
                     5 Days • 30 Contact Hours • {programme.location}
                   </span>
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900">
                   {programme.title}
                 </h1>
-                <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-                  {programme.description} Faculty: <strong className="text-cyan-300">Mr. Naveen Kumar</strong>
+                <p className="text-sm text-gray-600 max-w-2xl leading-relaxed">
+                  {programme.description} Faculty: <strong className="text-red-700 font-bold">Mr. Naveen Kumar</strong>
                 </p>
-                <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-muted-foreground">
-                  <span className="text-cyan-400 font-semibold">Pilot Subnets:</span>
+                <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono text-gray-500">
+                  <span className="text-red-600 font-semibold">Pilot Subnets:</span>
                   <span>WAN: 10.231.10.0/24</span>
                   <span>•</span>
                   <span>LAN: 10.231.20.0/24</span>
@@ -171,16 +171,16 @@ export function StudentWorkspace({
                 {/* Progress Bar & KPI Chips */}
                 <div className="pt-2 space-y-2 max-w-xl">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="text-muted-foreground">Course Completion:</span>
-                    <span className="text-cyan-400 font-bold">{progressPercent}%</span>
+                    <span className="text-gray-500">Course Completion:</span>
+                    <span className="text-red-600 font-bold">{progressPercent}%</span>
                   </div>
-                  <div className="h-2.5 w-full rounded-full bg-slate-900 border border-border/80 overflow-hidden">
+                  <div className="h-2.5 w-full rounded-full bg-gray-100 border border-gray-200 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 shadow-[0_0_12px_#00e5ff] transition-all duration-500"
+                      className="h-full rounded-full bg-red-600 transition-all duration-500 shadow-sm"
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
-                  <div className="flex items-center justify-between text-[11px] text-muted-foreground font-mono">
+                  <div className="flex items-center justify-between text-[11px] text-gray-500 font-mono">
                     <span>{completedCount} of {totalSessions} Sessions Completed</span>
                     <span>{loggedContactHours} / 30.0 Contact Hours</span>
                   </div>
@@ -188,29 +188,29 @@ export function StudentWorkspace({
               </div>
 
               {/* Prominent Continue Learning Card */}
-              <div className="lg:col-span-1 rounded-xl border border-cyan-500/50 bg-cyan-950/30 p-5 shadow-[0_0_20px_rgba(0,229,255,0.12)] space-y-4">
+              <div className="lg:col-span-1 rounded-xl border border-red-200 bg-red-50/50 p-5 shadow-sm space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-red-700">
                     NEXT UP ON YOUR SCHEDULE
                   </span>
-                  <Badge className="bg-cyan-500 text-slate-950 font-mono text-[10px] font-bold">
+                  <Badge className="bg-red-600 text-white font-mono text-[10px] font-bold">
                     DAY {nextSession.dayIndex + 1}
                   </Badge>
                 </div>
 
                 <div>
-                  <h3 className="text-base font-bold text-foreground line-clamp-2">
+                  <h3 className="text-base font-bold text-gray-900 line-clamp-2">
                     {nextSession.title}
                   </h3>
-                  <div className="mt-1 flex items-center gap-2 text-xs font-mono text-muted-foreground">
-                    <Clock className="h-3.5 w-3.5 text-cyan-400" />
+                  <div className="mt-1 flex items-center gap-2 text-xs font-mono text-gray-600">
+                    <Clock className="h-3.5 w-3.5 text-red-600" />
                     <span>{nextSession.start} – {nextSession.end} ({nextSession.kind})</span>
                   </div>
                 </div>
 
                 <Button
                   onClick={() => setActiveSessionId(nextSession.id)}
-                  className="w-full gap-2 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold text-sm h-11 shadow-[0_0_20px_rgba(0,229,255,0.35)]"
+                  className="w-full gap-2 bg-red-600 text-white hover:bg-red-700 font-bold text-sm h-11 shadow-sm"
                 >
                   <Play className="h-4 w-4 fill-current" />
                   <span>CONTINUE LEARNING</span>
@@ -221,31 +221,31 @@ export function StudentWorkspace({
 
           {/* Quick Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="p-4 border-border/80 bg-card/60">
-              <span className="font-mono text-[10px] text-muted-foreground uppercase font-bold">ACTIVE DAY</span>
-              <div className="text-lg font-bold text-foreground mt-1">Day {nextSession.dayIndex + 1}</div>
-              <p className="text-[11px] text-muted-foreground truncate mt-0.5">{nextSession.dayTitle}</p>
+            <Card className="p-4 border-gray-200 bg-white shadow-sm">
+              <span className="font-mono text-[10px] text-gray-500 uppercase font-bold">ACTIVE DAY</span>
+              <div className="text-lg font-bold text-gray-900 mt-1">Day {nextSession.dayIndex + 1}</div>
+              <p className="text-[11px] text-gray-500 truncate mt-0.5">{nextSession.dayTitle}</p>
             </Card>
 
-            <Card className="p-4 border-border/80 bg-card/60">
-              <span className="font-mono text-[10px] text-muted-foreground uppercase font-bold">NEXT ASSESSMENT</span>
-              <div className="text-lg font-bold text-cyan-400 mt-1">Session {nextSession.id.toUpperCase()}</div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Knowledge check pending</p>
+            <Card className="p-4 border-gray-200 bg-white shadow-sm">
+              <span className="font-mono text-[10px] text-gray-500 uppercase font-bold">NEXT ASSESSMENT</span>
+              <div className="text-lg font-bold text-red-600 mt-1 font-mono">Session {nextSession.id.toUpperCase()}</div>
+              <p className="text-[11px] text-gray-500 mt-0.5">Knowledge check pending</p>
             </Card>
 
-            <Card className="p-4 border-border/80 bg-card/60">
-              <span className="font-mono text-[10px] text-muted-foreground uppercase font-bold">CYBER RANGE</span>
-              <div className="text-lg font-bold text-emerald-400 mt-1 flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <Card className="p-4 border-gray-200 bg-white shadow-sm">
+              <span className="font-mono text-[10px] text-gray-500 uppercase font-bold">CYBER RANGE</span>
+              <div className="text-lg font-bold text-emerald-700 mt-1 flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>ONLINE</span>
               </div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">pfSense 2.7.2 Ready</p>
+              <p className="text-[11px] text-gray-500 mt-0.5">pfSense 2.7.2 Ready</p>
             </Card>
 
-            <Card className="p-4 border-border/80 bg-card/60">
-              <span className="font-mono text-[10px] text-muted-foreground uppercase font-bold">LAB TROUBLESHOOTING</span>
-              <div className="text-lg font-bold text-foreground mt-1">Zero Blocker</div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Browser simulation active</p>
+            <Card className="p-4 border-gray-200 bg-white shadow-sm">
+              <span className="font-mono text-[10px] text-gray-500 uppercase font-bold">LAB TROUBLESHOOTING</span>
+              <div className="text-lg font-bold text-gray-900 mt-1">Zero Blocker</div>
+              <p className="text-[11px] text-gray-500 mt-0.5">Browser simulation active</p>
             </Card>
           </div>
 
@@ -254,15 +254,15 @@ export function StudentWorkspace({
             {/* Session Roadmap */}
             <div className="lg:col-span-2 space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-                  <CalendarDays className="h-5 w-5 text-cyan-400" />
+                <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <CalendarDays className="h-5 w-5 text-red-600" />
                   <span>Curriculum Journey (5 Days / 20 Sessions)</span>
                 </h2>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => onSelectNav("sessions")}
-                  className="text-xs text-cyan-400 hover:text-cyan-300 gap-1"
+                  className="text-xs text-red-600 hover:text-red-700 gap-1 font-semibold"
                 >
                   <span>View Full Schedule</span>
                   <ChevronRight className="h-3.5 w-3.5" />
@@ -280,29 +280,29 @@ export function StudentWorkspace({
                       onClick={() => setActiveSessionId(session.id)}
                       className={`flex items-center justify-between p-3.5 rounded-lg border transition-all cursor-pointer ${
                         isNext
-                          ? "border-cyan-500 bg-cyan-500/10 shadow-[0_0_12px_rgba(0,229,255,0.08)] hover:bg-cyan-500/15"
+                          ? "border-red-600 bg-red-50 text-gray-900 shadow-sm hover:bg-red-100/50"
                           : isDone
-                            ? "border-emerald-500/30 bg-card/40 hover:border-emerald-500/60"
-                            : "border-border/60 bg-card/30 hover:border-cyan-500/50 hover:bg-card/60"
+                            ? "border-emerald-200 bg-emerald-50/50 hover:border-emerald-300"
+                            : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div
                           className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md font-mono text-xs font-bold ${
                             isDone
-                              ? "bg-emerald-500 text-slate-950"
+                              ? "bg-emerald-600 text-white"
                               : isNext
-                                ? "bg-cyan-400 text-slate-950 shadow-[0_0_8px_#00e5ff]"
-                                : "bg-card text-muted-foreground border border-border"
+                                ? "bg-red-600 text-white shadow-sm"
+                                : "bg-gray-100 text-gray-600 border border-gray-200"
                           }`}
                         >
                           {isDone ? <Check className="h-4 w-4 stroke-[3]" /> : sIdx + 1}
                         </div>
                         <div className="min-w-0">
-                          <div className="text-xs font-semibold text-foreground truncate">
+                          <div className="text-xs font-semibold text-gray-900 truncate">
                             {session.title}
                           </div>
-                          <div className="text-[10px] text-muted-foreground font-mono">
+                          <div className="text-[10px] text-gray-500 font-mono">
                             Day {session.dayIndex + 1} • {session.start} – {session.end} • {session.kind}
                           </div>
                         </div>
@@ -316,7 +316,7 @@ export function StudentWorkspace({
                           setActiveSessionId(session.id);
                         }}
                         className={`text-xs h-7 px-3 shrink-0 ${
-                          isNext ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-semibold" : ""
+                          isNext ? "bg-red-600 text-white hover:bg-red-700 font-semibold shadow-sm" : "border-gray-200 text-gray-700 hover:text-gray-900"
                         }`}
                       >
                         {isDone ? "Review" : isNext ? "Start" : "Open"}
@@ -329,30 +329,30 @@ export function StudentWorkspace({
 
             {/* Quick Cyber Range Link & Competency Radar */}
             <div className="lg:col-span-1 space-y-4">
-              <Card className="p-5 border-cyan-500/30 bg-gradient-to-br from-card to-cyan-950/20 space-y-4">
+              <Card className="p-5 border-gray-200 bg-white shadow-sm space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-cyan-400 font-mono text-xs font-bold">
+                  <div className="flex items-center gap-2 text-red-600 font-mono text-xs font-bold">
                     <Radio className="h-4 w-4 animate-pulse" />
                     <span>CYBER RANGE SHORTCUT</span>
                   </div>
-                  <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 text-[10px]">
+                  <Badge variant="outline" className="border-red-200 text-red-700 bg-red-50 text-[10px]">
                     7 Nodes Live
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-xs text-gray-600 leading-relaxed">
                   Open the live packet journey simulator and inspect state table entries, firewall rules, and syslog telemetry.
                 </p>
                 <Button
                   onClick={() => onSelectNav("cyber-range")}
-                  className="w-full gap-2 bg-card border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/20 text-xs h-9 font-semibold"
+                  className="w-full gap-2 bg-red-600 text-white hover:bg-red-700 text-xs h-9 font-semibold shadow-sm"
                 >
                   <span>Launch Cyber Range</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               </Card>
 
-              <Card className="p-5 border-border/80 bg-card/60 space-y-3">
-                <div className="font-mono text-xs font-bold uppercase text-muted-foreground">
+              <Card className="p-5 border-gray-200 bg-white shadow-sm space-y-3">
+                <div className="font-mono text-xs font-bold uppercase text-gray-700">
                   Competency Mastery Status
                 </div>
                 <div className="space-y-2 text-xs">
@@ -364,12 +364,12 @@ export function StudentWorkspace({
                   ].map((item, idx) => (
                     <div key={idx} className="space-y-1">
                       <div className="flex justify-between text-[11px]">
-                        <span className="text-foreground">{item.domain}</span>
-                        <span className="text-cyan-400 font-mono">{item.mastery}%</span>
+                        <span className="text-gray-800 font-medium">{item.domain}</span>
+                        <span className="text-red-600 font-mono font-bold">{item.mastery}%</span>
                       </div>
-                      <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-cyan-400 rounded-full"
+                          className="h-full bg-red-600 rounded-full transition-all"
                           style={{ width: `${item.mastery}%` }}
                         />
                       </div>
@@ -393,33 +393,33 @@ export function StudentWorkspace({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-6 border-cyan-500/40 bg-card/70 space-y-4">
+            <Card className="p-6 border-gray-200 bg-white shadow-sm space-y-4">
               <div className="flex items-center justify-between">
-                <Badge className="bg-cyan-500 text-slate-950 font-mono text-xs font-bold">
+                <Badge className="bg-red-600 text-white font-mono text-xs font-bold">
                   ACTIVE ENROLLMENT
                 </Badge>
-                <span className="text-xs text-muted-foreground font-mono">
+                <span className="text-xs text-gray-500 font-mono">
                   {programme.durationLabel}
                 </span>
               </div>
-              <h2 className="text-xl font-bold text-foreground">{programme.title}</h2>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <h2 className="text-xl font-bold text-gray-900">{programme.title}</h2>
+              <p className="text-xs text-gray-600 leading-relaxed">
                 {programme.description}
               </p>
-              <div className="grid grid-cols-2 gap-3 text-xs border-t border-border/80 pt-4 font-mono">
+              <div className="grid grid-cols-2 gap-3 text-xs border-t border-gray-100 pt-4 font-mono">
                 <div>
-                  <span className="text-muted-foreground">INSTRUCTOR:</span>
-                  <div className="font-semibold text-foreground mt-0.5">{programme.instructor}</div>
+                  <span className="text-gray-500">INSTRUCTOR:</span>
+                  <div className="font-semibold text-gray-900 mt-0.5">{programme.instructor}</div>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">LOCATION:</span>
-                  <div className="font-semibold text-foreground mt-0.5">{programme.location}</div>
+                  <span className="text-gray-500">LOCATION:</span>
+                  <div className="font-semibold text-gray-900 mt-0.5">{programme.location}</div>
                 </div>
               </div>
               <div className="pt-2">
                 <Button
                   onClick={() => onSelectNav("sessions")}
-                  className="w-full bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-semibold text-xs"
+                  className="w-full bg-red-600 text-white hover:bg-red-700 font-semibold text-xs shadow-sm"
                 >
                   View Course Schedule
                 </Button>
@@ -432,15 +432,15 @@ export function StudentWorkspace({
       {/* VIEW: LEARNING SESSIONS (SCHEDULE) */}
       {activeNavId === "sessions" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="border-b border-border/80 pb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="border-b border-gray-200 pb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Learning Sessions Schedule</h1>
-              <p className="text-xs text-muted-foreground mt-1">
+              <h1 className="text-2xl font-bold text-gray-900">Learning Sessions Schedule</h1>
+              <p className="text-xs text-gray-500 mt-1">
                 Preserved 5-Day / 20-Session Table of Contents (30 Contact Hours) • ESCI Hyderabad
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono overflow-x-auto max-w-full">
+              <div className="flex rounded-lg border border-gray-200 bg-gray-50 p-0.5 text-xs font-mono overflow-x-auto max-w-full">
                 {(
                   [
                     { id: "day-1", label: "Day 1" },
@@ -456,15 +456,15 @@ export function StudentWorkspace({
                     onClick={() => setSelectedDayTab(tab.id)}
                     className={`px-3 py-1 rounded-md transition-all whitespace-nowrap ${
                       selectedDayTab === tab.id
-                        ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
-                        : "text-muted-foreground hover:text-foreground"
+                        ? "bg-red-600 text-white font-bold shadow-sm"
+                        : "text-gray-600 hover:text-gray-900"
                     }`}
                   >
                     {tab.label}
                   </button>
                 ))}
               </div>
-              <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 font-mono text-xs shrink-0">
+              <Badge variant="outline" className="border-red-200 text-red-700 bg-red-50 font-mono text-xs shrink-0">
                 {progressPercent}% COMPLETE
               </Badge>
             </div>
@@ -512,14 +512,14 @@ export function StudentWorkspace({
                   return (
                     <div
                       key={sess.id}
-                      className="rounded-xl border border-border/70 bg-card/40 p-4 space-y-3 hover:border-cyan-500/50 transition-all"
+                      className="rounded-xl border border-gray-200 bg-white p-4 space-y-3 hover:border-gray-300 shadow-sm transition-all"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <span className="font-mono text-xs font-bold text-cyan-400">
+                          <span className="font-mono text-xs font-bold text-red-600">
                             {selectedDayTab.toUpperCase()} • S{sIdx + 1}
                           </span>
-                          <h3 className="text-sm font-semibold text-foreground">
+                          <h3 className="text-sm font-semibold text-gray-900">
                             {sess.title}
                           </h3>
                         </div>
@@ -527,7 +527,7 @@ export function StudentWorkspace({
                           <Button
                             size="sm"
                             onClick={() => setActiveSessionId(sess.id)}
-                            className="gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold text-xs h-8 shadow-[0_0_10px_rgba(0,229,255,0.25)]"
+                            className="gap-1.5 bg-red-600 text-white hover:bg-red-700 font-bold text-xs h-8 shadow-sm"
                           >
                             <Play className="h-3.5 w-3.5 fill-current" />
                             <span>Open Lesson</span>
@@ -542,10 +542,10 @@ export function StudentWorkspace({
                           </Button>
                         </div>
                       </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-gray-600 leading-relaxed">
                         {sess.description}
                       </p>
-                      <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground pt-1 border-t border-border/50">
+                      <div className="flex items-center gap-4 text-xs font-mono text-gray-500 pt-1 border-t border-gray-100">
                         <span>
                           {sess.start} – {sess.end}
                         </span>
@@ -563,9 +563,9 @@ export function StudentWorkspace({
       {/* VIEW: CONCEPTS EXPLORER */}
       {activeNavId === "concepts" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="border-b border-border/80 pb-4">
-            <h1 className="text-2xl font-bold text-foreground">Concepts Explorer</h1>
-            <p className="text-xs text-muted-foreground mt-1">
+          <div className="border-b border-gray-200 pb-4">
+            <h1 className="text-2xl font-bold text-gray-900">Concepts Explorer</h1>
+            <p className="text-xs text-gray-500 mt-1">
               In-depth technical explanations, architecture diagrams, and knowledge checks.
             </p>
           </div>
@@ -588,21 +588,21 @@ export function StudentWorkspace({
       {/* VIEW: PRACTICAL LABS */}
       {activeNavId === "labs" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="border-b border-border/80 pb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="border-b border-gray-200 pb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Practical Labs Engine</h1>
-              <p className="text-xs text-muted-foreground mt-1">
+              <h1 className="text-2xl font-bold text-gray-900">Practical Labs Engine</h1>
+              <p className="text-xs text-gray-500 mt-1">
                 Guided network experiments, packet filters, and configuration testing.
               </p>
             </div>
-            <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono">
+            <div className="flex rounded-lg border border-gray-200 bg-gray-50 p-0.5 text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setSelectedDayTab("day-2")}
                 className={`px-3 py-1 rounded-md transition-all ${
                   selectedDayTab === "day-2"
-                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-red-600 text-white font-bold shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }`}
               >
                 Day 2 Labs (Active)
@@ -612,8 +612,8 @@ export function StudentWorkspace({
                 onClick={() => setSelectedDayTab("day-1")}
                 className={`px-3 py-1 rounded-md transition-all ${
                   selectedDayTab === "day-1"
-                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-red-600 text-white font-bold shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }`}
               >
                 Day 1 Labs
@@ -640,14 +640,14 @@ export function StudentWorkspace({
       {/* VIEW: CYBER RANGE */}
       {activeNavId === "cyber-range" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="flex rounded-lg border border-border/70 bg-card/60 p-1 text-xs font-mono max-w-md">
+          <div className="flex rounded-lg border border-gray-200 bg-gray-50 p-1 text-xs font-mono max-w-md">
             <button
               type="button"
               onClick={() => setSelectedDayTab("day-2")}
               className={`flex-1 py-1.5 px-3 rounded-md transition-all text-center ${
                 selectedDayTab === "day-2"
-                  ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(0,229,255,0.25)]"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-red-600 text-white font-bold shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               Day 2 Pilot Topology (10.231.x.x)
@@ -657,8 +657,8 @@ export function StudentWorkspace({
               onClick={() => setSelectedDayTab("day-1")}
               className={`flex-1 py-1.5 px-3 rounded-md transition-all text-center ${
                 selectedDayTab === "day-1"
-                  ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(0,229,255,0.25)]"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-red-600 text-white font-bold shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
               }`}
             >
               Full Multi-Node Cyber Range
@@ -681,21 +681,21 @@ export function StudentWorkspace({
       {/* VIEW: ASSESSMENTS */}
       {activeNavId === "assessments" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="border-b border-border/80 pb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="border-b border-gray-200 pb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Competency Assessments</h1>
-              <p className="text-xs text-muted-foreground mt-1">
+              <h1 className="text-2xl font-bold text-gray-900">Competency Assessments</h1>
+              <p className="text-xs text-gray-500 mt-1">
                 Transparent knowledge checks, log interpretations, and final examinations.
               </p>
             </div>
-            <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 text-xs font-mono">
+            <div className="flex rounded-lg border border-gray-200 bg-gray-50 p-0.5 text-xs font-mono">
               <button
                 type="button"
                 onClick={() => setSelectedDayTab("day-2")}
                 className={`px-3 py-1 rounded-md transition-all ${
                   selectedDayTab === "day-2"
-                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-red-600 text-white font-bold shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }`}
               >
                 Day 2 Assessments (Active)
@@ -705,8 +705,8 @@ export function StudentWorkspace({
                 onClick={() => setSelectedDayTab("day-1")}
                 className={`px-3 py-1 rounded-md transition-all ${
                   selectedDayTab === "day-1"
-                    ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_8px_rgba(0,229,255,0.3)]"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-red-600 text-white font-bold shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
                 }`}
               >
                 Day 1 Assessments
@@ -737,44 +737,44 @@ export function StudentWorkspace({
       {/* VIEW: MY PROGRESS */}
       {activeNavId === "progress" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="border-b border-border/80 pb-4">
-            <h1 className="text-2xl font-bold text-foreground">My Learning Progress & Competency</h1>
-            <p className="text-xs text-muted-foreground mt-1">
+          <div className="border-b border-gray-200 pb-4">
+            <h1 className="text-2xl font-bold text-gray-900">My Learning Progress & Competency</h1>
+            <p className="text-xs text-gray-500 mt-1">
               Detailed tracking of completed sessions, contact hours, and learning gaps.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 border-cyan-500/40 bg-card/70 text-center space-y-3">
-              <span className="font-mono text-xs text-muted-foreground uppercase font-bold">
+            <Card className="p-6 border-gray-200 bg-white shadow-sm text-center space-y-3">
+              <span className="font-mono text-xs text-gray-500 uppercase font-bold">
                 COMPLETION SCORE
               </span>
-              <div className="text-4xl font-extrabold text-cyan-400 font-mono">
+              <div className="text-4xl font-extrabold text-red-600 font-mono">
                 {progressPercent}%
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-gray-500">
                 {completedCount} of {totalSessions} sessions logged
               </p>
             </Card>
 
-            <Card className="p-6 border-emerald-500/40 bg-card/70 text-center space-y-3">
-              <span className="font-mono text-xs text-muted-foreground uppercase font-bold">
+            <Card className="p-6 border-gray-200 bg-white shadow-sm text-center space-y-3">
+              <span className="font-mono text-xs text-gray-500 uppercase font-bold">
                 CONTACT HOURS LOGGED
               </span>
-              <div className="text-4xl font-extrabold text-emerald-400 font-mono">
+              <div className="text-4xl font-extrabold text-emerald-700 font-mono">
                 {loggedContactHours}
               </div>
-              <p className="text-xs text-muted-foreground">out of 30.0 total contact hours</p>
+              <p className="text-xs text-gray-500">out of 30.0 total contact hours</p>
             </Card>
 
-            <Card className="p-6 border-border/80 bg-card/70 text-center space-y-3">
-              <span className="font-mono text-xs text-muted-foreground uppercase font-bold">
+            <Card className="p-6 border-gray-200 bg-white shadow-sm text-center space-y-3">
+              <span className="font-mono text-xs text-gray-500 uppercase font-bold">
                 LAB VERIFICATION
               </span>
-              <div className="text-4xl font-extrabold text-foreground font-mono">
+              <div className="text-4xl font-extrabold text-gray-900 font-mono">
                 {Object.keys(state.day1LabScores ?? {}).length}
               </div>
-              <p className="text-xs text-muted-foreground">labs successfully evaluated</p>
+              <p className="text-xs text-gray-500">labs successfully evaluated</p>
             </Card>
           </div>
         </div>
@@ -865,26 +865,26 @@ export function StudentWorkspace({
                 badge: "IETF RFC",
               },
             ].map((res) => (
-              <Card key={res.id} className="p-4 border-border/80 bg-card/60 flex flex-col justify-between space-y-3">
+              <Card key={res.id} className="p-4 border-gray-200 bg-white shadow-sm flex flex-col justify-between space-y-3">
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[9px] font-bold text-cyan-400 uppercase tracking-wider">
+                    <span className="font-mono text-[9px] font-bold text-red-600 uppercase tracking-wider">
                       {res.badge}
                     </span>
-                    <span className="font-mono text-[10px] text-muted-foreground">{res.size}</span>
+                    <span className="font-mono text-[10px] text-gray-500">{res.size}</span>
                   </div>
-                  <h3 className="text-xs font-semibold text-foreground line-clamp-2">{res.title}</h3>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed">{res.kind}</p>
+                  <h3 className="text-xs font-semibold text-gray-900 line-clamp-2">{res.title}</h3>
+                  <p className="text-[11px] text-gray-500 leading-relaxed">{res.kind}</p>
                 </div>
-                <div className="pt-2 border-t border-border/60 flex items-center justify-between">
-                  <span className="font-mono text-[10px] text-muted-foreground/80 truncate max-w-[150px]">
+                <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
+                  <span className="font-mono text-[10px] text-gray-500 truncate max-w-[150px]">
                     {res.url.replace("https://", "")}
                   </span>
                   <a
                     href={res.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 font-medium"
+                    className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700 font-medium"
                   >
                     <span>Open Standard</span>
                     <ExternalLink className="h-3 w-3" />

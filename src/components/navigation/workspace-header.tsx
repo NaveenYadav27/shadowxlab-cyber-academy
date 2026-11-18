@@ -46,10 +46,10 @@ export function WorkspaceHeader({
   const isDev = Boolean(import.meta.env?.DEV);
 
   const roleColors: Record<UserRole, string> = {
-    student: "border-cyan-500/40 text-cyan-300 bg-cyan-950/30",
-    instructor: "border-emerald-500/40 text-emerald-300 bg-emerald-950/30",
-    administrator: "border-purple-500/40 text-purple-300 bg-purple-950/30",
-    guest: "border-amber-500/40 text-amber-300 bg-amber-950/30",
+    student: "border-red-200 text-red-600 bg-red-50",
+    instructor: "border-emerald-200 text-emerald-700 bg-emerald-50",
+    administrator: "border-purple-200 text-purple-700 bg-purple-50",
+    guest: "border-amber-200 text-amber-700 bg-amber-50",
   };
 
   const roleLabels: Record<UserRole, string> = {
@@ -60,7 +60,7 @@ export function WorkspaceHeader({
   };
 
   return (
-    <header className="sticky top-0 z-30 flex min-h-[68px] items-center justify-between border-b border-border/80 bg-background/90 px-4 py-2.5 backdrop-blur-md sm:px-6">
+    <header className="sticky top-0 z-30 flex min-h-[68px] items-center justify-between border-b border-border bg-white/95 px-4 py-2.5 backdrop-blur-md sm:px-6 shadow-xs">
       {/* Left: Mobile Trigger & Brand Identity */}
       <div className="flex items-center gap-3">
         {onToggleSidebar && (
@@ -79,10 +79,10 @@ export function WorkspaceHeader({
           <img
             src={logoImg}
             alt="ShadowXLab Logo"
-            className="h-9 w-auto max-w-[140px] object-contain drop-shadow-[0_0_8px_rgba(0,229,255,0.25)]"
+            className="h-9 w-auto max-w-[140px] object-contain"
           />
-          <div className="hidden border-l border-border/80 pl-2.5 lg:block">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+          <div className="hidden border-l border-border pl-2.5 lg:block">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-red-600">
               Cyber Academy
             </span>
             <div className="text-[11px] text-muted-foreground font-medium">
@@ -108,10 +108,10 @@ export function WorkspaceHeader({
         {onOpenReadiness && (
           <button
             onClick={onOpenReadiness}
-            className="flex items-center gap-1.5 rounded-md border border-border/70 bg-card/60 px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-cyan-500/50 hover:text-cyan-300"
+            className="flex items-center gap-1.5 rounded-md border border-border bg-slate-50 px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-red-300 hover:text-red-600"
             title="Inspect or configure Lab Execution Mode"
           >
-            <Radio className="h-3 w-3 text-cyan-400 animate-pulse" />
+            <Radio className="h-3 w-3 text-red-600 animate-pulse" />
             <span className="font-mono uppercase text-foreground">
               {selectedLabMode === "simulation"
                 ? "Simulated Range (Zero Blocker)"
@@ -133,9 +133,9 @@ export function WorkspaceHeader({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 gap-1.5 border-border/70 bg-card/50 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+                className="h-8 gap-1.5 border-border bg-white px-2.5 text-xs text-muted-foreground hover:text-foreground"
               >
-                <Sliders className="h-3.5 w-3.5 text-cyan-400" />
+                <Sliders className="h-3.5 w-3.5 text-red-600" />
                 <span className="hidden sm:inline">Role View:</span>
                 <span className="font-semibold capitalize text-foreground">{role}</span>
                 <ChevronDown className="h-3 w-3" />
@@ -151,7 +151,7 @@ export function WorkspaceHeader({
                 className="text-xs cursor-pointer flex items-center justify-between"
               >
                 <span>Student Workspace</span>
-                {role === "student" && <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" />}
+                {role === "student" && <ShieldCheck className="h-3.5 w-3.5 text-red-600" />}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => setPreviewRole("instructor")}
@@ -184,9 +184,9 @@ export function WorkspaceHeader({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8 gap-2 border-border/70 bg-card/60 px-2.5 text-xs text-foreground hover:border-cyan-500/50"
+                className="h-8 gap-2 border-border bg-white px-2.5 text-xs text-foreground hover:border-red-300"
               >
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-950 text-[10px] font-bold text-cyan-400 border border-cyan-500/30">
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-50 text-[10px] font-bold text-red-600 border border-red-200">
                   {user.email.charAt(0).toUpperCase()}
                 </div>
                 <span className="max-w-[120px] truncate font-medium hidden sm:inline">
@@ -207,13 +207,13 @@ export function WorkspaceHeader({
               <DropdownMenuSeparator />
               {onOpenReadiness && (
                 <DropdownMenuItem onClick={onOpenReadiness} className="text-xs cursor-pointer">
-                  <MonitorCheck className="mr-2 h-3.5 w-3.5 text-cyan-400" />
+                  <MonitorCheck className="mr-2 h-3.5 w-3.5 text-red-600" />
                   <span>Lab Readiness Diagnostics</span>
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
                 onClick={() => signOut()}
-                className="text-xs text-rose-400 cursor-pointer focus:text-rose-300"
+                className="text-xs text-red-600 cursor-pointer focus:text-red-700"
               >
                 <LogOut className="mr-2 h-3.5 w-3.5" />
                 <span>Sign Out</span>
@@ -224,7 +224,7 @@ export function WorkspaceHeader({
           <Button
             size="sm"
             onClick={onOpenAuthModal}
-            className="h-8 gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-semibold text-xs px-3 shadow-[0_0_12px_rgba(0,229,255,0.25)]"
+            className="h-8 gap-1.5 bg-primary text-primary-foreground hover:bg-[#A91219] font-semibold text-xs px-3 shadow-xs"
           >
             <LogIn className="h-3.5 w-3.5" />
             <span>Sign In / Demo</span>

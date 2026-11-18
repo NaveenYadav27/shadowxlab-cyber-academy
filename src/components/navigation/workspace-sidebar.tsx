@@ -126,14 +126,14 @@ export function WorkspaceSidebar({
 
       {/* Sidebar Panel */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-border/80 bg-gradient-to-b from-card/95 via-card/90 to-background/95 p-3.5 transition-transform duration-200 ease-in-out md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-border bg-white p-3.5 shadow-sm transition-transform duration-200 ease-in-out md:static md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Workspace Identifier Header */}
-        <div className="mb-3 flex items-center justify-between border-b border-border/70 pb-3 px-2">
+        <div className="mb-3 flex items-center justify-between border-b border-border pb-3 px-2">
           <div className="flex flex-col">
-            <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-cyan-400">
+            <span className="font-mono text-[9px] font-bold uppercase tracking-wider text-red-600">
               Active Environment
             </span>
             <span className="text-xs font-semibold text-foreground">{roleTitle}</span>
@@ -166,14 +166,14 @@ export function WorkspaceSidebar({
                 }}
                 className={`flex w-full items-center justify-between gap-2.5 rounded-md px-3 py-2 text-left font-medium transition-all ${
                   isActive
-                    ? "border border-cyan-500/50 bg-cyan-500/10 text-cyan-300 shadow-[inset_2px_0_0_#00e5ff,0_0_12px_rgba(0,229,255,0.08)]"
-                    : "border border-transparent text-muted-foreground hover:bg-card/70 hover:text-foreground"
+                    ? "border border-red-200 bg-red-50 text-red-600 font-semibold shadow-[inset_3px_0_0_#D71920]"
+                    : "border border-transparent text-muted-foreground hover:bg-slate-100 hover:text-foreground"
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <Icon
                     className={`h-4 w-4 shrink-0 transition-colors ${
-                      isActive ? "text-cyan-400" : "text-muted-foreground"
+                      isActive ? "text-red-600" : "text-muted-foreground"
                     }`}
                   />
                   <span className="truncate">{item.label}</span>
@@ -181,7 +181,7 @@ export function WorkspaceSidebar({
                 {item.badge && (
                   <Badge
                     variant="outline"
-                    className="h-4 border-cyan-500/40 bg-cyan-950/40 px-1.5 font-mono text-[9px] font-bold text-cyan-400"
+                    className="h-4 border-red-200 bg-red-50 px-1.5 font-mono text-[9px] font-bold text-red-600"
                   >
                     {item.badge}
                   </Badge>
@@ -192,16 +192,16 @@ export function WorkspaceSidebar({
         </nav>
 
         {/* Sidebar Footer Status */}
-        <div className="mt-auto border-t border-border/70 pt-3 px-2">
+        <div className="mt-auto border-t border-border pt-3 px-2">
           <div className="flex items-center justify-between text-[10px] text-muted-foreground font-mono">
             <span>NETWORK SIM:</span>
-            <span className="flex items-center gap-1.5 text-cyan-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#00e5ff]" />
+            <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
               OPERATIONAL
             </span>
           </div>
-          <div className="mt-1 text-[9px] text-muted-foreground/80">
-            NPLRA Security Baseline • v2.4
+          <div className="mt-1 text-[9px] text-muted-foreground">
+            ESCI Security Baseline • v2.4
           </div>
         </div>
       </aside>

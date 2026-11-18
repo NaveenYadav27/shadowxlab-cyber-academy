@@ -75,8 +75,8 @@ export function Day2ScheduleAccordion({
             key={session.id}
             className={`rounded-xl border transition-all ${
               isExpanded
-                ? "border-cyan-500/50 bg-card/60 shadow-lg shadow-cyan-950/20"
-                : "border-border/70 bg-card/30 hover:border-border"
+                ? "border-red-500/40 bg-white shadow-sm ring-1 ring-red-50"
+                : "border-gray-200 bg-white hover:border-gray-300"
             }`}
           >
             {/* Header / Trigger */}
@@ -87,23 +87,23 @@ export function Day2ScheduleAccordion({
                 aria-expanded={isExpanded}
                 className="flex flex-1 items-center gap-3 text-left focus:outline-none"
               >
-                <span className="text-cyan-400">
+                <span className="text-red-600">
                   {isExpanded ? (
                     <ChevronDown className="h-5 w-5" />
                   ) : (
                     <ChevronRight className="h-5 w-5" />
                   )}
                 </span>
-                <span className="font-mono text-xs font-bold text-muted-foreground">
+                <span className="font-mono text-xs font-bold text-gray-500">
                   DAY 2 • S{sessionIdx + 1}
                 </span>
                 <div className="min-w-0">
-                  <h3 className="text-sm font-semibold text-foreground line-clamp-1">
+                  <h3 className="text-sm font-semibold text-gray-900 line-clamp-1">
                     {session.title}
                   </h3>
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono mt-0.5">
+                  <div className="flex items-center gap-3 text-xs text-gray-500 font-mono mt-0.5">
                     <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5 text-cyan-400" />
+                      <Clock className="h-3.5 w-3.5 text-red-600" />
                       {session.start} – {session.end} ({session.durationMinutes}m)
                     </span>
                     <span>•</span>
@@ -114,7 +114,7 @@ export function Day2ScheduleAccordion({
 
               <div className="flex items-center gap-2">
                 {isSessionDone && (
-                  <Badge className="bg-emerald-950/60 text-emerald-300 border-emerald-500/40 text-xs font-mono">
+                  <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-xs font-mono">
                     <CheckCircle2 className="h-3 w-3 mr-1" />
                     Complete
                   </Badge>
@@ -124,8 +124,8 @@ export function Day2ScheduleAccordion({
                     variant="outline"
                     className={`font-mono text-xs ${
                       isAssessmentPassed
-                        ? "border-emerald-500/40 text-emerald-300 bg-emerald-950/20"
-                        : "border-amber-500/40 text-amber-300 bg-amber-950/20"
+                        ? "border-emerald-200 text-emerald-800 bg-emerald-50"
+                        : "border-amber-200 text-amber-800 bg-amber-50"
                     }`}
                   >
                     Quiz: {assessmentScore}%
@@ -135,7 +135,7 @@ export function Day2ScheduleAccordion({
                   <Button
                     size="sm"
                     onClick={() => onStartSession(session.id)}
-                    className="gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold text-xs h-8 shadow-[0_0_10px_rgba(0,229,255,0.25)]"
+                    className="gap-1.5 bg-red-600 text-white hover:bg-red-700 font-bold text-xs h-8 shadow-sm"
                   >
                     <Play className="h-3.5 w-3.5 fill-current" />
                     <span>Open Session</span>
@@ -146,18 +146,18 @@ export function Day2ScheduleAccordion({
 
             {/* Accordion Content */}
             {isExpanded && (
-              <div className="border-t border-border/60 bg-slate-950/40 p-4 space-y-4">
-                <p className="text-xs text-muted-foreground leading-relaxed">
+              <div className="border-t border-gray-100 bg-gray-50/50 p-4 space-y-4">
+                <p className="text-xs text-gray-600 leading-relaxed">
                   {session.description}
                 </p>
 
                 {/* Concepts List */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-mono">
-                    <span className="font-bold uppercase text-cyan-400">
+                    <span className="font-bold uppercase text-red-600">
                       SESSION CONCEPTS ({concepts.length})
                     </span>
-                    <span className="text-muted-foreground">{conceptPercent}% mastered</span>
+                    <span className="text-gray-500">{conceptPercent}% mastered</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -167,7 +167,7 @@ export function Day2ScheduleAccordion({
                       return (
                         <div
                           key={concept.id}
-                          className="flex items-center justify-between p-2.5 rounded-lg border border-border/60 bg-card/40 text-xs"
+                          className="flex items-center justify-between p-2.5 rounded-lg border border-gray-200 bg-white text-xs shadow-sm"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <button
@@ -175,13 +175,13 @@ export function Day2ScheduleAccordion({
                               onClick={() => onToggleConceptComplete?.(concept.id)}
                               className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors ${
                                 isConceptDone
-                                  ? "bg-emerald-500 text-slate-950 border-emerald-500"
-                                  : "border-border bg-card hover:border-cyan-400"
+                                  ? "bg-emerald-600 text-white border-emerald-600"
+                                  : "border-gray-200 bg-white hover:border-red-400"
                               }`}
                             >
                               {isConceptDone && <Check className="h-3 w-3 stroke-[3]" />}
                             </button>
-                            <span className="truncate text-foreground font-medium">
+                            <span className="truncate text-gray-900 font-medium">
                               {concept.title}
                             </span>
                           </div>
@@ -191,7 +191,7 @@ export function Day2ScheduleAccordion({
                               variant="ghost"
                               size="sm"
                               onClick={() => onSelectConcept(concept.id)}
-                              className="h-6 px-2 text-[10px] text-cyan-400 hover:text-cyan-300"
+                              className="h-6 px-2 text-[10px] text-red-600 hover:text-red-700 font-semibold"
                             >
                               Study
                             </Button>
@@ -203,7 +203,7 @@ export function Day2ScheduleAccordion({
                 </div>
 
                 {/* Lab & Assessment Quick Actions */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-border/50 text-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-gray-100 text-xs">
                   <div className="flex items-center gap-2">
                     {session.labReferences.map((labId) => {
                       const lab = getDay2LabById(labId);
@@ -214,12 +214,12 @@ export function Day2ScheduleAccordion({
                           key={labId}
                           type="button"
                           onClick={() => onOpenLab?.(labId)}
-                          className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-card border border-border/70 hover:border-cyan-500/50 text-[11px] font-mono text-cyan-300 transition-colors"
+                          className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-white border border-gray-200 hover:border-red-300 text-[11px] font-mono text-gray-800 transition-colors shadow-sm"
                         >
-                          <FlaskConical className="h-3 w-3 text-cyan-400" />
+                          <FlaskConical className="h-3 w-3 text-red-600" />
                           <span>{lab?.title ?? labId}</span>
                           {lScore !== undefined && (
-                            <span className="text-emerald-400 font-bold ml-1">({lScore}%)</span>
+                            <span className="text-emerald-700 font-bold ml-1">({lScore}%)</span>
                           )}
                         </button>
                       );
@@ -231,7 +231,7 @@ export function Day2ScheduleAccordion({
                       <Button
                         size="sm"
                         onClick={() => onStartSession(session.id)}
-                        className="h-7 text-xs gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold shadow-[0_0_8px_rgba(0,229,255,0.2)]"
+                        className="h-7 text-xs gap-1.5 bg-red-600 text-white hover:bg-red-700 font-bold shadow-sm"
                       >
                         <Play className="h-3.5 w-3.5 fill-current" />
                         <span>Launch Session Engine (8 Stages)</span>
@@ -242,9 +242,9 @@ export function Day2ScheduleAccordion({
                         variant="outline"
                         size="sm"
                         onClick={() => onOpenSessionAssessment(session.id)}
-                        className="h-7 text-xs gap-1 border-border/70"
+                        className="h-7 text-xs gap-1 border-gray-200 text-gray-700 hover:text-gray-900"
                       >
-                        <HelpCircle className="h-3 w-3 text-cyan-400" />
+                        <HelpCircle className="h-3 w-3 text-red-600" />
                         <span>Take Assessment</span>
                       </Button>
                     )}

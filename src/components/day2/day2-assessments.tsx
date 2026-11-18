@@ -107,25 +107,25 @@ export function Day2Assessments({
               onClick={() => handleSelectAssessment(session.id)}
               className={`p-3 rounded-xl border text-left transition-all ${
                 isSelected
-                  ? "border-cyan-500 bg-cyan-500/15 shadow-[0_0_15px_rgba(0,229,255,0.15)] text-foreground"
+                  ? "border-red-600 bg-red-50 shadow-sm text-gray-900 font-medium"
                   : isPassed
-                    ? "border-emerald-500/40 bg-card/50 text-muted-foreground"
-                    : "border-border/60 bg-card/30 text-muted-foreground hover:bg-card/60 hover:text-foreground"
+                    ? "border-emerald-200 bg-emerald-50/50 text-emerald-800"
+                    : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] text-cyan-400 font-bold uppercase">
+                <span className="font-mono text-[10px] text-red-600 font-bold uppercase">
                   SESSION {idx + 1}
                 </span>
                 {score !== undefined ? (
-                  <Badge className="bg-emerald-950/60 text-emerald-300 border-emerald-500/40 text-[9px] font-mono">
+                  <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[9px] font-mono">
                     {score}%
                   </Badge>
                 ) : (
-                  <span className="text-[9px] font-mono text-muted-foreground">Pending</span>
+                  <span className="text-[9px] font-mono text-gray-400">Pending</span>
                 )}
               </div>
-              <div className="text-xs font-bold text-foreground mt-1 line-clamp-1">
+              <div className="text-xs font-bold text-gray-900 mt-1 line-clamp-1">
                 {session.title}
               </div>
             </button>
@@ -138,39 +138,39 @@ export function Day2Assessments({
           onClick={() => handleSelectAssessment("final")}
           className={`p-3 rounded-xl border text-left transition-all ${
             selectedAssessment === "final"
-              ? "border-amber-500 bg-amber-500/15 shadow-[0_0_15px_rgba(245,158,11,0.15)] text-foreground"
+              ? "border-red-600 bg-red-50 shadow-sm text-gray-900 font-medium"
               : finalScore !== null
-                ? "border-emerald-500/40 bg-card/50 text-muted-foreground"
-                : "border-border/60 bg-card/30 text-muted-foreground hover:bg-card/60 hover:text-foreground"
+                ? "border-emerald-200 bg-emerald-50/50 text-emerald-800"
+                : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
           }`}
         >
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] text-amber-400 font-bold uppercase">DAY 2 EXAM</span>
+            <span className="font-mono text-[10px] text-red-600 font-bold uppercase">DAY 2 EXAM</span>
             {finalScore !== null ? (
-              <Badge className="bg-emerald-950/60 text-emerald-300 border-emerald-500/40 text-[9px] font-mono">
+              <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[9px] font-mono">
                 {finalScore}%
               </Badge>
             ) : (
-              <span className="text-[9px] font-mono text-muted-foreground">Pending</span>
+              <span className="text-[9px] font-mono text-gray-400">Pending</span>
             )}
           </div>
-          <div className="text-xs font-bold text-foreground mt-1">Day 2 Comprehensive</div>
+          <div className="text-xs font-bold text-gray-900 mt-1">Day 2 Comprehensive</div>
         </button>
       </div>
 
       {/* Main Assessment Card */}
-      <Card className="p-6 border-cyan-500/30 bg-card/60 space-y-6 shadow-xl">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 pb-4">
+      <Card className="p-6 border-gray-200 bg-white shadow-sm space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <ClipboardCheck className="h-4 w-4 text-cyan-400" />
-              <span className="font-mono text-xs font-bold uppercase text-cyan-400">
+              <ClipboardCheck className="h-4 w-4 text-red-600" />
+              <span className="font-mono text-xs font-bold uppercase text-red-600">
                 {selectedAssessment === "final"
                   ? "DAY 2 COMPREHENSIVE EXAMINATION"
                   : `SESSION ${selectedAssessment.toUpperCase()} KNOWLEDGE CHECK`}
               </span>
             </div>
-            <h3 className="text-lg font-bold text-foreground mt-1">
+            <h3 className="text-lg font-bold text-gray-900 mt-1">
               {selectedAssessment === "final"
                 ? "Day 2 Firewall Architecture & Administration Capstone Assessment"
                 : DAY2_SESSIONS.find((s) => s.id === selectedAssessment)?.title}
@@ -178,15 +178,15 @@ export function Day2Assessments({
           </div>
 
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="font-mono text-xs text-muted-foreground">
+            <Badge variant="outline" className="font-mono text-xs text-gray-500 border-gray-200 bg-gray-50">
               {questions.length} QUESTIONS • PASS SCORE: 70%
             </Badge>
             {calculatedScore !== null && (
               <Badge
                 className={
                   calculatedScore >= 70
-                    ? "bg-emerald-950 text-emerald-300 border-emerald-500/50 text-xs font-mono font-bold"
-                    : "bg-rose-950 text-rose-300 border-rose-500/50 text-xs font-mono font-bold"
+                    ? "bg-emerald-50 text-emerald-800 border-emerald-200 text-xs font-mono font-bold"
+                    : "bg-red-50 text-red-800 border-red-200 text-xs font-mono font-bold"
                 }
               >
                 SCORE: {calculatedScore}%
@@ -198,15 +198,15 @@ export function Day2Assessments({
         {/* Question Stepper / Item Display */}
         {currentQ ? (
           <div className="space-y-6">
-            <div className="flex items-center justify-between font-mono text-xs text-muted-foreground">
+            <div className="flex items-center justify-between font-mono text-xs text-gray-500">
               <span>
                 QUESTION {currentQuestionIndex + 1} OF {questions.length}
               </span>
               <span>{Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}% COMPLETE</span>
             </div>
 
-            <div className="rounded-xl border border-border/80 bg-slate-950 p-5 space-y-4">
-              <h4 className="text-sm font-semibold text-foreground leading-relaxed">
+            <div className="rounded-xl border border-gray-200 bg-gray-50/60 p-5 space-y-4">
+              <h4 className="text-sm font-semibold text-gray-900 leading-relaxed">
                 {currentQ.prompt}
               </h4>
 
@@ -216,16 +216,16 @@ export function Day2Assessments({
                   const isCorrectAnswer = currentQ.correctAnswer === optIdx;
 
                   let optionStyle =
-                    "border-border/60 bg-card/40 text-muted-foreground hover:bg-card/70 hover:text-foreground";
+                    "border-gray-200 bg-white text-gray-700 hover:bg-gray-50";
                   if (isSubmitted) {
                     if (isCorrectAnswer) {
-                      optionStyle = "border-emerald-500 bg-emerald-950/30 text-emerald-300 font-semibold";
+                      optionStyle = "border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold";
                     } else if (isChosen && !isCorrectAnswer) {
-                      optionStyle = "border-rose-500 bg-rose-950/30 text-rose-300 font-semibold";
+                      optionStyle = "border-red-600 bg-red-50 text-red-900 font-semibold";
                     }
                   } else if (isChosen) {
                     optionStyle =
-                      "border-cyan-500 bg-cyan-500/15 text-cyan-300 font-semibold shadow-[0_0_10px_rgba(0,229,255,0.1)]";
+                      "border-red-600 bg-red-50 text-red-900 font-semibold shadow-sm";
                   }
 
                   return (
@@ -236,16 +236,16 @@ export function Day2Assessments({
                       className={`w-full text-left p-3.5 rounded-lg border text-xs flex items-center justify-between transition-all ${optionStyle}`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-[10px] font-mono">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-gray-200 text-[10px] font-mono text-gray-600 bg-gray-50">
                           {String.fromCharCode(65 + optIdx)}
                         </span>
                         <span>{opt}</span>
                       </div>
                       {isSubmitted && isCorrectAnswer && (
-                        <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                       )}
                       {isSubmitted && isChosen && !isCorrectAnswer && (
-                        <XCircle className="h-4 w-4 text-rose-400 shrink-0" />
+                        <XCircle className="h-4 w-4 text-red-600 shrink-0" />
                       )}
                     </button>
                   );
@@ -254,11 +254,11 @@ export function Day2Assessments({
 
               {/* Explanation upon submission */}
               {isSubmitted && (
-                <div className="rounded-lg border border-cyan-500/30 bg-cyan-950/20 p-4 text-xs space-y-1 animate-in fade-in">
-                  <span className="font-mono font-bold uppercase text-cyan-400">
+                <div className="rounded-lg border border-red-100 bg-red-50/40 p-4 text-xs space-y-1 animate-in fade-in">
+                  <span className="font-mono font-bold uppercase text-red-700">
                     TECHNICAL EXPLANATION:
                   </span>
-                  <p className="text-muted-foreground leading-relaxed">{currentQ.explanation}</p>
+                  <p className="text-gray-700 leading-relaxed">{currentQ.explanation}</p>
                 </div>
               )}
             </div>
@@ -270,7 +270,7 @@ export function Day2Assessments({
                 size="sm"
                 onClick={() => setCurrentQuestionIndex((prev) => Math.max(0, prev - 1))}
                 disabled={currentQuestionIndex === 0}
-                className="gap-1 text-xs"
+                className="gap-1 text-xs border-gray-200 text-gray-700 hover:text-gray-900"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span>Previous</span>
@@ -280,7 +280,7 @@ export function Day2Assessments({
                 {!isSubmitted ? (
                   <Button
                     onClick={handleSubmit}
-                    className="gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold text-xs h-9 shadow-[0_0_15px_rgba(0,229,255,0.25)]"
+                    className="gap-1.5 bg-red-600 text-white hover:bg-red-700 font-bold text-xs h-9 shadow-sm"
                   >
                     <Check className="h-4 w-4" />
                     <span>SUBMIT ASSESSMENT</span>

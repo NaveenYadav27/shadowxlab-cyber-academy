@@ -1,6 +1,13 @@
 import curriculumData from "@/data/day2-curriculum.json";
 import assessmentBankData from "@/data/day2-assessment-bank.json";
 
+export type ConceptKnowledgeCheckItem = {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+};
+
 export type Day2Concept = {
   id: string;
   number: number;
@@ -8,16 +15,25 @@ export type Day2Concept = {
   sessionId: string;
   durationMinutes: number;
   learningObjectives: string[];
-  technicalExplanation: string;
-  architectureOrWorkflow: string;
-  enterpriseExample: string;
-  securityEngineeringRelevance: string;
-  instructorExplanation: string;
-  commonMistakes: string[];
-  knowledgeCheckObjectives: string[];
-  diagramSpecification: string;
-  recommendedLab: string[];
-  prerequisites: string[];
+  // 10-point pedagogical structure
+  conceptIntroduction?: string;
+  purpose?: string;
+  howItWorks?: string[];
+  architectureOrWorkflow?: string;
+  enterpriseExample?: string;
+  configurationRelevance?: string;
+  practicalRelevance?: string;
+  commonMistakes?: string[];
+  keyTakeaways?: string[];
+  knowledgeCheck?: ConceptKnowledgeCheckItem[];
+  // Legacy fields
+  technicalExplanation?: string;
+  securityEngineeringRelevance?: string;
+  instructorExplanation?: string;
+  knowledgeCheckObjectives?: string[];
+  diagramSpecification?: string;
+  recommendedLab?: string[];
+  prerequisites?: string[];
 };
 
 export type Day2Session = {

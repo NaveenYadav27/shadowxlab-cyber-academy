@@ -185,50 +185,48 @@ export function Day2TopologyCanvas() {
   return (
     <div className="day2-topology-canvas space-y-6">
       {/* Top Banner & Mode Disclosure */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-cyan-500/30 bg-card/60 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
         <div>
           <div className="flex items-center gap-2">
-            <Network className="h-4 w-4 text-cyan-400" />
-            <h3 className="text-sm font-bold uppercase tracking-wider text-cyan-300 font-mono">
+            <Network className="h-4 w-4 text-red-600" />
+            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-900 font-mono">
               ESCI PILOT TOPOLOGY & PACKET FLOW TRACER
             </h3>
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5">
             Interactive visual network model for WAN (10.231.10.0/24), LAN (10.231.20.0/24), and DMZ (10.231.30.0/24).
           </p>
         </div>
-        <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 font-mono text-[11px]">
-          <span className="h-2 w-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse" />
+        <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700 font-mono text-[11px]">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />
           DETERMINISTIC SIMULATION ENGINE
         </Badge>
       </div>
 
       {/* Main Visual Topology Map */}
-      <div className="relative rounded-2xl border border-border/80 bg-slate-950/90 p-6 overflow-hidden shadow-2xl">
-        <div className="absolute inset-0 bg-[radial-gradient(#00e5ff_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
-
+      <div className="relative rounded-2xl border border-gray-200 bg-gray-50/70 p-6 overflow-hidden shadow-sm">
         {/* 3-Zone Architecture Diagram */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
           {/* WAN ZONE (Outside) */}
           <div
             onClick={() => setSelectedNode("wan")}
-            className={`cursor-pointer rounded-xl border p-4 transition-all ${
+            className={`cursor-pointer rounded-xl border p-4 transition-all bg-white shadow-sm ${
               selectedNode === "wan"
-                ? "border-amber-500 bg-amber-950/25 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
-                : "border-border/60 bg-card/40 hover:border-amber-500/50"
+                ? "border-amber-500 ring-2 ring-amber-100 shadow-md"
+                : "border-gray-200 hover:border-amber-400"
             }`}
           >
-            <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-3">
-              <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/40 font-mono text-[10px]">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-3">
+              <Badge className="bg-amber-50 text-amber-800 border-amber-200 font-mono text-[10px]">
                 OUTSIDE ZONE (TRUST 0)
               </Badge>
-              <Globe className="h-4 w-4 text-amber-400" />
+              <Globe className="h-4 w-4 text-amber-600" />
             </div>
             <div className="space-y-1.5 font-mono text-xs">
-              <div className="text-foreground font-bold text-sm">sxl-wan01</div>
-              <div className="text-muted-foreground text-[11px]">Subnet: 10.231.10.0/24</div>
-              <div className="text-amber-400 font-semibold">IP: 10.231.10.10</div>
-              <div className="text-[10px] text-muted-foreground pt-1 border-t border-border/50">
+              <div className="text-gray-900 font-bold text-sm">sxl-wan01</div>
+              <div className="text-gray-500 text-[11px]">Subnet: 10.231.10.0/24</div>
+              <div className="text-amber-700 font-semibold">IP: 10.231.10.10</div>
+              <div className="text-[10px] text-gray-500 pt-1 border-t border-gray-100">
                 Firewall Link: eth2 (10.231.10.254)
               </div>
             </div>
@@ -237,38 +235,38 @@ export function Day2TopologyCanvas() {
           {/* FIREWALL CORE (sxl-fw01) */}
           <div
             onClick={() => setSelectedNode("firewall")}
-            className={`cursor-pointer rounded-xl border p-5 text-center transition-all ${
+            className={`cursor-pointer rounded-xl border p-5 text-center transition-all bg-white shadow-sm ${
               selectedNode === "firewall"
-                ? "border-cyan-500 bg-cyan-950/30 shadow-[0_0_25px_rgba(0,229,255,0.25)]"
-                : "border-cyan-500/50 bg-card/50 hover:border-cyan-400"
+                ? "border-red-600 ring-2 ring-red-100 shadow-md"
+                : "border-gray-200 hover:border-red-400"
             }`}
           >
             <div className="flex items-center justify-center gap-2 mb-2">
-              <Shield className="h-5 w-5 text-cyan-400" />
-              <span className="font-mono text-xs font-bold uppercase text-cyan-300">
+              <Shield className="h-5 w-5 text-red-600" />
+              <span className="font-mono text-xs font-bold uppercase text-red-600">
                 SECURITY GATEWAY
               </span>
             </div>
-            <div className="text-lg font-extrabold text-foreground font-mono">sxl-fw01</div>
-            <div className="text-[11px] text-cyan-400/90 font-mono mt-0.5">
+            <div className="text-lg font-extrabold text-gray-900 font-mono">sxl-fw01</div>
+            <div className="text-[11px] text-gray-500 font-mono mt-0.5">
               nftables v1.0.6 Stateful Core
             </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border/70 pt-3 text-[10px] font-mono">
-              <div className="p-1.5 rounded bg-slate-900 border border-border/60">
-                <span className="text-amber-400 font-bold">eth2</span>
-                <div className="text-muted-foreground text-[9px]">10.231.10.254</div>
-                <div className="text-amber-300/80 text-[8px] uppercase">WAN</div>
+            <div className="mt-4 grid grid-cols-3 gap-2 border-t border-gray-100 pt-3 text-[10px] font-mono">
+              <div className="p-1.5 rounded bg-amber-50/60 border border-amber-100">
+                <span className="text-amber-800 font-bold">eth2</span>
+                <div className="text-gray-600 text-[9px]">10.231.10.254</div>
+                <div className="text-amber-700 text-[8px] uppercase font-semibold">WAN</div>
               </div>
-              <div className="p-1.5 rounded bg-slate-900 border border-border/60">
-                <span className="text-emerald-400 font-bold">eth1</span>
-                <div className="text-muted-foreground text-[9px]">10.231.20.254</div>
-                <div className="text-emerald-300/80 text-[8px] uppercase">LAN</div>
+              <div className="p-1.5 rounded bg-emerald-50/60 border border-emerald-100">
+                <span className="text-emerald-800 font-bold">eth1</span>
+                <div className="text-gray-600 text-[9px]">10.231.20.254</div>
+                <div className="text-emerald-700 text-[8px] uppercase font-semibold">LAN</div>
               </div>
-              <div className="p-1.5 rounded bg-slate-900 border border-border/60">
-                <span className="text-purple-400 font-bold">eth0</span>
-                <div className="text-muted-foreground text-[9px]">10.231.30.254</div>
-                <div className="text-purple-300/80 text-[8px] uppercase">DMZ</div>
+              <div className="p-1.5 rounded bg-purple-50/60 border border-purple-100">
+                <span className="text-purple-800 font-bold">eth0</span>
+                <div className="text-gray-600 text-[9px]">10.231.30.254</div>
+                <div className="text-purple-700 text-[8px] uppercase font-semibold">DMZ</div>
               </div>
             </div>
           </div>
@@ -278,46 +276,46 @@ export function Day2TopologyCanvas() {
             {/* LAN ZONE (Inside) */}
             <div
               onClick={() => setSelectedNode("lan")}
-              className={`cursor-pointer rounded-xl border p-4 transition-all ${
+              className={`cursor-pointer rounded-xl border p-4 transition-all bg-white shadow-sm ${
                 selectedNode === "lan"
-                  ? "border-emerald-500 bg-emerald-950/25 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                  : "border-border/60 bg-card/40 hover:border-emerald-500/50"
+                  ? "border-emerald-500 ring-2 ring-emerald-100 shadow-md"
+                  : "border-gray-200 hover:border-emerald-400"
               }`}
             >
-              <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-2">
-                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-mono text-[10px]">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-2">
+                <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 font-mono text-[10px]">
                   INSIDE ZONE (TRUST 100)
                 </Badge>
-                <Monitor className="h-4 w-4 text-emerald-400" />
+                <Monitor className="h-4 w-4 text-emerald-600" />
               </div>
               <div className="space-y-1 font-mono text-xs">
-                <div className="text-foreground font-bold text-sm">sxl-lan01 (Workstation)</div>
-                <div className="text-muted-foreground text-[11px]">Subnet: 10.231.20.0/24</div>
-                <div className="text-emerald-400 font-semibold">IP: 10.231.20.10</div>
-                <div className="text-[10px] text-muted-foreground">Gateway: 10.231.20.254 (eth1)</div>
+                <div className="text-gray-900 font-bold text-sm">sxl-lan01 (Workstation)</div>
+                <div className="text-gray-500 text-[11px]">Subnet: 10.231.20.0/24</div>
+                <div className="text-emerald-700 font-semibold">IP: 10.231.20.10</div>
+                <div className="text-[10px] text-gray-500">Gateway: 10.231.20.254 (eth1)</div>
               </div>
             </div>
 
             {/* DMZ ZONE (Perimeter Services) */}
             <div
               onClick={() => setSelectedNode("dmz")}
-              className={`cursor-pointer rounded-xl border p-4 transition-all ${
+              className={`cursor-pointer rounded-xl border p-4 transition-all bg-white shadow-sm ${
                 selectedNode === "dmz"
-                  ? "border-purple-500 bg-purple-950/25 shadow-[0_0_15px_rgba(168,85,247,0.2)]"
-                  : "border-border/60 bg-card/40 hover:border-purple-500/50"
+                  ? "border-purple-500 ring-2 ring-purple-100 shadow-md"
+                  : "border-gray-200 hover:border-purple-400"
               }`}
             >
-              <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-2">
-                <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/40 font-mono text-[10px]">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-2">
+                <Badge className="bg-purple-50 text-purple-800 border-purple-200 font-mono text-[10px]">
                   DMZ ZONE (TRUST 50)
                 </Badge>
-                <Server className="h-4 w-4 text-purple-400" />
+                <Server className="h-4 w-4 text-purple-600" />
               </div>
               <div className="space-y-1 font-mono text-xs">
-                <div className="text-foreground font-bold text-sm">sxl-dmz01 (Nginx Web)</div>
-                <div className="text-muted-foreground text-[11px]">Subnet: 10.231.30.0/24</div>
-                <div className="text-purple-400 font-semibold">IP: 10.231.30.10 (HTTP:80, HTTPS:443)</div>
-                <div className="text-[10px] text-muted-foreground">Gateway: 10.231.30.254 (eth0)</div>
+                <div className="text-gray-900 font-bold text-sm">sxl-dmz01 (Nginx Web)</div>
+                <div className="text-gray-500 text-[11px]">Subnet: 10.231.30.0/24</div>
+                <div className="text-purple-700 font-semibold">IP: 10.231.30.10 (HTTP:80, HTTPS:443)</div>
+                <div className="text-[10px] text-gray-500">Gateway: 10.231.30.254 (eth0)</div>
               </div>
             </div>
           </div>
@@ -325,10 +323,10 @@ export function Day2TopologyCanvas() {
 
         {/* Live Packet Flight Indicator (when simulating) */}
         {isSimulating && (
-          <div className="mt-6 rounded-lg border border-cyan-500/50 bg-slate-900/90 p-3 font-mono text-xs flex items-center justify-between">
+          <div className="mt-6 rounded-lg border border-red-200 bg-red-50/70 p-3 font-mono text-xs flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-3">
-              <span className="h-3 w-3 rounded-full bg-cyan-400 animate-ping" />
-              <span className="text-cyan-300">
+              <span className="h-3 w-3 rounded-full bg-red-600 animate-ping" />
+              <span className="text-red-900 font-medium">
                 {simStep === 1 && `[STEP 1/4] Transmitting packet from ${activeScenario.sourceIp}...`}
                 {simStep === 2 && `[STEP 2/4] Arrived at sxl-fw01: Kernel IP forwarding check & route lookup...`}
                 {simStep === 3 && `[STEP 3/4] Netfilter FORWARD chain evaluation against rule: ${activeScenario.matchingRule}...`}
@@ -338,8 +336,8 @@ export function Day2TopologyCanvas() {
             <Badge
               className={
                 activeScenario.verdict === "ACCEPTED"
-                  ? "bg-emerald-500 text-slate-950 font-bold"
-                  : "bg-rose-500 text-slate-950 font-bold"
+                  ? "bg-emerald-600 text-white font-bold"
+                  : "bg-red-600 text-white font-bold"
               }
             >
               {activeScenario.verdict}
@@ -352,11 +350,11 @@ export function Day2TopologyCanvas() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Scenario Deck */}
         <div className="lg:col-span-2 space-y-4">
-          <Card className="p-5 border-border/80 bg-card/60 space-y-4">
+          <Card className="p-5 border-gray-200 bg-white shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Terminal className="h-4 w-4 text-cyan-400" />
-                <h4 className="font-mono text-xs font-bold uppercase text-foreground">
+                <Terminal className="h-4 w-4 text-red-600" />
+                <h4 className="font-mono text-xs font-bold uppercase text-gray-900">
                   ENTERPRISE TRAFFIC FLOW SCENARIOS ({PRESET_SCENARIOS.length})
                 </h4>
               </div>
@@ -364,7 +362,7 @@ export function Day2TopologyCanvas() {
                 onClick={handleRunSimulation}
                 disabled={isSimulating}
                 size="sm"
-                className="gap-1.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 font-bold text-xs h-8 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
+                className="gap-1.5 bg-red-600 text-white hover:bg-red-700 font-bold text-xs h-8 shadow-sm"
               >
                 <Play className="h-3.5 w-3.5 fill-current" />
                 <span>TRACE PACKET FLOW</span>
@@ -383,28 +381,28 @@ export function Day2TopologyCanvas() {
                     onClick={() => setActiveScenario(scenario)}
                     className={`p-3 rounded-lg border text-left transition-all ${
                       isSelected
-                        ? "border-cyan-500 bg-cyan-500/15 shadow-[0_0_12px_rgba(0,229,255,0.12)] text-foreground font-medium"
-                        : "border-border/60 bg-card/40 text-muted-foreground hover:bg-card/70 hover:text-foreground"
+                        ? "border-red-600 bg-red-50 text-gray-900 font-medium shadow-sm"
+                        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
                     <div className="flex items-center justify-between gap-1">
-                      <span className="font-mono text-[10px] text-cyan-400 uppercase font-bold">
+                      <span className="font-mono text-[10px] text-red-600 uppercase font-bold">
                         {scenario.protocol} • {scenario.service}
                       </span>
                       <span
                         className={`font-mono text-[9px] px-1.5 py-0.5 rounded font-bold ${
                           isPass
-                            ? "bg-emerald-950/60 text-emerald-400 border border-emerald-500/30"
-                            : "bg-rose-950/60 text-rose-400 border border-rose-500/30"
+                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                            : "bg-red-50 text-red-700 border border-red-200"
                         }`}
                       >
                         {scenario.verdict}
                       </span>
                     </div>
-                    <div className="text-xs font-semibold text-foreground mt-1 line-clamp-1">
+                    <div className="text-xs font-semibold text-gray-900 mt-1 line-clamp-1">
                       {scenario.name}
                     </div>
-                    <div className="text-[10px] font-mono text-muted-foreground mt-0.5 truncate">
+                    <div className="text-[10px] font-mono text-gray-500 mt-0.5 truncate">
                       {scenario.sourceIp} → {scenario.destIp}
                     </div>
                   </button>
@@ -413,16 +411,16 @@ export function Day2TopologyCanvas() {
             </div>
 
             {/* Selected Scenario Trace Detail */}
-            <div className="rounded-xl border border-cyan-500/40 bg-slate-950 p-4 space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between border-b border-border/80 pb-2">
-                <span className="text-cyan-300 font-bold uppercase tracking-wider">
+            <div className="rounded-xl border border-gray-200 bg-gray-50/80 p-4 space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+                <span className="text-gray-900 font-bold uppercase tracking-wider">
                   ACTIVE FLOW TRACE: {activeScenario.name}
                 </span>
                 <Badge
                   className={
                     activeScenario.verdict === "ACCEPTED"
-                      ? "bg-emerald-500 text-slate-950 font-bold"
-                      : "bg-rose-500 text-slate-950 font-bold"
+                      ? "bg-emerald-600 text-white font-bold"
+                      : "bg-red-600 text-white font-bold"
                   }
                 >
                   {activeScenario.verdict === "ACCEPTED" ? (
@@ -435,32 +433,32 @@ export function Day2TopologyCanvas() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px]">
-                <div className="p-2 rounded bg-card/50 border border-border/50">
-                  <span className="text-muted-foreground text-[10px] block">SOURCE:</span>
-                  <span className="text-foreground font-semibold">{activeScenario.sourceIp}</span>
+                <div className="p-2 rounded bg-white border border-gray-200">
+                  <span className="text-gray-500 text-[10px] block">SOURCE:</span>
+                  <span className="text-gray-900 font-semibold">{activeScenario.sourceIp}</span>
                 </div>
-                <div className="p-2 rounded bg-card/50 border border-border/50">
-                  <span className="text-muted-foreground text-[10px] block">DESTINATION:</span>
-                  <span className="text-foreground font-semibold">{activeScenario.destIp}</span>
+                <div className="p-2 rounded bg-white border border-gray-200">
+                  <span className="text-gray-500 text-[10px] block">DESTINATION:</span>
+                  <span className="text-gray-900 font-semibold">{activeScenario.destIp}</span>
                 </div>
-                <div className="p-2 rounded bg-card/50 border border-border/50">
-                  <span className="text-muted-foreground text-[10px] block">PROTOCOL:</span>
-                  <span className="text-cyan-400 font-semibold">{activeScenario.protocol} (Port {activeScenario.port})</span>
+                <div className="p-2 rounded bg-white border border-gray-200">
+                  <span className="text-gray-500 text-[10px] block">PROTOCOL:</span>
+                  <span className="text-red-700 font-semibold">{activeScenario.protocol} (Port {activeScenario.port})</span>
                 </div>
-                <div className="p-2 rounded bg-card/50 border border-border/50">
-                  <span className="text-muted-foreground text-[10px] block">CONNTRACK:</span>
-                  <span className="text-emerald-400 font-semibold">{activeScenario.conntrackState}</span>
+                <div className="p-2 rounded bg-white border border-gray-200">
+                  <span className="text-gray-500 text-[10px] block">CONNTRACK:</span>
+                  <span className="text-emerald-700 font-semibold">{activeScenario.conntrackState}</span>
                 </div>
               </div>
 
               <div className="space-y-1 pt-1">
-                <span className="text-muted-foreground text-[10px] block">EVALUATED RULE:</span>
-                <code className="text-cyan-300 bg-card/70 px-2.5 py-1.5 rounded block text-[11px] border border-border/60">
+                <span className="text-gray-500 text-[10px] block">EVALUATED RULE:</span>
+                <code className="text-gray-900 bg-white px-2.5 py-1.5 rounded block text-[11px] border border-gray-200 font-mono">
                   {activeScenario.matchingRule}
                 </code>
               </div>
 
-              <p className="text-xs text-muted-foreground leading-relaxed font-sans pt-1">
+              <p className="text-xs text-gray-600 leading-relaxed font-sans pt-1">
                 {activeScenario.narrative}
               </p>
             </div>
@@ -469,10 +467,10 @@ export function Day2TopologyCanvas() {
 
         {/* Node Detail Drawer / Inspection Panel */}
         <div className="lg:col-span-1 space-y-4">
-          <Card className="p-5 border-border/80 bg-card/60 space-y-4">
-            <div className="flex items-center gap-2 border-b border-border/80 pb-3">
-              <Info className="h-4 w-4 text-cyan-400" />
-              <h4 className="font-mono text-xs font-bold uppercase text-foreground">
+          <Card className="p-5 border-gray-200 bg-white shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-gray-200 pb-3">
+              <Info className="h-4 w-4 text-red-600" />
+              <h4 className="font-mono text-xs font-bold uppercase text-gray-900">
                 NODE INSPECTION DRAWER
               </h4>
             </div>
@@ -480,40 +478,40 @@ export function Day2TopologyCanvas() {
             {selectedNode === "firewall" && (
               <div className="space-y-3 font-mono text-xs">
                 <div>
-                  <span className="text-[10px] text-cyan-400 uppercase font-bold">NODE IDENTITY</span>
-                  <div className="text-base font-bold text-foreground mt-0.5">sxl-fw01</div>
-                  <div className="text-muted-foreground text-[11px]">
+                  <span className="text-[10px] text-red-600 uppercase font-bold">NODE IDENTITY</span>
+                  <div className="text-base font-bold text-gray-900 mt-0.5">sxl-fw01</div>
+                  <div className="text-gray-500 text-[11px]">
                     nftables v1.0.6 (Linux 6.x Netfilter Core)
                   </div>
                 </div>
 
-                <div className="space-y-1.5 border-t border-border/60 pt-2.5 text-[11px]">
-                  <span className="text-muted-foreground text-[10px] uppercase font-bold">
+                <div className="space-y-1.5 border-t border-gray-100 pt-2.5 text-[11px]">
+                  <span className="text-gray-500 text-[10px] uppercase font-bold">
                     ACTIVE INTERFACES:
                   </span>
-                  <div className="p-2 rounded bg-slate-950 border border-border/60 space-y-1">
-                    <div className="text-amber-400">eth2: 10.231.10.254/24 (WAN)</div>
-                    <div className="text-emerald-400">eth1: 10.231.20.254/24 (LAN)</div>
-                    <div className="text-purple-400">eth0: 10.231.30.254/24 (DMZ)</div>
+                  <div className="p-2 rounded bg-gray-50 border border-gray-200 space-y-1">
+                    <div className="text-amber-800">eth2: 10.231.10.254/24 (WAN)</div>
+                    <div className="text-emerald-800">eth1: 10.231.20.254/24 (LAN)</div>
+                    <div className="text-purple-800">eth0: 10.231.30.254/24 (DMZ)</div>
                   </div>
                 </div>
 
-                <div className="space-y-1.5 border-t border-border/60 pt-2.5 text-[11px]">
-                  <span className="text-muted-foreground text-[10px] uppercase font-bold">
+                <div className="space-y-1.5 border-t border-gray-100 pt-2.5 text-[11px]">
+                  <span className="text-gray-500 text-[10px] uppercase font-bold">
                     KERNEL PARAMETERS:
                   </span>
-                  <div className="p-2 rounded bg-slate-950 border border-border/60 space-y-0.5 text-cyan-300">
+                  <div className="p-2 rounded bg-gray-50 border border-gray-200 space-y-0.5 text-gray-800 font-mono">
                     <div>net.ipv4.ip_forward = 1</div>
                     <div>net.netfilter.nf_conntrack_max = 262144</div>
                     <div>net.ipv4.tcp_syncookies = 1</div>
                   </div>
                 </div>
 
-                <div className="space-y-1.5 border-t border-border/60 pt-2.5 text-[11px]">
-                  <span className="text-muted-foreground text-[10px] uppercase font-bold">
+                <div className="space-y-1.5 border-t border-gray-100 pt-2.5 text-[11px]">
+                  <span className="text-gray-500 text-[10px] uppercase font-bold">
                     DEFAULT POLICY:
                   </span>
-                  <div className="p-2 rounded bg-slate-950 border border-border/60 space-y-0.5 text-rose-400">
+                  <div className="p-2 rounded bg-gray-50 border border-gray-200 space-y-0.5 text-red-700 font-mono">
                     <div>chain input: policy drop</div>
                     <div>chain forward: policy drop</div>
                     <div>chain output: policy accept</div>
@@ -525,11 +523,11 @@ export function Day2TopologyCanvas() {
             {selectedNode === "wan" && (
               <div className="space-y-3 font-mono text-xs">
                 <div>
-                  <span className="text-[10px] text-amber-400 uppercase font-bold">NODE IDENTITY</span>
-                  <div className="text-base font-bold text-foreground mt-0.5">sxl-wan01</div>
-                  <div className="text-muted-foreground text-[11px]">Untrusted External Network Host</div>
+                  <span className="text-[10px] text-amber-700 uppercase font-bold">NODE IDENTITY</span>
+                  <div className="text-base font-bold text-gray-900 mt-0.5">sxl-wan01</div>
+                  <div className="text-gray-500 text-[11px]">Untrusted External Network Host</div>
                 </div>
-                <div className="p-3 rounded bg-slate-950 border border-border/60 space-y-1 text-[11px]">
+                <div className="p-3 rounded bg-gray-50 border border-gray-200 space-y-1 text-[11px] text-gray-700">
                   <div>IP Address: 10.231.10.10/24</div>
                   <div>Default Gateway: 10.231.10.254 (sxl-fw01 eth2)</div>
                   <div>Role: Simulates external public web users & potential threat actors</div>
@@ -540,11 +538,11 @@ export function Day2TopologyCanvas() {
             {selectedNode === "lan" && (
               <div className="space-y-3 font-mono text-xs">
                 <div>
-                  <span className="text-[10px] text-emerald-400 uppercase font-bold">NODE IDENTITY</span>
-                  <div className="text-base font-bold text-foreground mt-0.5">sxl-lan01</div>
-                  <div className="text-muted-foreground text-[11px]">Internal Workstation & Admin Host</div>
+                  <span className="text-[10px] text-emerald-700 uppercase font-bold">NODE IDENTITY</span>
+                  <div className="text-base font-bold text-gray-900 mt-0.5">sxl-lan01</div>
+                  <div className="text-gray-500 text-[11px]">Internal Workstation & Admin Host</div>
                 </div>
-                <div className="p-3 rounded bg-slate-950 border border-border/60 space-y-1 text-[11px]">
+                <div className="p-3 rounded bg-gray-50 border border-gray-200 space-y-1 text-[11px] text-gray-700">
                   <div>IP Address: 10.231.20.10/24</div>
                   <div>Default Gateway: 10.231.20.254 (sxl-fw01 eth1)</div>
                   <div>Authorized Privileges: In-band SSH administrative access to sxl-fw01</div>
@@ -555,11 +553,11 @@ export function Day2TopologyCanvas() {
             {selectedNode === "dmz" && (
               <div className="space-y-3 font-mono text-xs">
                 <div>
-                  <span className="text-[10px] text-purple-400 uppercase font-bold">NODE IDENTITY</span>
-                  <div className="text-base font-bold text-foreground mt-0.5">sxl-dmz01</div>
-                  <div className="text-muted-foreground text-[11px]">Demilitarized Application Server</div>
+                  <span className="text-[10px] text-purple-700 uppercase font-bold">NODE IDENTITY</span>
+                  <div className="text-base font-bold text-gray-900 mt-0.5">sxl-dmz01</div>
+                  <div className="text-gray-500 text-[11px]">Demilitarized Application Server</div>
                 </div>
-                <div className="p-3 rounded bg-slate-950 border border-border/60 space-y-1 text-[11px]">
+                <div className="p-3 rounded bg-gray-50 border border-gray-200 space-y-1 text-[11px] text-gray-700">
                   <div>IP Address: 10.231.30.10/24</div>
                   <div>Default Gateway: 10.231.30.254 (sxl-fw01 eth0)</div>
                   <div>Active Daemon: Nginx 1.24 (HTTP Port 80, HTTPS Port 443)</div>
@@ -571,20 +569,20 @@ export function Day2TopologyCanvas() {
 
           {/* Telemetry Trace History */}
           {simHistory.length > 0 && (
-            <Card className="p-4 border-border/80 bg-card/60 space-y-2">
-              <span className="font-mono text-[10px] font-bold uppercase text-muted-foreground">
+            <Card className="p-4 border-gray-200 bg-white shadow-sm space-y-2">
+              <span className="font-mono text-[10px] font-bold uppercase text-gray-500">
                 RECENT SIMULATION LOGS
               </span>
               <div className="space-y-1.5 text-xs font-mono">
                 {simHistory.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-1.5 rounded bg-slate-950/70 border border-border/50 text-[11px]"
+                    className="flex items-center justify-between p-1.5 rounded bg-gray-50 border border-gray-200 text-[11px]"
                   >
-                    <span className="text-muted-foreground truncate max-w-[170px]">{item.name}</span>
+                    <span className="text-gray-600 truncate max-w-[170px]">{item.name}</span>
                     <span
                       className={
-                        item.verdict === "ACCEPTED" ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"
+                        item.verdict === "ACCEPTED" ? "text-emerald-700 font-bold" : "text-red-700 font-bold"
                       }
                     >
                       {item.verdict}
